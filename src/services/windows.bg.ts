@@ -11,6 +11,7 @@ import * as Sidebar from 'src/services/sidebar.bg'
 import * as Utils from 'src/utils'
 import { translate } from 'src/dict'
 import * as SessionValues from 'src/services/session-values'
+import * as WindowsApi from 'src/services/windows-api'
 
 export const byId = new Map<ID, BgWindow>()
 export let lastFocusedId = NOID
@@ -76,7 +77,7 @@ export async function createWithTabs(
   const isPrivate = conf.incognito
   let window: browser.windows.Window
   try {
-    window = await browser.windows.create(conf)
+    window = await WindowsApi.create(conf)
   } catch (err) {
     if (String(err) === 'Error: Extension does not have permission for incognito mode') {
       if (lastFocusedId !== NOID) {

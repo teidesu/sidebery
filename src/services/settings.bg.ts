@@ -1,4 +1,5 @@
 import * as Utils from 'src/utils'
+import * as WindowsApi from 'src/services/windows-api'
 import { DEFAULT_SETTINGS } from 'src/defaults'
 import { SettingsState } from 'src/types'
 import { InstanceType } from 'src/enums'
@@ -79,7 +80,7 @@ export function updateSettingsBg(settings?: SettingsState | null): void {
     for (const [id, win] of Windows.byId) {
       if (win.type !== 'normal' || win.id === undefined) continue
       if (!next.markWindow) {
-        browser.windows.update(win.id, { titlePreface: '' })
+        WindowsApi.update(win.id, { titlePreface: '' })
       } else if (IPC.isConnected(InstanceType.sidebar, win.id)) {
         IPC.sendToSidebar(win.id, 'updWindowPreface', next.markWindowPreface)
       }

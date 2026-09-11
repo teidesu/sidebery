@@ -22,6 +22,7 @@ The product branding is Sidechery. Preserve `sidebery` only for upstream referen
 - `SetupPage.copyDevtoolsUrl` copies Firefox's direct toolbox URL on Firefox and the current extension's `chrome://extensions` details page on Chromium, where live views can be inspected.
 - Favicon backup import preserves the five storage shards used by `src/services/favicons.bg.ts`, deduplicates without adding a second copy, and skips only new icons after the cache reaches its limit.
 - `src/services/tabs-api.ts` is the required boundary for all tab creation. It strips Firefox-only fields (`cookieStoreId`, `discarded`, `openInReaderMode`, `title`) and self-opener updates on Chromium. Firefox-only succession/warmup calls become no-ops there.
+- Route window creation/update through `src/services/windows-api.ts`; Chromium strips Firefox-only `allowScriptsToClose`, `cookieStoreId`, and `titlePreface` fields.
 - Tab screenshots route through `TabsApi.capture`: Firefox uses `captureTab`; Chromium uses `captureVisibleTab` only for an active target and returns no image for inactive tabs. Preview metadata still renders when Chromium cannot capture an image.
 - `history.onTitleChanged` is Firefox-only and remains optional in `src/services/history.fg.ts`; Chromium updates history titles on normal reload paths.
 - `src/services/sidebar-action.ts` owns Firefox sidebar-action vs Chromium Side Panel behavior. Chromium cannot set the native side-panel title.

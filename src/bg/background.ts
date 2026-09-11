@@ -19,6 +19,7 @@ import * as Sync from 'src/services/sync.bg'
 import * as Omnibox from 'src/services/omnibox.bg'
 import * as Styles from 'src/services/styles.bg'
 import * as SidebarAction from 'src/services/sidebar-action'
+import * as WindowsApi from 'src/services/windows-api'
 export default defineBackground(() => {
   markLocalStorage()
 
@@ -97,7 +98,7 @@ export default defineBackground(() => {
     Logs.info('IPC.onDisconnected sidebar', winId)
 
     if (Settings.state.markWindow && Windows.byId.has(winId)) {
-      browser.windows.update(winId, { titlePreface: '' })
+      WindowsApi.update(winId, { titlePreface: '' })
     }
   })
 

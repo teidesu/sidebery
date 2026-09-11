@@ -5,6 +5,7 @@ import * as Utils from 'src/utils'
 import * as Logs from 'src/services/logs'
 import * as Settings from 'src/services/settings'
 import * as TabsApi from 'src/services/tabs-api'
+import * as WindowsApi from 'src/services/windows-api'
 import * as Sidebar from 'src/services/sidebar.fg'
 import * as Info from 'src/services/info'
 import * as SessionValues from 'src/services/session-values'
@@ -144,7 +145,7 @@ export function updWindowPreface(preface?: string) {
 
   preface = preface.replace('%PN', Sidebar.panelsById[Sidebar.activePanelId]?.name ?? '')
 
-  browser.windows.update(id, { titlePreface: preface })
+  WindowsApi.update(id, { titlePreface: preface })
 }
 
 export function setupWindowsListeners(): void {

@@ -7,6 +7,7 @@ import * as Windows from 'src/services/windows.fg'
 import * as Sidebar from 'src/services/sidebar.fg'
 import { translate } from 'src/dict'
 import * as Notifications from 'src/services/notifications.fg'
+import * as WindowsApi from 'src/services/windows-api'
 
 import * as Sync from 'src/services/sync'
 import * as Self from 'src/services/sync.fg'
@@ -277,7 +278,7 @@ export async function openSyncPopup() {
 
   const parentWinId = Windows.id
 
-  await browser.windows.create({
+  await WindowsApi.create({
     allowScriptsToClose: true,
     focused: true,
     width,

@@ -3,6 +3,7 @@ import * as D from 'src/defaults'
 import { translate } from 'src/dict'
 import * as Logs from 'src/services/logs'
 import * as Utils from 'src/utils'
+import * as WindowsApi from 'src/services/windows-api'
 import * as Store from 'src/services/storage'
 
 export let reactive: T.SidebarConfig = {
@@ -97,7 +98,7 @@ export async function openPanelConfigWindow(panelId: ID) {
   const width = 720
   const height = 640
 
-  await browser.windows.create({
+  await WindowsApi.create({
     allowScriptsToClose: true,
     focused: true,
     width,

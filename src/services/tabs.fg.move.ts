@@ -4,6 +4,7 @@ import { DEFAULT_CONTAINER_ID, MOVEID, NEWID, NOID } from 'src/defaults'
 import * as Sidebar from 'src/services/sidebar.fg'
 import * as Tabs from 'src/services/tabs.fg'
 import * as TabsApi from 'src/services/tabs-api'
+import * as WindowsApi from 'src/services/windows-api'
 import * as Settings from 'src/services/settings'
 import * as Windows from 'src/services/windows.fg'
 import * as Containers from 'src/services/containers'
@@ -911,7 +912,7 @@ export async function moveTabToGroupViaOmnibox(tabInfo: T.ItemInfo, srcWinId: ID
   const panelId = groupTab.panelId
   const windowId = Windows.id
 
-  if (!Windows.focused) browser.windows.update(Windows.id, { focused: true })
+  if (!Windows.focused) WindowsApi.update(Windows.id, { focused: true })
   if (Sidebar.activePanelId !== panelId) Sidebar.switchToPanel(panelId, true, true)
   if (groupTab.folded || groupTab.invisible) Tabs.expTabsBranch(groupTabId, false)
 
