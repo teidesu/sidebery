@@ -43,7 +43,10 @@ export async function load(): Promise<void> {
   const storedLocal = Utils.settledOr(localResult, {} as Stored)
   if (!storedLocal.settings) {
     // Respect prefersReducedMotion rule for default settings
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const prefersReducedMotion =
+      typeof window === 'undefined'
+        ? undefined
+        : window.matchMedia('(prefers-reduced-motion: reduce)')
     if (prefersReducedMotion?.matches) DEFAULT_SETTINGS.animations = false
 
     storedLocal.settings = {} as SettingsState

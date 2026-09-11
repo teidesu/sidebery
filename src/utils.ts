@@ -71,7 +71,7 @@ export function asap(cb: T.AnyFunc, delay: number): FuncCtx {
       if (ctx.busy) return
       ctx.busy = true
 
-      if (!delay && window.requestAnimationFrame) {
+      if (!delay && typeof window !== 'undefined' && window.requestAnimationFrame) {
         window.requestAnimationFrame(() => {
           cb(a)
           ctx.busy = false

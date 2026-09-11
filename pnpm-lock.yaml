@@ -15,12 +15,12 @@ importers:
       '@eslint/js':
         specifier: 10.0.1
         version: 10.0.1(eslint@10.10.0(jiti@2.7.0))
+      '@vitejs/plugin-vue':
+        specifier: 6.0.8
+        version: 6.0.8(vite@8.2.2(@types/node@22.20.2)(esbuild@0.28.2)(jiti@2.7.0)(stylus@0.64.0))(vue@3.5.42(typescript@6.0.3))
       '@vue/language-plugin-pug':
         specifier: 3.3.11
         version: 3.3.11
-      '@wxt-dev/module-vue':
-        specifier: 1.0.3
-        version: 1.0.3(vite@8.2.2(@types/node@22.20.2)(esbuild@0.28.2)(jiti@2.7.0)(stylus@0.64.0))(vue@3.5.42(typescript@6.0.3))(wxt@0.21.4(esbuild@0.28.2)(eslint@10.10.0(jiti@2.7.0))(rolldown@1.2.8)(typescript@6.0.3)(vite@8.2.2(@types/node@22.20.2)(esbuild@0.28.2)(jiti@2.7.0)(stylus@0.64.0))(web-ext@10.6.0(jiti@2.7.0)))
       eslint:
         specifier: 10.10.0
         version: 10.10.0(jiti@2.7.0)
@@ -766,11 +766,6 @@ packages:
 
   '@wxt-dev/browser@0.2.9':
     resolution: {integrity: sha512-I//1sxt6sSd2Ouj48Q7NfXvGFEKbQAL0wf4I/7sxduMx6S0i5xhJqDUkPCCUj42QnnbTpzybI0TA6OIz9NfMgA==}
-
-  '@wxt-dev/module-vue@1.0.3':
-    resolution: {integrity: sha512-xUNygcj4w0b1MzQGOQIp5V2ZwFE4y+5AwKPi/IPKyo2aNeFVJTfItIxzWI5vTj7031WCLzHgQrrBRS5C63D5iw==}
-    peerDependencies:
-      wxt: '>=0.19.16'
 
   '@wxt-dev/storage@1.2.9':
     resolution: {integrity: sha512-dh9TJwvLBM2x4wyy9nE7eYE3wA8pgz1TXSyz7RbdjkJxLfFfWkbeIqiU7VkGy7Vx8sJBmQjoSpk9zSUb3Bjy0Q==}
@@ -3508,14 +3503,6 @@ snapshots:
     dependencies:
       '@types/filesystem': 0.0.36
       '@types/har-format': 1.2.16
-
-  '@wxt-dev/module-vue@1.0.3(vite@8.2.2(@types/node@22.20.2)(esbuild@0.28.2)(jiti@2.7.0)(stylus@0.64.0))(vue@3.5.42(typescript@6.0.3))(wxt@0.21.4(esbuild@0.28.2)(eslint@10.10.0(jiti@2.7.0))(rolldown@1.2.8)(typescript@6.0.3)(vite@8.2.2(@types/node@22.20.2)(esbuild@0.28.2)(jiti@2.7.0)(stylus@0.64.0))(web-ext@10.6.0(jiti@2.7.0)))':
-    dependencies:
-      '@vitejs/plugin-vue': 6.0.8(vite@8.2.2(@types/node@22.20.2)(esbuild@0.28.2)(jiti@2.7.0)(stylus@0.64.0))(vue@3.5.42(typescript@6.0.3))
-      wxt: 0.21.4(esbuild@0.28.2)(eslint@10.10.0(jiti@2.7.0))(rolldown@1.2.8)(typescript@6.0.3)(vite@8.2.2(@types/node@22.20.2)(esbuild@0.28.2)(jiti@2.7.0)(stylus@0.64.0))(web-ext@10.6.0(jiti@2.7.0))
-    transitivePeerDependencies:
-      - vite
-      - vue
 
   '@wxt-dev/storage@1.2.9':
     dependencies:

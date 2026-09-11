@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { defineConfig, type EntrypointInfo } from 'wxt'
 import { transformWithOxc } from 'vite'
+import vue from '@vitejs/plugin-vue'
 
 const sourceManifest = JSON.parse(fs.readFileSync('wxt/manifest.json', 'utf8'))
 const svgInjectRe = /<inject>svg:\/\/(.+?)(#(.+))?<\/inject>/g
@@ -9,7 +10,6 @@ const svgInjectRe = /<inject>svg:\/\/(.+?)(#(.+))?<\/inject>/g
 export default defineConfig({
   srcDir: 'src',
   entrypointsDir: '../wxt/entrypoints',
-  modules: ['@wxt-dev/module-vue'],
   zip: {
     excludeSources: ['addon/**', 'build/**', 'coverage/**', 'dist/**'],
   },
@@ -145,6 +145,7 @@ export default defineConfig({
   vite: () => ({
     resolve: { alias: { src: path.resolve('src') } },
     plugins: [
+      vue(),
       {
         name: 'inline-sidebery-svg',
         enforce: 'pre',

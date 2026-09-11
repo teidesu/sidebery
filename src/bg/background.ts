@@ -120,6 +120,7 @@ export default defineBackground(() => {
 
     Logs.info(`Init end: ${performance.now() - ts}ms`)
 
+    if (typeof window === 'undefined') return
     window.getSideberyState = () => {
       return {
         profileId: Info.getProfileId(),
@@ -144,6 +145,7 @@ export default defineBackground(() => {
   }
 
   function markLocalStorage() {
+    if (typeof localStorage === 'undefined') return
     localStorage.setItem('sdbr', '+')
   }
 })

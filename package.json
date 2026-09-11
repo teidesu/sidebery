@@ -23,8 +23,8 @@
   "packageManager": "pnpm@10.34.4",
   "devDependencies": {
     "@eslint/js": "10.0.1",
+    "@vitejs/plugin-vue": "6.0.8",
     "@vue/language-plugin-pug": "3.3.11",
-    "@wxt-dev/module-vue": "1.0.3",
     "eslint": "10.10.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.6",

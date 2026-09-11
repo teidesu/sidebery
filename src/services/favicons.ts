@@ -45,8 +45,9 @@ export async function loadFaviconsData() {
   }
 }
 
-export const SIZE = Math.trunc(16 * window.devicePixelRatio)
-const THRESHOLD_BYTES_DIFF = 150 * window.devicePixelRatio
+const devicePixelRatio = typeof window === 'undefined' ? 1 : window.devicePixelRatio
+export const SIZE = Math.trunc(16 * devicePixelRatio)
+const THRESHOLD_BYTES_DIFF = 150 * devicePixelRatio
 
 let favRescaleCanvas: HTMLCanvasElement | undefined
 let favPrescaleCanvas: HTMLCanvasElement | undefined
@@ -55,6 +56,8 @@ let favPrescaleCanvasCtx: CanvasRenderingContext2D | null = null
 let favRescaleImg: HTMLImageElement | undefined
 
 export async function resizeFavicon(fav: DataUriImage): Promise<DataUriImage> {
+  if (typeof document === 'undefined' || typeof Image === 'undefined') return fav
+
   const favIsSVG = Utils.isSvg(fav)
 
   // Favicon is svg

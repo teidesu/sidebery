@@ -92,6 +92,7 @@ export function getColorSchemeName(colorScheme?: ColorSchemeVariant): 'dark' | '
 
 export function updColorScheme(state: StylesState, scheme?: 'dark' | 'light'): void {
   if (!scheme) {
+    if (typeof window === 'undefined') return updColorScheme(state, 'dark')
     if (!darkMedia) darkMedia = window.matchMedia(PREF_DARK_MEDIA)
 
     if (darkMedia.matches) {
@@ -114,6 +115,7 @@ export function updColorScheme(state: StylesState, scheme?: 'dark' | 'light'): v
 }
 
 export function _setupAutoColorSchemeListener(cb: () => void): void {
+  if (typeof window === 'undefined') return
   if (!darkMedia) darkMedia = window.matchMedia(PREF_DARK_MEDIA)
   if (!darkMedia.onchange) darkMedia.onchange = () => cb()
 }
@@ -174,6 +176,7 @@ function toColorString(rgba?: RGBA | RGB | string | null, noAlpha?: boolean): st
 }
 
 export function getSystemColorScheme(): 'dark' | 'light' {
+  if (typeof document === 'undefined') return 'dark'
   const probeEl = document.getElementById('moz_dialog_color_scheme_probe')
   if (!probeEl) return 'dark'
 
@@ -429,6 +432,12 @@ export function parseFirefoxTheme(theme: browser.theme.Theme): ParsedTheme {
 
   // Fallback to system color scheme
   if (parsed.error || !theme.colors) {
+    if (typeof window === 'undefined') {
+      parsed.frameVariant = ColorSchemeVariant.Dark
+      parsed.toolbarVariant = parsed.frameVariant
+      parsed.actElVariant = parsed.frameVariant
+      return parsed
+    }
     if (!darkMedia) darkMedia = window.matchMedia(PREF_DARK_MEDIA)
     if (darkMedia.matches) parsed.frameVariant = ColorSchemeVariant.Dark
     else parsed.frameVariant = ColorSchemeVariant.Light
