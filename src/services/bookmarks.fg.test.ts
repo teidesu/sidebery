@@ -3,7 +3,7 @@ import * as Bookmarks from 'src/services/bookmarks.fg'
 import * as Settings from 'src/services/settings'
 import * as Sidebar from 'src/services/sidebar.fg'
 import { addMTTab, resetMTabs, setDefaultMTabPanel } from 'src/defaults/mocks.tabs.fg'
-import { PanelType } from 'src/enums'
+import { BkmType, PanelType } from 'src/enums'
 import { addMPanel, resetMSidebar } from 'src/defaults/mocks.sidebar.fg'
 
 describe('Bookmarks.BkmNode', () => {
@@ -21,6 +21,17 @@ describe('Bookmarks.BkmNode', () => {
     const bkm = new Bookmarks.TESTING.BkmNode({ type: 'bookmark', id: 'abc', title: 'AAA' })
     bkm.setTitle('')
     expect(bkm.parsedTitle).toBe('')
+  })
+
+  test('normalizes Chromium bookmark nodes without type', () => {
+    const folder = new Bookmarks.TESTING.BkmNode({
+      id: '1',
+      title: 'Bookmarks bar',
+      children: [{ id: '2', parentId: '1', title: 'Example', url: 'https://example.com' }],
+    })
+
+    expect(folder.type).toBe(BkmType.Folder)
+    expect(folder.children?.[0]?.type).toBe(BkmType.Bookmark)
   })
 
   test('addBkm', () => {

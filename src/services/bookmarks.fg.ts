@@ -93,9 +93,12 @@ class BkmNode {
 
   constructor(nativeBkm: T.NativeBkmNode) {
     this.id = nativeBkm.id ?? D.NOID
-    if (nativeBkm.type === 'bookmark') this.type = E.BkmType.Bookmark
-    else if (nativeBkm.type === 'folder') this.type = E.BkmType.Folder
-    else this.type = E.BkmType.Separator
+    if (nativeBkm.type === 'separator') this.type = E.BkmType.Separator
+    else if (nativeBkm.type === 'bookmark' || nativeBkm.url !== undefined) {
+      this.type = E.BkmType.Bookmark
+    } else {
+      this.type = E.BkmType.Folder
+    }
     this.index = nativeBkm.index ?? -1
     this.parentId = nativeBkm.parentId ?? D.NOID
     this.dateAdded = nativeBkm.dateAdded

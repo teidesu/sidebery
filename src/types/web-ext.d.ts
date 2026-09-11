@@ -963,7 +963,7 @@ declare namespace browser {
       unmodifiable?: 'managed'
       parentId?: ID
       title: string
-      type: TreeNodeType
+      type?: TreeNodeType
       url?: string
     }
 
