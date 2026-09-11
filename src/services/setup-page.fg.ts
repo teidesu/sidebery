@@ -471,7 +471,9 @@ export async function getDbgDetails(): Promise<T.DbgInfo> {
 }
 
 export function copyDevtoolsUrl(): void {
-  const url = 'about:devtools-toolbox?id=%7B3c078156-979c-498b-8990-85f7987dd929%7D&type=extension'
+  const url = Info.isFirefox
+    ? 'about:devtools-toolbox?id=%7B3c078156-979c-498b-8990-85f7987dd929%7D&type=extension'
+    : `chrome://extensions/?id=${new URL(browser.runtime.getURL('')).host}`
   navigator.clipboard.writeText(url)
 }
 
