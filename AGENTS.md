@@ -23,6 +23,7 @@ This fork adds Chromium support to upstream Sidebery v5. Keep Firefox behavior u
 - Context-menu code uses the shared `browser.contextMenus` namespace. Route creation through `src/services/context-menu.ts`, which removes Firefox-only creation fields on Chromium. Firefox-only `onHidden` and `overrideContext` calls remain optional.
 - Shared style/favicon/settings helpers and `src/bg/background.ts` guard DOM globals so Chromium's service worker can initialize. Background favicon resizing is skipped without DOM canvas support. Do not add unguarded `window`, `document`, `Image`, or `localStorage` access to background imports/startup.
 - Chromium uses the `favicon` permission and `/_favicon/` endpoint for missing or inaccessible native page icons. These native icons are marked with `data-native-favicon` and rendered as `currentColor` masks; Firefox retains upstream favicon handling.
+- Chromium manifest/action icons use raster `src/assets/logo-{16,32,48,128}.png` generated from `logo.svg`; Chrome falls back to a puzzle icon for SVG manifest icons. Regenerate PNGs when the source logo changes.
 - Media injections are passed as functions from `src/injections/` instead of emitted standalone scripts. This keeps `browser.scripting.executeScript` compatible with WXT output.
 - Background initialization is wrapped in `defineBackground`; listeners must remain synchronously registered inside that callback.
 - pnpm is the package manager. Keep `pnpm-lock.yaml`; do not restore `package-lock.json`.

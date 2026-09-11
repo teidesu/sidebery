@@ -39,6 +39,16 @@ export default defineConfig({
         (permission: string) => !['proxy', 'tabHide', 'webRequestBlocking'].includes(permission)
       )
       manifest.permissions.push('proxy')
+      manifest.icons = {
+        16: 'assets/logo-16.png',
+        32: 'assets/logo-32.png',
+        48: 'assets/logo-48.png',
+        128: 'assets/logo-128.png',
+      }
+      manifest.action.default_icon = {
+        16: 'assets/logo-16.png',
+        32: 'assets/logo-32.png',
+      }
       delete manifest.action.default_area
       delete manifest.action.theme_icons
 
@@ -110,6 +120,10 @@ export default defineConfig({
     'build:publicAssets'(_, files) {
       for (const name of [
         'group-page-favicon.svg',
+        'logo-16.png',
+        'logo-32.png',
+        'logo-48.png',
+        'logo-128.png',
         'logo-native-dark.svg',
         'logo-native-light.svg',
         'logo-native.svg',
