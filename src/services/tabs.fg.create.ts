@@ -860,7 +860,7 @@ export function getParentForNewTab(panel: Panel, conf?: ParentForNewTabConf): ID
     if (Settings.state.moveNewTabParent === 'last_child') return openerTabId
     if (Settings.state.moveNewTabParent === 'start') return
     if (Settings.state.moveNewTabParent === 'end') return
-    // Find appropriate parent for the unknown (not controlled by Sidebery) index
+    // Find appropriate parent for the unknown (not controlled by Sidechery) index
     if (Settings.state.moveNewTabParent === 'default') {
       const prevTab = conf?.index ? Tabs.list[conf.index - 1] : undefined
       const prevIsSiblingToParent = prevTab !== parent && prevTab?.parentId === parent.parentId

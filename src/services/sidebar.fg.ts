@@ -2311,7 +2311,7 @@ export function updateSidebarTitle(delay = 456): void {
 
       SidebarAction.setTitle({ title: panel.name, windowId: Windows.id })
     } else {
-      SidebarAction.setTitle({ title: 'Sidebery', windowId: Windows.id })
+      SidebarAction.setTitle({ title: 'Sidechery', windowId: Windows.id })
     }
   }, delay)
 }

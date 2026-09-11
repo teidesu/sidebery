@@ -262,7 +262,7 @@ export function onStoredContainersUpdated(newContainers?: Record<ID, Container> 
 }
 
 function onContainerCreated(info: browser.contextualIdentities.ChangeInfo): void {
-  // Container is created by Sidebery (most likely), skip
+  // Container is created by Sidechery (most likely), skip
   if (creating === info.contextualIdentity.name) return
 
   if (!ready) {
@@ -278,7 +278,7 @@ function onContainerCreated(info: browser.contextualIdentities.ChangeInfo): void
 
 function onContainerRemoved(info: browser.contextualIdentities.ChangeInfo): void {
   const id = info.contextualIdentity.cookieStoreId
-  // Container is removed by Sidebery, skip
+  // Container is removed by Sidechery, skip
   if (removing.has(id)) return
 
   if (!ready) {
@@ -295,7 +295,7 @@ function onContainerRemoved(info: browser.contextualIdentities.ChangeInfo): void
 function onContainerUpdated(info: browser.contextualIdentities.ChangeInfo): void {
   const container = info.contextualIdentity
   const id = container.cookieStoreId
-  // Container is updated by Sidebery or not existed, skip
+  // Container is updated by Sidechery or not existed, skip
   if (updating.has(id) || !Containers.reactive.byId[id]) return
 
   if (!ready) {

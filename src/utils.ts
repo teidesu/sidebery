@@ -754,7 +754,7 @@ export function sanitizeUrl(url?: string, title?: string): string | undefined {
 }
 
 /**
- * Convert url from Sidebery-safe/specific to its original form
+ * Convert url from Sidechery-safe/specific to its original form
  */
 export function restoreUrl(url?: string): string | undefined {
   if (!url) return url

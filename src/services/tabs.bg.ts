@@ -437,7 +437,7 @@ export function hideProxyBadge(tabId: ID): void {
   browser.pageAction.hide(tabId).catch(err => {
     Logs.err('Tabs.hideProxyBadge: Cannot hide proxy badge:', err)
   })
-  browser.pageAction.setTitle({ title: 'Sidebery proxy off', tabId })
+  browser.pageAction.setTitle({ title: 'Sidechery proxy off', tabId })
 }
 
 /**

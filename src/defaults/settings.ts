@@ -8,7 +8,7 @@ export const DEFAULT_SETTINGS: SettingsState = {
   selWinScreenshots: false,
   updateSidebarTitle: true,
   markWindow: false,
-  markWindowPreface: '[Sidebery] ',
+  markWindowPreface: '[Sidechery] ',
   copyTreeIndent: '',
   copyMultiBullet: '',
   copyTemplates: 'HTML:%B<a href="%U">%CT</a>\nMarkdown:%B[%CT](%U)',
@@ -221,7 +221,7 @@ export const DEFAULT_SETTINGS: SettingsState = {
   snapLimitUnit: 'snap',
   snapAutoExport: false,
   snapAutoExportType: 'json',
-  snapAutoExportPath: 'Sidebery/snapshot-%Y.%M.%D-%h.%m.%s',
+  snapAutoExportPath: 'Sidechery/snapshot-%Y.%M.%D-%h.%m.%s',
   snapMdFullTree: false,
 
   // Mouse

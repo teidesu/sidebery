@@ -1,6 +1,6 @@
 {
   "ExtName": {
-    "en": "Sidebery"
+    "en": "Sidechery"
   },
   "ExtDesc": {
     "en": "Tabs tree, bookmarks and history in a highly configurable sidebar.",
@@ -14,15 +14,15 @@
     "ja": "高度にカスタマイズ可能なサイドバー内のタブツリー、ブックマーク、履歴。"
   },
   "ActionTitle": {
-    "en": "Toggle Sidebery sidebar\nMiddle click: Open settings",
-    "de": "Sidebery Seitenleiste umschalten\nMittelklick: Einstellungen öffnen",
-    "fr": "Ouvrir/fermer le panneau Sidebery\nClic-milieu: Ouvrir les paramètres",
-    "hu": "A Sidebery oldalsáv ki-/bekapcsolása\nKözépső gomb: Beállítások",
-    "pl": "Włącz panel boczny Sidebery\nŚrodkowy przycisk myszy: Otwórz ustawienia",
-    "ru": "Открыть Sidebery\nСредний щелчок: открыть настройки",
-    "zh_CN": "切换 Sidebery 侧边栏\n中键点击：打开设置",
-    "zh_TW": "切換 Sidebery 側邊欄\n中鍵點選：開啟設定",
-    "ja": "Sidebery サイドバーの切り替え\n中クリック: 設定を開く"
+    "en": "Toggle Sidechery sidebar\nMiddle click: Open settings",
+    "de": "Sidechery Seitenleiste umschalten\nMittelklick: Einstellungen öffnen",
+    "fr": "Ouvrir/fermer le panneau Sidechery\nClic-milieu: Ouvrir les paramètres",
+    "hu": "A Sidechery oldalsáv ki-/bekapcsolása\nKözépső gomb: Beállítások",
+    "pl": "Włącz panel boczny Sidechery\nŚrodkowy przycisk myszy: Otwórz ustawienia",
+    "ru": "Открыть Sidechery\nСредний щелчок: открыть настройки",
+    "zh_CN": "切换 Sidechery 侧边栏\n中键点击：打开设置",
+    "zh_TW": "切換 Sidechery 側邊欄\n中鍵點選：開啟設定",
+    "ja": "Sidechery サイドバーの切り替え\n中クリック: 設定を開く"
   },
 
   "KbOpenSidebarPanel": {
@@ -1413,15 +1413,15 @@
     "ja": "URL をコピー"
   },
   "api_limit_info": {
-    "en": "Sidebery is unable to open this link due to security-related restrictions of Firefox.",
-    "de": "Aufgrund von sicherheitsrelevanten API Beschränkungen kann Sidebery diesen Link nicht öffnen.",
-    "fr": "Sidebery ne peux pas ouvrir ce lien à cause des restrictions de sécurité de Firefox",
+    "en": "Sidechery is unable to open this link due to security-related restrictions of Firefox.",
+    "de": "Aufgrund von sicherheitsrelevanten API Beschränkungen kann Sidechery diesen Link nicht öffnen.",
+    "fr": "Sidechery ne peux pas ouvrir ce lien à cause des restrictions de sécurité de Firefox",
     "hu": "A Firefox biztonsági beállításai miatt ezt a hivatkozást nem lehet megnyitni.",
-    "pl": "Sidebery nie jest w stanie otworzyć tego linku z powodów związanych z restrykcjami bezpieczeństwa Firefoxa.",
-    "ru": "Из-за ограничений API, связанных с безопасностью, Sidebery не может открыть эту ссылку.",
-    "zh_CN": "由于安全相关的 API 限制，Sidebery 无法打开此链接。",
-    "zh_TW": "由於安全相關的 API 限制，Sidebery 無法開啟此鏈接。",
-    "ja": "Firefox のセキュリティ関連の制限により、Sidebery はこのリンクを開けません。"
+    "pl": "Sidechery nie jest w stanie otworzyć tego linku z powodów związanych z restrykcjami bezpieczeństwa Firefoxa.",
+    "ru": "Из-за ограничений API, связанных с безопасностью, Sidechery не может открыть эту ссылку.",
+    "zh_CN": "由于安全相关的 API 限制，Sidechery 无法打开此链接。",
+    "zh_TW": "由於安全相關的 API 限制，Sidechery 無法開啟此鏈接。",
+    "ja": "Firefox のセキュリティ関連の制限により、Sidechery はこのリンクを開けません。"
   },
 
   "group_disconnected_warn": {

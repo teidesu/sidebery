@@ -8,11 +8,11 @@ body:
     attributes:
       label: Steps to reproduce
       description: |
-        Include all steps needed to reproduce this bug, e.g.: Installing other addons, changing browser settings, changing `about:config` properties, changing Sidebery settings, etc...  
+        Include all steps needed to reproduce this bug, e.g.: Installing other addons, changing browser settings, changing `about:config` properties, changing Sidechery settings, etc...
         [How to open Firefox in a new profile](https://support.mozilla.org/en-US/kb/profile-manager-create-remove-switch-firefox-profiles)  
       value: |
         - Open Firefox in a new profile
-        - Install Sidebery
+        - Install Sidechery
         - 
     validations:
       required: true
@@ -41,8 +41,8 @@ body:
       required: true
   - type: input
     attributes:
-      label: Sidebery version
-      description: "To find it, open `about:addons`, click on Sidebery and check `version` field"
+      label: Sidechery version
+      description: "To find it, open `about:addons`, click on Sidechery and check `version` field"
     validations:
       required: true
   - type: textarea

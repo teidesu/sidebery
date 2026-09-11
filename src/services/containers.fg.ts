@@ -80,7 +80,7 @@ function setupListeners(): void {
   if (!Containers.isSupported()) return
 
   // Handle onCreated event in sidebar, even though it will be received with
-  // Store.onKeyChange later. This is needed b/c Sidebery need to get that
+  // Store.onKeyChange later. This is needed b/c Sidechery need to get that
   // info ASAP to correctly handle new tabs of just created container.
   if (Info.isSidebar) {
     browser.contextualIdentities.onCreated.addListener(onContainerCreated)
@@ -90,7 +90,7 @@ function setupListeners(): void {
 
 function onContainerCreated(info: browser.contextualIdentities.ChangeInfo) {
   const container = info.contextualIdentity
-  // Container is created by Sidebery (most likely), skip
+  // Container is created by Sidechery (most likely), skip
   if (creating === container.name) return
 
   Containers.onContainerCreated(info)

@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "browser_specific_settings": {
     "gecko": {
-      "id": "{3c078156-979c-498b-8990-85f7987dd929}",
+      "id": "{C3F4C561-B09E-4B4F-8AD5-C8668EE38682}",
       "strict_min_version": "140.0",
       "data_collection_permissions": {
         "required": [
@@ -19,7 +19,7 @@
   "version": "5.6.1",
   "default_locale": "en",
   "description": "__MSG_ExtDesc__",
-  "homepage_url": "https://github.com/mbnuqw/sidebery",
+  "homepage_url": "https://github.com/teidesu/sidechery",
   "icons": {
     "48": "./assets/logo.svg",
     "96": "./assets/logo.svg"
@@ -60,13 +60,13 @@
   ],
   "sidebar_action": {
     "default_icon": "./assets/logo-native.svg",
-    "default_title": "Sidebery",
+    "default_title": "Sidechery",
     "default_panel": "./sidebar/sidebar.html"
   },
   "page_action": {
     "browser_style": false,
     "default_icon": "./assets/proxy-native.svg",
-    "default_title": "Sidebery proxy off",
+    "default_title": "Sidechery proxy off",
     "default_popup": "./popup.proxy/proxy.html"
   },
   "commands": {

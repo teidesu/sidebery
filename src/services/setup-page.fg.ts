@@ -182,7 +182,7 @@ export async function open(section?: string): Promise<void> {
 }
 
 export function goToPerm(permId: string): void {
-  document.title = 'Sidebery / Settings'
+  document.title = 'Sidechery / Settings'
   SetupPage.reactive.activeView = 'settings'
   SetupPage.reactive.permissions = permId
 
@@ -228,14 +228,14 @@ export async function updateActiveView(): Promise<void> {
       SetupPage.reactive.activeView === 'menu_editor' ? 0 : 250
     )
 
-    document.title = 'Sidebery / Menu Editor'
+    document.title = 'Sidechery / Menu Editor'
     SetupPage.reactive.activeView = 'menu_editor'
     SetupPage.reactive.permissions = false
     return
   }
 
   if (hash.startsWith('styles_editor')) {
-    document.title = 'Sidebery / Styles Editor'
+    document.title = 'Sidechery / Styles Editor'
     SetupPage.reactive.activeView = 'styles_editor'
     SetupPage.reactive.activeSection = 'styles_editor'
     SetupPage.reactive.permissions = false
@@ -243,7 +243,7 @@ export async function updateActiveView(): Promise<void> {
   }
 
   if (hash.startsWith('snapshots')) {
-    document.title = 'Sidebery / Snapshots'
+    document.title = 'Sidechery / Snapshots'
     SetupPage.reactive.activeView = 'snapshots'
     SetupPage.reactive.activeSection = 'snapshots'
     SetupPage.reactive.permissions = false
@@ -251,7 +251,7 @@ export async function updateActiveView(): Promise<void> {
   }
 
   if (hash.startsWith('storage')) {
-    document.title = 'Sidebery / Storage'
+    document.title = 'Sidechery / Storage'
     SetupPage.reactive.activeView = 'storage'
     SetupPage.reactive.activeSection = 'storage'
     SetupPage.reactive.permissions = false
@@ -259,7 +259,7 @@ export async function updateActiveView(): Promise<void> {
   }
 
   if (hash.startsWith('keybindings')) {
-    document.title = 'Sidebery / Keybindings'
+    document.title = 'Sidechery / Keybindings'
     SetupPage.reactive.activeView = 'keybindings'
     SetupPage.reactive.activeSection = 'keybindings'
     SetupPage.reactive.permissions = false
@@ -290,7 +290,7 @@ export async function updateActiveView(): Promise<void> {
     SetupPage.reactive.activeView === 'settings' ? 0 : 250
   )
 
-  document.title = 'Sidebery / Settings'
+  document.title = 'Sidechery / Settings'
   SetupPage.reactive.activeView = 'settings'
 }
 

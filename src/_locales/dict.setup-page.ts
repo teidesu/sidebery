@@ -1107,15 +1107,15 @@ Liste de “sous-chaines” ou “/RegExp/” avec une entrée par ligne:
     ja: 'アクティブパネルの名前をサイドバーのタイトルとして使用する',
   },
   'settings.mark_window': {
-    en: "Add preface to the browser window's title if Sidebery sidebar is active",
-    de: 'Präfix dem Fensternamen des Browsers voranstellen, wenn die Sidebery-Seitenleiste geöffnet ist',
-    fr: 'Ajouter un préfixe au titre de la fenêtre du navigateur quand la barre latérale Sidebery est actif',
-    hu: 'Az ablak címében előtag jelzi, ha a Sidebery oldalsáv aktív',
-    pl: 'Dodaj przedrostek do tytułu okna przeglądarki jeśli panel boczny Sidebery jest aktywny',
-    ru: 'Добавлять префикс к заголовку окна, если боковая панель Sidebery активна',
-    zh_CN: 'Sidebery 侧边栏处于活动状态时在浏览器窗口的标题中添加前言',
-    zh_TW: 'Sidebery 側邊欄作用中時在瀏覽器視窗的標題前方添加序言',
-    ja: 'Sidebery サイドバーがアクティブな場合、ブラウザウィンドウのタイトルの前へ文字列を追加する',
+    en: "Add preface to the browser window's title if Sidechery sidebar is active",
+    de: 'Präfix dem Fensternamen des Browsers voranstellen, wenn die Sidechery-Seitenleiste geöffnet ist',
+    fr: 'Ajouter un préfixe au titre de la fenêtre du navigateur quand la barre latérale Sidechery est actif',
+    hu: 'Az ablak címében előtag jelzi, ha a Sidechery oldalsáv aktív',
+    pl: 'Dodaj przedrostek do tytułu okna przeglądarki jeśli panel boczny Sidechery jest aktywny',
+    ru: 'Добавлять префикс к заголовку окна, если боковая панель Sidechery активна',
+    zh_CN: 'Sidechery 侧边栏处于活动状态时在浏览器窗口的标题中添加前言',
+    zh_TW: 'Sidechery 側邊欄作用中時在瀏覽器視窗的標題前方添加序言',
+    ja: 'Sidechery サイドバーがアクティブな場合、ブラウザウィンドウのタイトルの前へ文字列を追加する',
   },
   'settings.mark_window_preface': {
     en: 'Preface value',
@@ -1210,15 +1210,15 @@ Available variables: %B - a list mark (bullet); %CT - custom title or title; %T 
 注意：清單標記僅會在透過範本複製多個項目時新增`,
   },
   'settings.storage_btn': {
-    en: "Sidebery's data:",
-    de: 'Sidebery-Daten:',
-    fr: 'Données de Sidebery:',
-    hu: 'Sidebery-adatok:',
-    pl: 'Dane Sidebery:',
-    ru: 'Данные Sidebery:',
-    zh_CN: 'Sidebery 的已用数据：',
-    zh_TW: 'Sidebery 的已用資料：',
-    ja: 'Sidebery のデータ：',
+    en: "Sidechery's data:",
+    de: 'Sidechery-Daten:',
+    fr: 'Données de Sidechery:',
+    hu: 'Sidechery-adatok:',
+    pl: 'Dane Sidechery:',
+    ru: 'Данные Sidechery:',
+    zh_CN: 'Sidechery 的已用数据：',
+    zh_TW: 'Sidechery 的已用資料：',
+    ja: 'Sidechery のデータ：',
   },
   'settings.permissions_btn': {
     en: 'Permissions',
@@ -1299,15 +1299,15 @@ Available variables: %B - a list mark (bullet); %CT - custom title or title; %T 
     ja: 'すべて削除',
   },
   'settings.clear_storage_confirm': {
-    en: 'Are you sure you want to delete all Sidebery data?',
-    de: 'Wirklich alle Sidebery-Daten löschen?',
-    fr: 'Voulez-vous vraiment supprimer toutes les données de Sidebery?',
-    hu: 'Biztosan törölhető a Sidebery összes adata?',
-    pl: 'Jesteś pewny, że chcesz usunąć wszystkie dane Sidebery?',
+    en: 'Are you sure you want to delete all Sidechery data?',
+    de: 'Wirklich alle Sidechery-Daten löschen?',
+    fr: 'Voulez-vous vraiment supprimer toutes les données de Sidechery?',
+    hu: 'Biztosan törölhető a Sidechery összes adata?',
+    pl: 'Jesteś pewny, że chcesz usunąć wszystkie dane Sidechery?',
     ru: 'Вы действительно хотите удалить все данные?',
-    zh_CN: '确定要删除 Sidebery 全部的数据吗？',
-    zh_TW: '確定要刪除 Sidebery 全部的資料嗎？',
-    ja: 'Sidebery のすべてのデータを削除してもよろしいですか？',
+    zh_CN: '确定要删除 Sidechery 全部的数据吗？',
+    zh_TW: '確定要刪除 Sidechery 全部的資料嗎？',
+    ja: 'Sidechery のすべてのデータを削除してもよろしいですか？',
   },
   'settings.favs_title': {
     en: 'Cached favicons',
@@ -1593,8 +1593,8 @@ Available variables: %B - a list mark (bullet); %CT - custom title or title; %T 
     fr: 'Barre d’adresse (Omnibox)',
   },
   'settings.omnibox_desc': {
-    en: `Use the address bar (aka Omnibox) for fast triggering some Sidebery commands.`,
-    fr: 'Utiliser la barre d’adresse (aka Omnibox) pour déclencher rapidement des commandes Sidebery.',
+    en: `Use the address bar (aka Omnibox) for fast triggering some Sidechery commands.`,
+    fr: 'Utiliser la barre d’adresse (aka Omnibox) pour déclencher rapidement des commandes Sidechery.',
   },
   'settings.omnibox_note': {
     en: `To start, focus the address bar (Ctrl+L/Cmd+L), then input "=" followed by a space, then start typing target container/panel/group name (case-insensitive). Choose desired command from the list or just press Enter to use the first one.
@@ -3383,15 +3383,15 @@ Available parameters:
     ja: '親タブのパネルがアクティブな場合のみ',
   },
   'settings.move_new_tab_button': {
-    en: `Place new tab created by the Sidebery new tab button`,
-    de: 'Platziere neuen Tab, die mit der Schaltfläche „Neue Tab“ von Sidebery erstellt wurde',
-    fr: 'Emplacement des onglets ouverts par le bouton Nouvel onglet de Sidebery',
-    hu: 'Az új lap pozíciója, amelyet a Sidebery új lap gombjával hoztunk létre',
-    pl: 'Pozycja nowej karty utworzonej za pomocą przycisku nowej karty Sidebery',
-    ru: 'Позиция новой вкладки, созданной с помощью кнопки новой вкладки Sidebery',
-    zh_CN: '由 Sidebery 新标签页按钮创建的新标签页的位置',
-    zh_TW: '由 Sidebery 新分頁按鈕建立的新分頁的位置',
-    ja: 'Sideberyの新規タブボタンを使用して作成された新規タブの位置',
+    en: `Place new tab created by the Sidechery new tab button`,
+    de: 'Platziere neuen Tab, die mit der Schaltfläche „Neue Tab“ von Sidechery erstellt wurde',
+    fr: 'Emplacement des onglets ouverts par le bouton Nouvel onglet de Sidechery',
+    hu: 'Az új lap pozíciója, amelyet a Sidechery új lap gombjával hoztunk létre',
+    pl: 'Pozycja nowej karty utworzonej za pomocą przycisku nowej karty Sidechery',
+    ru: 'Позиция новой вкладки, созданной с помощью кнопки новой вкладки Sidechery',
+    zh_CN: '由 Sidechery 新标签页按钮创建的新标签页的位置',
+    zh_TW: '由 Sidechery 新分頁按鈕建立的新分頁的位置',
+    ja: 'Sidecheryの新規タブボタンを使用して作成された新規タブの位置',
   },
   'settings.move_new_tab': {
     en: 'Place new tab (general rule)',
@@ -4358,15 +4358,15 @@ Available parameters:
     ja: '読み込まれていないネイティブタブを非表示にする',
   },
   'settings.native_highlight': {
-    en: 'Highlight native tabs when selecting Sidebery tabs',
-    de: 'Native Tabs bei der Auswahl von Tabs in Sidebery hervorheben',
-    fr: "Mettre en surbrillance les onglets natifs lors de la sélection d'onglets dans Sidebery",
-    hu: 'A natív lapok kiemelése a Sidebery lapjaival összhangban',
-    pl: 'Podświetlaj karty natywne podczas wybierania kart Sidebery',
-    ru: 'Выделять стандартные вкладки вместе с вкладками Sidebery',
-    zh_CN: '高亮显示 Sidebery 中选中的标签页',
-    zh_TW: '凸顯標示 Sidebery 中選中的分頁',
-    ja: 'Sidebery タブを選択した際にネイティブタブを強調表示する',
+    en: 'Highlight native tabs when selecting Sidechery tabs',
+    de: 'Native Tabs bei der Auswahl von Tabs in Sidechery hervorheben',
+    fr: "Mettre en surbrillance les onglets natifs lors de la sélection d'onglets dans Sidechery",
+    hu: 'A natív lapok kiemelése a Sidechery lapjaival összhangban',
+    pl: 'Podświetlaj karty natywne podczas wybierania kart Sidechery',
+    ru: 'Выделять стандартные вкладки вместе с вкладками Sidechery',
+    zh_CN: '高亮显示 Sidechery 中选中的标签页',
+    zh_TW: '凸顯標示 Sidechery 中選中的分頁',
+    ja: 'Sidechery タブを選択した際にネイティブタブを強調表示する',
   },
   'settings.native_highlight_note': {
     en: "This will also highlight the active tab, since Firefox doesn't allow you to highlight only inactive tabs",
@@ -4887,17 +4887,17 @@ Available parameters:
     ja: '注意事項:',
   },
   'settings.appearance_notes': {
-    en: '- To apply theme color to Sidebery buttons in browser interface set "svg.context-properties.content.enabled" to "true" in about:config page.',
-    de: '- Um die Theme-Farbe auf Sidebery-Schaltflächen in der Browseroberfläche anzuwenden, setze "svg.context-properties.content.enabled" auf "true" auf der "about:config" Seite.',
-    fr: '– Pour appliquer le thème de couleurs aux boutons de Sidebery dans l’interface du navigateur, définissez “svg.context-properties.content.enabled” à “true” dans la page “about:config”',
+    en: '- To apply theme color to Sidechery buttons in browser interface set "svg.context-properties.content.enabled" to "true" in about:config page.',
+    de: '- Um die Theme-Farbe auf Sidechery-Schaltflächen in der Browseroberfläche anzuwenden, setze "svg.context-properties.content.enabled" auf "true" auf der "about:config" Seite.',
+    fr: '– Pour appliquer le thème de couleurs aux boutons de Sidechery dans l’interface du navigateur, définissez “svg.context-properties.content.enabled” à “true” dans la page “about:config”',
     hu: 'A gombokra vonatkozó témaszínek alkalmazásához a böngésző about:config lapján az „svg.context-properties.content.enabled” beállításnak „true” értéket kell adni.',
-    pl: '- Aby zastosować schemat kolorystyczny do przycisków Sidebery w interfejsie przeglądarki, ustaw "svg.context-properties.content.enabled" na "true" na stronie about:config.',
-    ru: '- Чтобы применить цвет темы к кнопкам Sidebery в интерфейсе браузера, установите «svg.context-properties.content.enabled» в «true» на странице about:config.',
+    pl: '- Aby zastosować schemat kolorystyczny do przycisków Sidechery w interfejsie przeglądarki, ustaw "svg.context-properties.content.enabled" na "true" na stronie about:config.',
+    ru: '- Чтобы применить цвет темы к кнопкам Sidechery в интерфейсе браузера, установите «svg.context-properties.content.enabled» в «true» на странице about:config.',
     zh_CN:
-      '- 为了将主题颜色应用于浏览器界面的 Sidebery 按钮，需要在 about:config 页面中设置 "svg.context-properties.content.enabled" 的值为 "true".',
+      '- 为了将主题颜色应用于浏览器界面的 Sidechery 按钮，需要在 about:config 页面中设置 "svg.context-properties.content.enabled" 的值为 "true".',
     zh_TW:
-      '- 要將主題顏色應用於瀏覽器界面中的 Sidebery 按鈕，請在 about:config 頁面中將 "svg.context-properties.content.enabled" 設定為 "true"。',
-    ja: '- ブラウザインターフェースのSideberyボタンにテーマカラーを適用するには、about:configページで「svg.context-properties.content.enabled」を「true」に設定してください。',
+      '- 要將主題顏色應用於瀏覽器界面中的 Sidechery 按鈕，請在 about:config 頁面中將 "svg.context-properties.content.enabled" 設定為 "true"。',
+    ja: '- ブラウザインターフェースのSidecheryボタンにテーマカラーを適用するには、about:configページで「svg.context-properties.content.enabled」を「true」に設定してください。',
   },
   'settings.edit_styles': {
     en: 'Edit styles',
@@ -6353,7 +6353,7 @@ Available parameters:
   // Although the translated name is displayed,
   // the default saved snapshot file name is always the same.
   'settings.snap_export_path_ph': {
-    en: 'Sidebery/snapshot-%Y.%M.%D-%h.%m.%s',
+    en: 'Sidechery/snapshot-%Y.%M.%D-%h.%m.%s',
   },
   'settings.snap_export_path_note': {
     en: `Note: Path is relative to the downloads folder and Firefox doesn't allow to set path outside it.
@@ -6557,29 +6557,29 @@ Available parameters:
   },
   'settings.sync_gd_note': {
     en: `Notes:
-- Sidebery doesn't have access to your files on Google Drive
-- Sidebery files are stored in JSON, so Google can read their contents (encryption is planned)`,
+- Sidechery doesn't have access to your files on Google Drive
+- Sidechery files are stored in JSON, so Google can read their contents (encryption is planned)`,
     de: `Hinweise:
-- Sidebery hat keinen Zugriff auf Ihre Dateien auf Google Drive
-- Sidebery-Dateien werden in JSON gespeichert, sodass Google deren Inhalte lesen kann (Verschlüsselung ist geplant)`,
+- Sidechery hat keinen Zugriff auf Ihre Dateien auf Google Drive
+- Sidechery-Dateien werden in JSON gespeichert, sodass Google deren Inhalte lesen kann (Verschlüsselung ist geplant)`,
     fr: `Notes:
-– Sidebery n’a pas accès à vos fichiers sur Google Drive.
-– Les données de Sidebery sont stockées en JSON, et Google peut donc lire leur contenu (le chiffrement est planifié)`,
+– Sidechery n’a pas accès à vos fichiers sur Google Drive.
+– Les données de Sidechery sont stockées en JSON, et Google peut donc lire leur contenu (le chiffrement est planifié)`,
     hu: `Megjegyzések:
-- A Sidebery nem fér hozzá az Ön Google Drive-on lévő fájljaihoz
-- A Sidebery fájlok JSON-ban vannak tárolva, így a Google el tudja olvasni a tartalmukat (titkosítást tervezünk)`,
+- A Sidechery nem fér hozzá az Ön Google Drive-on lévő fájljaihoz
+- A Sidechery fájlok JSON-ban vannak tárolva, így a Google el tudja olvasni a tartalmukat (titkosítást tervezünk)`,
     pl: `Uwagi:
-- Sidebery nie ma dostępu do Twoich plików na Dysku Google
-- Pliki Sidebery są przechowywane w formacie JSON, więc Google może odczytać ich zawartość (planowane jest szyfrowanie)`,
+- Sidechery nie ma dostępu do Twoich plików na Dysku Google
+- Pliki Sidechery są przechowywane w formacie JSON, więc Google może odczytać ich zawartość (planowane jest szyfrowanie)`,
     ru: `Примечания:
-- Sidebery не имеет доступа к вашим файлам на Google Диске
-- Файлы Sidebery хранятся в формате JSON, поэтому Google может читать их содержимое (шифрование планируется)`,
+- Sidechery не имеет доступа к вашим файлам на Google Диске
+- Файлы Sidechery хранятся в формате JSON, поэтому Google может читать их содержимое (шифрование планируется)`,
     zh_TW: `說明：
-- Sidebery 不會存取您在 Google 雲端硬碟上的檔案
-- Sidebery 以 JSON 格式儲存同步檔案，因此 Google 可以讀取其內容（計劃實做加密）`,
+- Sidechery 不會存取您在 Google 雲端硬碟上的檔案
+- Sidechery 以 JSON 格式儲存同步檔案，因此 Google 可以讀取其內容（計劃實做加密）`,
     ja: `注:
-- Sidebery は Google ドライブのファイルにアクセスできません
-- Sidebery ファイルは JSON 形式で保存されるため、Google はファイルの内容を読み取ることができます (暗号化が予定されています)`,
+- Sidechery は Google ドライブのファイルにアクセスできません
+- Sidechery ファイルは JSON 形式で保存されるため、Google はファイルの内容を読み取ることができます (暗号化が予定されています)`,
   },
   'settings.sync_gd_api': {
     en: 'Use your own API key',
@@ -6668,10 +6668,10 @@ Available parameters:
     zh_TW: '7. 新增測試使用者（您的電子郵件地址）：',
   },
   'settings.sync_gd_api_reload': {
-    en: '8. Disconnect Sidebery from your Google Drive:',
-    fr: '8. Déconnecter Sidebery de votre Google Drive:',
-    zh_CN: '8. 取消 Sidebery 与 Google 云端硬盘的关联：',
-    zh_TW: '8. 取消 Sidebery 與 Google 雲端硬碟的連接：',
+    en: '8. Disconnect Sidechery from your Google Drive:',
+    fr: '8. Déconnecter Sidechery de votre Google Drive:',
+    zh_CN: '8. 取消 Sidechery 与 Google 云端硬盘的关联：',
+    zh_TW: '8. 取消 Sidechery 與 Google 雲端硬碟的連接：',
   },
   'settings.sync_gd_api_reload_sub': {
     en: '(if you used the default API key)',
@@ -6836,32 +6836,32 @@ Available parameters:
     ja: '注意事項：',
   },
   'settings.sync_notes': {
-    en: `Sidebery uses Firefox syncronization so:
+    en: `Sidechery uses Firefox syncronization so:
 - You need to login to Firefox account to get it working
 - To be sure that data is uploaded to Firefox sync server you need to press the "Sync now" button in the Firefox settings or in your profile in the main menu (the three-line button)`,
-    de: `Sidebery nutzt die Synchronisation von Firefox, deshalb:
+    de: `Sidechery nutzt die Synchronisation von Firefox, deshalb:
 - müssen Sie sich in Ihrem Firefox Konto einloggen, damit es funktioniert
 - um sicher zu gehen, dass die Daten auf die Firefox Synchronisations-Server hochgeladen werden, müssen Sie in den Firefox Einstellungen oder in Ihrem Profil im Hauptmenü (Drei-Striche-Menü) auf "Jetzt synchronisieren" drücken `,
-    fr: `Sidebery utilise la synchronisation de Firefox donc:
+    fr: `Sidechery utilise la synchronisation de Firefox donc:
 – Vous devez être connecté·e à votre compte Firefox pour que ça fonctionne.
 – Pour vous assurer que les données sont bien envoyées aux serveurs de Firefox Sync, cliquez sur le bouton “Synchroniser maintenant” dans les paramètres de Firefox ou dans votre profil dans le menu principal (le bouton avec les trois lignes).`,
-    hu: `A Sidebery a Firefox szinkronizáló szolgáltatását használja, ezért:
+    hu: `A Sidechery a Firefox szinkronizáló szolgáltatását használja, ezért:
 – A használathoz be kell jelentkezni egy Firefox-fiókba.
 – A Firefox beállításaiban vagy főmenüjében (gomb három csíkkal) található „Szinkronizálás most” gomb használatával lehet meggyőződni arról, hogy az adatok feltöltése ténylegesen megtörtént.`,
-    pl: `Sidebery używa synchronizacji Firefox, więc:
+    pl: `Sidechery używa synchronizacji Firefox, więc:
 - Musisz zalogować się do konta Firefox aby ona działała
 - Aby być pewnym, że dane są wysyłane do serwerów synchronizacji Firefoxa musisz nacisnąć przycisk "Synchronizuj teraz" w ustawieniach Firefoxa lub w swoim profilu w głównym menu (przycisk hamburgera)`,
-    ru: `Sidebery использует синхронизацию Firefox, поэтому:
+    ru: `Sidechery использует синхронизацию Firefox, поэтому:
 - Чтобы синхронизация работала, вам нужно зайти в Firefox аккаунт
 - Чтобы быть уверенным в том, что данные загрузились на сервер синхронизации Firefox, необходимо нажать на кнопку "Синхронизировать" в настройках или в вашем профиле в главном меню`,
-    zh_CN: `- Sidebery 使用 Firefox 同步，因此您需要登录到 Firefox 帐户才能运行
+    zh_CN: `- Sidechery 使用 Firefox 同步，因此您需要登录到 Firefox 帐户才能运行
 - 要确保数据已上传到 Firefox 同步服务器，您需要在 Firefox 设置或主菜单的个人资料中按“立即同步”按钮（三行按钮）`,
-    zh_TW: `- 您需要登入 Mozilla 帳號方可運行，因為 Sidebery 使用 Firefox 同步來實作本功能
+    zh_TW: `- 您需要登入 Mozilla 帳號方可運行，因為 Sidechery 使用 Firefox 同步來實作本功能
 - 要確保資料已上傳到 Firefox 同步伺服器，您需要在下列六處擇一按「立刻同步」按鈕：
   -「工具列 > 應用程式選單 > Mozilla 帳號（設定 > 同步）」
   -「工具列 > Mozilla 帳號（設定 > 同步）」
   -「選單列 > 工具（編輯 > 設定 > 同步）」`,
-    ja: `- Sidebery は Firefox 同期を使用しているため、次のようになります：
+    ja: `- Sidechery は Firefox 同期を使用しているため、次のようになります：
 - この機能を使用するには Firefox アカウントにログインする必要があります
 - データが Firefox 同期サーバーにアップロードされたことを確認するには、Firefox 設定またはメインメニュー（三行ボタン）内のプロファイルで「今すぐ同期」ボタンを押す必要があります`,
   },

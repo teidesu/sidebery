@@ -1,11 +1,11 @@
 # Contributing
 
-Thank you for your interest in contributing to this project! Here you can find options to help maintain and develop Sidebery.
+Thank you for your interest in contributing to this project! Here you can find options to help maintain and develop Sidechery.
 
 
 ## Discussions
 
-You can ask/answer a question or start a general discussion related to Sidebery.
+You can ask/answer a question or start a general discussion related to Sidechery.
 
 
 ## Issues
@@ -20,7 +20,7 @@ You can open a PR to fix a bug, change/create translation or add a new feature. 
 ### Translations
 
 To edit/add translation:
-- Open a dictionary file in `https://github.com/mbnuqw/sidebery/blob/v5/src/_locales`
+- Open a dictionary file in `https://github.com/teidesu/sidechery/blob/main/src/_locales`
 - Click on a pencil icon to edit the file.
 - Make some changes, e.g.:
   ```ts

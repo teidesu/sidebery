@@ -124,7 +124,7 @@ export default defineConfig({
       if (wxt.config.browser === 'firefox') {
         manifest.sidebar_action = {
           default_icon: 'assets/logo-native.svg',
-          default_title: 'Sidebery',
+          default_title: 'Sidechery',
           default_panel: 'sidebar/sidebar.html',
         }
       }

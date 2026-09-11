@@ -2,7 +2,7 @@
 
 > sidebery + chrome = sidechery
 
-vibecoded port of sidebery for chromium. not published anywhere, plz install as an unpacked ext from gh releases.
+vibecoded port of sidebery for chromium. not published anywhere, install from [nightly.link](https://nightly.link/teidesu/sidechery/workflows/build-artifacts/main)
 
 ### note on side panels in chrome
 
@@ -13,7 +13,7 @@ due to limitations of chromium extensions api, you will need to manually open th
 it is currently recommended to use [helium](https://helium.computer), with the following configuration:
 
 - Browser layout: vertical
-  - Show vertical tabs on right side: on (if you want sidebery to be on the left, to avoid hover-reveal conflicts)
+  - Show vertical tabs on right side: on (if you want sidechery to be on the left, to avoid hover-reveal conflicts)
 - Side panel position -> Helium Panels: Left (i.e. opposite of the above)
 - Frameless mode: on
   - Always show the sidebar: off
@@ -58,7 +58,8 @@ and these custom styles:
 <img src="docs/assets/helium-colors-guide.png" alt="where to find the colors" width="75%">
 </div>
 
-original readme below
+
+original firefox-specific readme below:
 
 ---
 
@@ -93,15 +94,9 @@ Firefox extension for managing tabs and bookmarks in sidebar.
 
 ## Install
 
-**Stable**:
-[Release page](https://github.com/mbnuqw/sidebery/releases/latest) |
-[Addon page](https://addons.mozilla.org/firefox/addon/sidebery/) (reviewed by Mozilla)  
-**Nightly** (v5.6.1.4):
-[Install](https://github.com/mbnuqw/sidebery/releases/download/v5.6.1/sidebery-5.6.1.4.xpi)
-> [!NOTE]
-> Nightly release is a signed build created via [github actions](https://github.com/mbnuqw/sidebery/actions/workflows/nightly-release.yml). It supports auto-updates and is designed for testing new features. A few previous nightly releases can be found in the Assets section of the latest [release notes](https://github.com/mbnuqw/sidebery/releases).
->
-> If you're manually updating an already installed Sidebery version you also need to open the Add-ons Manager (about:addon) and click on the 'Update Now' button in the Sidebery card or restart the browser.
+*(snip)*
+
+sidechery can be installed from [nightly.link](https://nightly.link/teidesu/sidechery/workflows/build-artifacts/main)
 
 ## About
 

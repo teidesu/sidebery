@@ -2,6 +2,8 @@
 
 This fork adds Chromium support to upstream Sidebery v5. Keep Firefox behavior unchanged unless a browser-specific implementation is required.
 
+The product branding is Sidechery. Preserve `sidebery` only for upstream references and compatibility-sensitive internal paths, globals, storage keys, and extension identity.
+
 ## Intentional divergences
 
 - WXT owns build, dev, zip, entrypoint discovery, manifest generation, SVG inlining, locale generation, and per-browser output. See `wxt.config.ts` and `wxt/`.

@@ -1563,7 +1563,7 @@ function onTabMoved(id: ID, info: browser.tabs.MoveInfo): void {
 
   // Logs.info('Tabs.onTabMove', id, info.fromIndex, info.toIndex)
 
-  // Check if tab moved by Sidebery so no additional handling is needed
+  // Check if tab moved by Sidechery so no additional handling is needed
   if (tab.moving !== undefined) {
     tab.dstPanelId = D.NOID
     Tabs.saveTabData(id)
@@ -1691,7 +1691,7 @@ function onTabDetached(id: ID, info: browser.tabs.DetachInfo): void {
   if (Tabs.tabsReinitializing) return Tabs.reinitTabs()
 
   // Ignore this event if the tab is in `Tabs.detachingTabIds`
-  // because it's already handled by Sidebery
+  // because it's already handled by Sidechery
   if (Tabs.detachingTabIds.has(id)) {
     Tabs.detachingTabIds.delete(id)
     return
@@ -1720,7 +1720,7 @@ async function onTabAttached(id: ID, info: browser.tabs.AttachInfo): Promise<voi
   if (Tabs.tabsReinitializing) return Tabs.reinitTabs()
 
   // Ignore this event if the tab is in `Tabs.attachingTabs`
-  // because it's already handled by Sidebery
+  // because it's already handled by Sidechery
   const ai = Tabs.attachingTabs.findIndex(t => t.id === id)
   if (ai > -1) {
     Tabs.attachingTabs.splice(ai, 1)

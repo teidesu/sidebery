@@ -178,7 +178,7 @@ export async function addSnapshot(snapshot: NormalizedSnapshot): Promise<void> {
 
 function getExportPath(expInfo: SnapExportInfo) {
   let snapAutoExportPath = Settings.state.snapAutoExportPath
-  if (!snapAutoExportPath) snapAutoExportPath = 'Sidebery/snapshot-%Y.%M.%D-%h.%m.%s'
+  if (!snapAutoExportPath) snapAutoExportPath = 'Sidechery/snapshot-%Y.%M.%D-%h.%m.%s'
   snapAutoExportPath = Utils.dateTimeTemplate(snapAutoExportPath, expInfo.time)
   snapAutoExportPath = snapAutoExportPath.replace(/^\.+/, '')
 
