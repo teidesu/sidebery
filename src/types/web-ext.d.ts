@@ -1149,7 +1149,7 @@ declare namespace browser {
 
     const onVisited: EventTarget<VisitedListener>
     const onVisitRemoved: EventTarget<VisitRemovedListener>
-    const onTitleChanged: EventTarget<TitleChangedListener>
+    const onTitleChanged: EventTarget<TitleChangedListener> | undefined
   }
 
   /**

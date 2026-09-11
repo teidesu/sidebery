@@ -458,7 +458,7 @@ export function setupListeners(): void {
   if (!browser.history) return
   browser.history.onVisited.addListener(onVisit)
   browser.history.onVisitRemoved.addListener(onRemoved)
-  browser.history.onTitleChanged.addListener(onTitleChange)
+  browser.history.onTitleChanged?.addListener(onTitleChange)
   if (Settings.state.historyTitleUpdInterval > 0) {
     startTitleChangeIntervalDebouncer()
   }
@@ -468,7 +468,7 @@ export function resetListeners(): void {
   if (!browser.history) return
   browser.history.onVisited.removeListener(onVisit)
   browser.history.onVisitRemoved.removeListener(onRemoved)
-  browser.history.onTitleChanged.removeListener(onTitleChange)
+  browser.history.onTitleChanged?.removeListener(onTitleChange)
   stopTitleChangeIntervalDebouncer()
 }
 
