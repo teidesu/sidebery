@@ -16,7 +16,10 @@
         @contextmenu="onTabContextMenu")
         .body
           .flash-fx
-          .fav(@dragstart.stop.prevent)
+          .fav(
+            :data-native-favicon="Favicons.isNativeFavicon(rmt.favIconUrl) || undefined"
+            :style="{ '--native-favicon': `url(${JSON.stringify(rmt.favIconUrl)})` }"
+            @dragstart.stop.prevent)
             svg.fav-icon(v-if="!rmt.favIconUrl"): use(:href="rmt.favPlaceholder")
             img.fav-icon(v-if="rmt.favIconUrl" :src="rmt.favIconUrl" draggable="false")
           .t-box: .title {{rmt.title}}
@@ -43,6 +46,7 @@ import * as Sidebar from 'src/services/sidebar.fg'
 import * as DnD from 'src/services/drag-and-drop.fg'
 import * as Windows from 'src/services/windows.fg'
 import * as Utils from 'src/utils'
+import * as Favicons from 'src/services/favicons'
 import ScrollBox from 'src/components/scroll-box.vue'
 
 const state = reactive({

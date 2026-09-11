@@ -170,7 +170,7 @@ export function rememberRemoved(tabs: Tab[]) {
       lvl: parent ? tab.lvl - minLvl : 0,
       containerId: tab.cookieStoreId,
       containerColor: Containers.reactive.byId[tab.cookieStoreId]?.color,
-      favIconUrl: tab.favIconUrl,
+      favIconUrl: tab.favIconUrl || Favicons.getNativeFavicon(tab.url),
       favPlaceholder: Favicons.getFavPlaceholder(tab.url),
       time: timestamp,
     }

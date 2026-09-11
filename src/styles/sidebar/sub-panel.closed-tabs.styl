@@ -178,6 +178,17 @@
   opacity: 1
   margin: 0 var(--tabs-inner-gap) 0 calc(var(--tabs-inner-gap) + 2px)
   z-index: 20
+  color: var(--frame-fg)
+  &[data-native-favicon]
+    &:before
+      content: ''
+      position: absolute
+      inset: 0
+      background-color: currentColor
+      -webkit-mask: var(--native-favicon) center / contain no-repeat
+      mask: var(--native-favicon) center / contain no-repeat
+    img
+      visibility: hidden
   > svg
     opacity: .7
 

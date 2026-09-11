@@ -2957,7 +2957,7 @@ export function renderFaviconInto(
 ): void {
   if (!tab.favIconUrl) tab.favIconUrl = Favicons.getNativeFavicon(tab.url)
   if (tab.favIconUrl && imgEl) {
-    const nativeFavicon = tab.favIconUrl.startsWith(browser.runtime.getURL('/_favicon/'))
+    const nativeFavicon = Favicons.isNativeFavicon(tab.favIconUrl)
     // Set img
     imgEl.src = tab.favIconUrl
     imgEl.toggleAttribute('data-native-favicon', nativeFavicon)

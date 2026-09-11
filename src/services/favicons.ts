@@ -128,6 +128,10 @@ export function getNativeFavicon(url: string): string {
   return faviconUrl.toString()
 }
 
+export function isNativeFavicon(url?: string): boolean {
+  return !!url?.startsWith(browser.runtime.getURL('/_favicon/'))
+}
+
 export function getFavPlaceholder(url?: string): string {
   if (!url) return '#icon_ff'
 
