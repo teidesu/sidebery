@@ -129,7 +129,9 @@ export function getNativeFavicon(url: string): string {
 }
 
 export function isNativeFavicon(url?: string): boolean {
-  return !!url?.startsWith(browser.runtime.getURL('/_favicon/'))
+  if (!url?.startsWith(browser.runtime.getURL('/_favicon/'))) return false
+  const pageUrl = new URL(url).searchParams.get('pageUrl')
+  return !pageUrl?.startsWith('chrome-extension://')
 }
 
 export function getFavPlaceholder(url?: string): string {
