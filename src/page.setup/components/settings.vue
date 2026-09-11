@@ -5,7 +5,7 @@
   OmniboxSection
   NavbarSection
   GroupSection
-  ContainersSection
+  ContainersSection(v-if="Containers.isSupported()")
   DndSection
   SearchSection
   TabsSection
@@ -31,6 +31,7 @@
 <script lang="ts" setup>
 import { ref, onActivated } from 'vue'
 import * as Info from 'src/services/info'
+import * as Containers from 'src/services/containers'
 import * as SetupPage from 'src/services/setup-page.fg'
 import GeneralSection from './settings.general.vue'
 import MenuSection from './settings.menu.vue'

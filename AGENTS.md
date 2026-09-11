@@ -26,6 +26,7 @@ This fork adds Chromium support to upstream Sidebery v5. Keep Firefox behavior u
 - Use `Info.isFirefox`/`Info.isChromium` for browser-family branches. Keep direct API feature detection only for capabilities that can vary by browser version or permission.
 - `src/services/permissions.ts` filters Firefox-only permission names before calling the permissions API. Route new permission checks/requests through it; Chrome rejects unknown names such as `tabHide` and `webRequestBlocking`.
 - `src/services/containers.ts` owns contextual-identity capability detection. Chromium disables native container loading/listeners, and tab normalization supplies `DEFAULT_CONTAINER_ID` when `cookieStoreId` is absent.
+- The setup page hides its Containers section and navigation entry when `Containers.isSupported()` is false; direct container-section hashes fall back to General.
 - Container-dependent request interception and per-container proxy handlers are disabled when contextual identities are unavailable.
 - Context-menu code uses the shared `browser.contextMenus` namespace. Route creation through `src/services/context-menu.ts`, which removes Firefox-only creation fields on Chromium. Firefox-only `onHidden` and `overrideContext` calls remain optional.
 - Shared style/favicon/settings helpers and `src/bg/background.ts` guard DOM globals so Chromium's service worker can initialize. Background favicon resizing is skipped without DOM canvas support. Do not add unguarded `window`, `document`, `Image`, or `localStorage` access to background imports/startup.
@@ -40,7 +41,7 @@ This fork adds Chromium support to upstream Sidebery v5. Keep Firefox behavior u
 These are not handled by the build migration yet:
 
 - Remaining `browser.sidebarAction.isOpen` call sites need an equivalent Chromium open-state source.
-- Container creation/configuration UI still needs to be hidden on Chromium; native contextual identities remain unavailable there.
+- Container controls outside the main settings section still need to be hidden on Chromium; native contextual identities remain unavailable there.
 - `menus.overrideContext` remains Firefox-only and needs guards at call sites.
 - `browser.pageAction`, `tabs.hide/show`, window `titlePreface`, and Firefox proxy behavior need guards or alternatives.
 - The Chromium background service worker still contains timer and in-memory lifetime assumptions.

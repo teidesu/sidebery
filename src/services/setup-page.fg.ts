@@ -72,7 +72,7 @@ export let reactive: SetupPageReactiveState = {
     { active: false, name: 'settings_omnibox', lvl: 1 },
     { active: false, name: 'settings_nav', lvl: 1 },
     { active: false, name: 'settings_group', lvl: 1 },
-    { active: false, name: 'settings_containers', lvl: 1 },
+    ...(Containers.isSupported() ? [{ active: false, name: 'settings_containers', lvl: 1 }] : []),
     { active: false, name: 'settings_dnd', lvl: 1 },
     { active: false, name: 'settings_search', lvl: 1 },
     { active: false, name: 'settings_tabs', lvl: 1 },
@@ -205,6 +205,7 @@ export async function updateActiveView(): Promise<void> {
   const hashArg = hash.split('.')
   hash = hashArg[0]
   const arg = hashArg[1]
+  if (!Containers.isSupported() && hash === 'settings_containers') hash = 'settings_general'
   const scrollSectionConf: ScrollIntoViewOptions = { behavior: 'smooth', block: 'start' }
 
   if (navLockTimeout) clearTimeout(navLockTimeout)
