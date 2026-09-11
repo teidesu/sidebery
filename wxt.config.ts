@@ -52,10 +52,13 @@ export default defineConfig({
       delete manifest.action.default_area
       delete manifest.action.theme_icons
 
+      manifest.commands._execute_action = manifest.commands._execute_sidebar_action
+      delete manifest.commands._execute_sidebar_action
+
       for (const [name, command] of Object.entries(
         manifest.commands as Record<string, { suggested_key?: Record<string, string> }>
       )) {
-        if (name === '_execute_sidebar_action' && command.suggested_key?.default) {
+        if (name === '_execute_action' && command.suggested_key?.default) {
           command.suggested_key.windows = command.suggested_key.default
         } else {
           delete command.suggested_key

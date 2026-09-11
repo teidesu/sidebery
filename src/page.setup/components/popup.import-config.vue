@@ -178,7 +178,7 @@ const faviconsInactive = computed((): boolean => {
 })
 const keybindingsInactive = computed((): boolean => {
   const data = props.importedData
-  return !data.keybindings
+  return !Keybindings.canUpdate || !data.keybindings
 })
 const importInactive = computed((): boolean => {
   return (

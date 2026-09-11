@@ -1,5 +1,6 @@
 <template lang="pug">
 .keybinding(
+  :data-readonly="!Keybindings.canUpdate"
   :is-focused="keybinding.focus"
   :data-error="!!keybinding.error")
   .label(@click="changeKeybinding(keybinding)") {{keybinding.description}}
@@ -14,6 +15,7 @@
     @keydown.prevent.stop="onKBKey($event, keybinding)"
     @keyup.prevent.stop="onKBKeyUp($event)")
   .icon-btn(
+    v-if="Keybindings.canUpdate"
     :data-enabled="!!keybinding.shortcut"
     @click="removeKeybinding(keybinding)"): svg: use(href="#icon_remove")
 </template>
@@ -39,6 +41,8 @@ let errMsg = ''
 const inputLabel = computed((): string => state.newShortcut || translate('settings.kb_input'))
 
 function changeKeybinding(cmd: Command): void {
+  if (!Keybindings.canUpdate) return
+
   state.newShortcut = ''
   errMsg = ''
 
@@ -168,6 +172,7 @@ function onKBKeyUp(e: Event): void {
 }
 
 function removeKeybinding(cmd: Command): void {
+  if (!Keybindings.canUpdate) return
   if (!cmd.shortcut) return
   Keybindings.update(cmd, { shortcut: '', focus: false })
 }

@@ -3,6 +3,9 @@
   section(ref="el")
     h2 {{translate('settings.kb_general')}}
     span.header-shadow
+    .info(v-if="Info.isChromium")
+      a.link(href="#" @click.prevent="openShortcutSettings").
+        {{translate('settings.kb_manage_in_browser')}}
     KeybindingField.-no-separator(:keybinding="Keybindings.reactive.byName._execute_sidebar_action")
     KeybindingField(:keybinding="Keybindings.reactive.byName.activate")
     .info {{translate('settings.kb_select_act_note')}}
@@ -211,7 +214,7 @@
 
   section
     .ctrls
-      .btn(@click="Keybindings.resetKeybindings") {{translate('settings.reset_kb')}}
+      .btn(v-if="Keybindings.canUpdate" @click="Keybindings.resetKeybindings") {{translate('settings.reset_kb')}}
 </template>
 
 <script lang="ts" setup>
@@ -220,6 +223,7 @@ import { translate } from 'src/dict'
 import * as Settings from 'src/services/settings.fg'
 import * as SetupPage from 'src/services/setup-page.fg'
 import * as Keybindings from 'src/services/keybindings.fg'
+import * as Info from 'src/services/info'
 import KeybindingField from 'src/page.setup/components/keybindings.keybinding.vue'
 import ToggleField from 'src/components/toggle-field.vue'
 import SelectField from 'src/components/select-field.vue'
@@ -228,4 +232,8 @@ import InfoField from 'src/components/info-field.vue'
 const el = ref<HTMLElement | null>(null)
 
 onMounted(() => SetupPage.registerEl('settings_keybindings', el.value))
+
+function openShortcutSettings(): void {
+  browser.tabs.create({ url: 'chrome://extensions/shortcuts' })
+}
 </script>

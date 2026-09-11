@@ -7208,6 +7208,17 @@ Available parameters:
     zh_TW: '一般',
     ja: '一般',
   },
+  'settings.kb_manage_in_browser': {
+    en: 'Manage shortcuts in Chromium',
+    de: 'Tastenkürzel in Chromium verwalten',
+    fr: 'Gérer les raccourcis dans Chromium',
+    hu: 'Billentyűparancsok kezelése a Chromiumban',
+    pl: 'Zarządzaj skrótami w Chromium',
+    ru: 'Настроить сочетания клавиш в Chromium',
+    zh_CN: '在 Chromium 中管理快捷键',
+    zh_TW: '在 Chromium 中管理快速鍵',
+    ja: 'Chromium でショートカットを管理',
+  },
   'settings.kb_select_act_note': {
     en: `- Activate selected tab
 - Open selected bookmark

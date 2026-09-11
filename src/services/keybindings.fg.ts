@@ -19,6 +19,7 @@ import * as SidebarConfig from 'src/services/sidebar-config'
 import * as SetupPage from 'src/services/setup-page.fg'
 import * as Notifications from 'src/services/notifications.fg'
 import { translate } from 'src/dict'
+import * as Info from 'src/services/info'
 
 export interface KBState {
   list: T.Command[]
@@ -33,18 +34,37 @@ export let reactive: KBState = {
   byName: {},
 }
 
+export const canUpdate = typeof browser.commands.update === 'function'
+
 export function reactivate(r: T.Reactivator<KBState>) {
   reactive = r(reactive)
+}
+
+export async function getAll(): Promise<T.Command[]> {
+  const commands = (await browser.commands.getAll()) as T.Command[]
+  if (Info.isChromium) {
+    const action = commands.find(command => command.name === '_execute_action')
+    if (action) {
+      action.name = '_execute_sidebar_action'
+      action.description ||= browser.i18n.getMessage('KbOpenSidebarPanel')
+    }
+  }
+  return commands
+}
+
+function getNativeCommandName(name: string): string {
+  if (Info.isChromium && name === '_execute_sidebar_action') return '_execute_action'
+  return name
 }
 
 /**
  * Load keybindings
  */
 export async function load(): Promise<void> {
-  const commands = await browser.commands.getAll()
+  const commands = await getAll()
   reactive.byName = {}
 
-  for (const k of commands as T.Command[]) {
+  for (const k of commands) {
     if (!k.name) continue
     k.error = ''
     k.focus = false
@@ -66,11 +86,13 @@ export async function saveKeybindingsToSync(): Promise<void> {
 export const saveKeybindingsToSyncDebounced = Utils.debounce(saveKeybindingsToSync)
 
 export async function importSyncedKeybindings(entry: Sync.SyncedEntry) {
+  if (!canUpdate) return
+
   Logs.info('Keybindings.importSyncedKeybindings(): entry:', entry)
 
   const prevKeybindings: Record<string, string> = {}
-  const commands = await browser.commands.getAll()
-  for (const k of commands as T.Command[]) {
+  const commands = await getAll()
+  for (const k of commands) {
     if (k.name && k.shortcut) prevKeybindings[k.name] = k.shortcut
   }
 
@@ -91,11 +113,13 @@ export async function importSyncedKeybindings(entry: Sync.SyncedEntry) {
 }
 
 export async function importKeybindings(keybindings: Record<string, string>) {
+  if (!canUpdate) return
+
   // Logs.info('Keybindings.importKeybindings(): keybindings:', keybindings)
 
   const waiting = []
-  const commands = await browser.commands.getAll()
-  for (const k of commands as T.Command[]) {
+  const commands = await getAll()
+  for (const k of commands) {
     if (!k.name) continue
 
     const name = k.name
@@ -103,11 +127,14 @@ export async function importKeybindings(keybindings: Record<string, string>) {
 
     // Find conflicting shortcuts
     const toReset = commands.find(k => k.shortcut === shortcut && k.name !== name)
-    if (toReset?.name) await browser.commands.update({ name: toReset.name, shortcut: '' })
+    if (toReset?.name) {
+      await browser.commands.update({ name: getNativeCommandName(toReset.name), shortcut: '' })
+    }
 
     // Set or remove shortcut
-    if (shortcut) waiting.push(browser.commands.update({ name, shortcut }))
-    else waiting.push(browser.commands.update({ name, shortcut: '' }))
+    const nativeName = getNativeCommandName(name)
+    if (shortcut) waiting.push(browser.commands.update({ name: nativeName, shortcut }))
+    else waiting.push(browser.commands.update({ name: nativeName, shortcut: '' }))
   }
 
   await Promise.allSettled(waiting)
@@ -118,8 +145,10 @@ export async function importKeybindings(keybindings: Record<string, string>) {
  * Reset addon's keybindings
  */
 export async function resetKeybindings(): Promise<void> {
+  if (!canUpdate) return
+
   const waitGroup = reactive.list.map(async k => {
-    if (k.name) return browser.commands.reset(k.name)
+    if (k.name) return browser.commands.reset(getNativeCommandName(k.name))
   })
 
   await Promise.all(waitGroup)
@@ -145,6 +174,8 @@ export function checkShortcut(shortcut: string): 'valid' | 'duplicate' | 'invali
  * Update keybinding
  */
 export async function update(cmd: T.Command, details: T.CommandUpdateDetails): Promise<void> {
+  if (!canUpdate) return
+
   Object.assign(cmd, details)
 
   if (details.shortcut !== undefined && cmd.name) {
@@ -152,7 +183,10 @@ export async function update(cmd: T.Command, details: T.CommandUpdateDetails): P
       saveKeybindingsToSyncDebounced(150)
     }
 
-    await browser.commands.update({ name: cmd.name, shortcut: details.shortcut })
+    await browser.commands.update({
+      name: getNativeCommandName(cmd.name),
+      shortcut: details.shortcut,
+    })
   }
 }
 

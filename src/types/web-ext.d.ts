@@ -567,8 +567,29 @@ declare namespace browser {
       tabId?: ID
       windowId?: ID
     }
+    interface PanelBehavior {
+      openPanelOnActionClick?: boolean
+    }
 
     function open(options: OpenOptions): Promise<void>
+    function setPanelBehavior(behavior: PanelBehavior): Promise<void>
+  }
+
+  namespace webNavigation {
+    interface NavigationDetails {
+      tabId: ID
+      frameId: number
+      url: string
+      timeStamp: number
+    }
+
+    type NavigationListener = (details: NavigationDetails) => void
+
+    const onBeforeNavigate: EventTarget<NavigationListener>
+    const onCompleted: EventTarget<NavigationListener>
+    const onErrorOccurred: EventTarget<NavigationListener>
+    const onHistoryStateUpdated: EventTarget<NavigationListener>
+    const onReferenceFragmentUpdated: EventTarget<NavigationListener>
   }
 
   /**

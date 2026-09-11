@@ -23,6 +23,7 @@ import { translate } from 'src/dict'
 import * as Utils from 'src/utils'
 import * as Styles from 'src/services/styles'
 import * as Logs from 'src/services/logs'
+import * as Keybindings from 'src/services/keybindings.fg'
 import ToggleField from '../../components/toggle-field.vue'
 
 const rootEl = ref<HTMLElement | null>(null)
@@ -142,7 +143,7 @@ async function genExportData(): Promise<void> {
 
   if (state.keybindings) {
     backup.keybindings = {}
-    const cmds = (await browser.commands.getAll()) ?? []
+    const cmds = await Keybindings.getAll()
     for (const cmd of cmds) {
       if (cmd.name && cmd.shortcut) backup.keybindings[cmd.name] = cmd.shortcut
     }

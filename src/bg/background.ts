@@ -139,6 +139,13 @@ export default defineBackground(() => {
   function initToolbarButton(): void {
     Menu.createBrowserActionMenu()
 
+    if (Info.isChromium && browser.sidePanel?.setPanelBehavior) {
+      browser.sidePanel
+        .setPanelBehavior({ openPanelOnActionClick: true })
+        .catch(err => Logs.err('Cannot configure side panel action:', err))
+      return
+    }
+
     browser.action.onClicked.addListener((tab, info): void => {
       if (info && info.button === 1) browser.runtime.openOptionsPage()
       else SidebarAction.toggle(tab.windowId)
