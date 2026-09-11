@@ -19,6 +19,7 @@ import * as Mouse from 'src/services/mouse.fg'
 import * as Popups from 'src/services/popups.fg'
 import * as Links from 'src/services/links'
 import * as Info from 'src/services/info.fg'
+import * as SessionValues from 'src/services/session-values'
 
 const EXT_HOST = browser.runtime.getURL('').slice(16)
 const URL_HOST_PATH_RE = /^([a-z0-9-]{1,63}\.)+\w+(:\d+)?\/[A-Za-z0-9-._~:/?#[\]%@!$&'()*+,;=]*$/
@@ -69,8 +70,7 @@ function waitForOtherReopenedTabs(tab: Tab): void {
 
   // Get session data of probably reopened tab
   // to check if it was actually reopened
-  browser.sessions
-    .getTabValue<TabSessionData>(tab.id, 'data')
+  SessionValues.getTabValue<TabSessionData>(tab.id, 'data')
     .then(data => {
       tab.reopened = !!data
 
@@ -136,15 +136,15 @@ function checkIfSessionIsRestoring(newTab: Tab) {
     Tabs.cancelSavingTabData()
 
     maybeRestoredTabsDataQuerying = maybeRestoredTabs.map(t => {
-      return browser.sessions
-        .getTabValue<TabSessionData | undefined>(t.id, 'data')
-        .catch(() => undefined)
+      return SessionValues.getTabValue<TabSessionData | undefined>(t.id, 'data').catch(
+        () => undefined
+      )
     })
   }
 
   // or continue to get tab session data;
   else if (maybeRestoredTabsDataQuerying) {
-    const dataQuerying = browser.sessions.getTabValue<TabSessionData | undefined>(newTab.id, 'data')
+    const dataQuerying = SessionValues.getTabValue<TabSessionData | undefined>(newTab.id, 'data')
     maybeRestoredTabsDataQuerying.push(dataQuerying.catch(() => undefined))
   }
 
@@ -221,7 +221,7 @@ async function tryToRestoreTabsStateFromSessionData(
     data = sData[i]
     if (!tab || !data) continue
 
-    const saving = browser.sessions.setTabValue(tab.id, 'data', data).catch(err => {
+    const saving = SessionValues.setTabValue(tab.id, 'data', data).catch(err => {
       Logs.warn('Tabs.tryToRestoreTabsStateFromSessionData: Cannot resave session data:', err)
     })
     resavingSessionData.push(saving)

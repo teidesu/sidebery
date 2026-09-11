@@ -6,6 +6,7 @@ import * as Logs from 'src/services/logs'
 import * as Settings from 'src/services/settings'
 import * as Sidebar from 'src/services/sidebar.fg'
 import * as Info from 'src/services/info'
+import * as SessionValues from 'src/services/session-values'
 
 export interface WindowsState {
   choosing: WindowChooseOption[] | null
@@ -41,7 +42,7 @@ export function setCurrentId(newId: ID) {
 export async function load(): Promise<void> {
   const winData = await Promise.all([
     browser.windows.getCurrent({ populate: false }),
-    browser.sessions.getWindowValue<string>(browser.windows.WINDOW_ID_CURRENT, 'uniqWinId'),
+    SessionValues.getWindowValue<string>(browser.windows.WINDOW_ID_CURRENT, 'uniqWinId'),
   ])
   const currentWindow = winData[0]
   uniqWinId = winData[1] ?? NOID
@@ -55,7 +56,7 @@ export async function load(): Promise<void> {
   // Generate unique window id
   if (uniqWinId === NOID) {
     uniqWinId = Utils.uid()
-    browser.sessions.setWindowValue(browser.windows.WINDOW_ID_CURRENT, 'uniqWinId', uniqWinId)
+    SessionValues.setWindowValue(browser.windows.WINDOW_ID_CURRENT, 'uniqWinId', uniqWinId)
   }
 
   incognito = currentWindow.incognito

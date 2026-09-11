@@ -23,6 +23,7 @@ import * as Popups from 'src/services/popups.fg'
 import { turnOffBeforeRequestHandler, turnOnBeforeRequestHandler } from 'src/services/web-req.fg'
 import * as SidebarConf from 'src/services/sidebar-config'
 import * as Sync from 'src/services/sync.fg'
+import * as SessionValues from 'src/services/session-values'
 
 export interface SidebarReactiveState {
   nav: ID[]
@@ -211,8 +212,8 @@ export async function loadPanels(): Promise<void> {
 
   const [storage, activeId, hiddenPanels] = await Promise.all([
     loadSidebarConfig(),
-    browser.sessions.getWindowValue<ID>(Windows.id, 'activePanelId').catch(() => undefined),
-    browser.sessions.getWindowValue<ID[]>(Windows.id, 'hiddenPanels').catch(() => undefined),
+    SessionValues.getWindowValue<ID>(Windows.id, 'activePanelId').catch(() => undefined),
+    SessionValues.getWindowValue<ID[]>(Windows.id, 'hiddenPanels').catch(() => undefined),
   ])
 
   if (!storage.sidebar?.nav?.length) {
@@ -1265,7 +1266,7 @@ let prevSavedActPanelId = D.NOID
 function saveActivePanel(): void {
   if (Windows.incognito || prevSavedActPanelId === activePanelId) return
   prevSavedActPanelId = activePanelId
-  browser.sessions.setWindowValue(Windows.id, 'activePanelId', activePanelId)
+  SessionValues.setWindowValue(Windows.id, 'activePanelId', activePanelId)
 }
 const saveActivePanelDebounced = Utils.debounce(saveActivePanel)
 
@@ -1676,7 +1677,7 @@ export function saveHiddenPanels() {
   for (const panel of panels) {
     if (panel.hidden) hiddenPanels.push(panel.id)
   }
-  browser.sessions.setWindowValue(Windows.id, 'hiddenPanels', hiddenPanels)
+  SessionValues.setWindowValue(Windows.id, 'hiddenPanels', hiddenPanels)
 }
 
 interface RemovingPanelConf {

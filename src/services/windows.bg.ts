@@ -9,6 +9,7 @@ import * as Omnibox from 'src/services/omnibox.bg'
 import * as Sidebar from 'src/services/sidebar.bg'
 import * as Utils from 'src/utils'
 import { translate } from 'src/dict'
+import * as SessionValues from 'src/services/session-values'
 
 export const byId = new Map<ID, BgWindow>()
 export let lastFocusedId = NOID
@@ -172,7 +173,7 @@ export async function createWithTabs(
     }
     if (srcInfo.customTitle) sessionData.customTitle = srcInfo.customTitle
     if (srcInfo.customColor) sessionData.customColor = srcInfo.customColor
-    browser.sessions.setTabValue(tab.id, 'data', sessionData).catch(err => {
+    SessionValues.setTabValue(tab.id, 'data', sessionData).catch(err => {
       Logs.err('Windows.createWithTabs: Cannot set session data:', err)
     })
 

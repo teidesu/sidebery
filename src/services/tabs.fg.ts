@@ -18,6 +18,7 @@ import * as Selection from 'src/services/selection.fg'
 import * as Favicons from 'src/services/favicons.fg'
 import * as Links from 'src/services/links'
 import * as Preview from 'src/services/tabs.fg.preview'
+import * as SessionValues from 'src/services/session-values'
 
 import * as Tabs from 'src/services/tabs.fg'
 
@@ -378,7 +379,7 @@ async function restoreTabsState(src?: LoadSrc, ignoreLockedTabs?: boolean): Prom
   // From session data
   else {
     const querying = nativeTabs.map(t =>
-      browser.sessions.getTabValue<T.TabSessionData>(t.id, 'data').catch(() => undefined)
+      SessionValues.getTabValue<T.TabSessionData>(t.id, 'data').catch(() => undefined)
     )
     try {
       tabsSessionData = (await Promise.all(querying)) ?? []
@@ -827,7 +828,7 @@ function _saveTabData(tabId: ID, forced?: boolean): void {
   else data.customColor = undefined
 
   // Logs.info('Tabs.saveTabData: Saving...', tabId, { ...data })
-  browser.sessions.setTabValue(tabId, 'data', data).catch(err => {
+  SessionValues.setTabValue(tabId, 'data', data).catch(err => {
     Logs.err('Tabs.saveTabData: Cannot set value in session:', err)
   })
 }

@@ -504,6 +504,7 @@ declare namespace browser {
     const local: StorageArea
     const sync: StorageArea
     const managed: StorageArea
+    const session: StorageArea | undefined
 
     interface StorageChange<T> {
       newValue: T
