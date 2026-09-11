@@ -42,13 +42,22 @@ export default defineConfig({
       manifest.permissions.push('proxy')
       manifest.icons = {
         16: 'assets/logo-16.png',
+        20: 'assets/logo-20.png',
+        24: 'assets/logo-24.png',
         32: 'assets/logo-32.png',
+        40: 'assets/logo-40.png',
         48: 'assets/logo-48.png',
+        64: 'assets/logo-64.png',
         128: 'assets/logo-128.png',
       }
       manifest.action.default_icon = {
         16: 'assets/logo-16.png',
+        20: 'assets/logo-20.png',
+        24: 'assets/logo-24.png',
         32: 'assets/logo-32.png',
+        40: 'assets/logo-40.png',
+        48: 'assets/logo-48.png',
+        64: 'assets/logo-64.png',
       }
       delete manifest.action.default_area
       delete manifest.action.theme_icons
@@ -125,8 +134,12 @@ export default defineConfig({
       for (const name of [
         'group-page-favicon.svg',
         'logo-16.png',
+        'logo-20.png',
+        'logo-24.png',
         'logo-32.png',
+        'logo-40.png',
         'logo-48.png',
+        'logo-64.png',
         'logo-128.png',
         'logo-native-dark.svg',
         'logo-native-light.svg',
