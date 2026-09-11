@@ -336,6 +336,7 @@ declare namespace browser {
     function update(tabId: ID, props: UpdateProperties): Promise<Tab>
     function update(props: UpdateProperties): Promise<Tab>
     function captureTab(tabId: ID, imageDetails: ImageDetails): Promise<string>
+    function captureVisibleTab(windowId?: ID, imageDetails?: ImageDetails): Promise<string>
     function moveInSuccession(tabIds: ID[], tabId?: ID): Promise<void>
     type Moved<T> = T extends ID[] ? Tab[] : T extends ID ? Tab : never
     function move<T extends ID[] | ID>(tabIds: T, moveProps: MoveProps): Promise<Moved<T>>

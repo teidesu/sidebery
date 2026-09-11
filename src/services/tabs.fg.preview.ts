@@ -10,6 +10,7 @@ import * as IPC from 'src/services/ipc'
 import * as Menu from 'src/services/menu.fg'
 import * as Mouse from 'src/services/mouse.fg'
 import * as Selection from 'src/services/selection.fg'
+import * as TabsApi from 'src/services/tabs-api'
 import { TabPreviewInitData } from 'src/injections/tab-preview'
 
 export const enum Status {
@@ -369,7 +370,7 @@ async function showSPreview(tab: Tab) {
       inlinePreviewConf.scale = window.devicePixelRatio
     }
 
-    preview = await browser.tabs.captureTab(tab.id, inlinePreviewConf).catch(() => '')
+    preview = await TabsApi.capture(tab, inlinePreviewConf).catch(() => '')
   }
 
   sPreviewTabId = tab.id
@@ -398,7 +399,7 @@ async function updateSPreview(tabId: ID) {
 
   let preview = ''
   if (!tab.discarded) {
-    preview = await browser.tabs.captureTab(tabId, inlinePreviewConf).catch(() => '')
+    preview = await TabsApi.capture(tab, inlinePreviewConf).catch(() => '')
   }
   if (state.status === Status.Closed || state.status === Status.Closing) return
   if (sPreviewTabId !== tabId) return

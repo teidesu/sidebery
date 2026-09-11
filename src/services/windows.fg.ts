@@ -4,6 +4,7 @@ import * as Preview from 'src/services/tabs.fg.preview'
 import * as Utils from 'src/utils'
 import * as Logs from 'src/services/logs'
 import * as Settings from 'src/services/settings'
+import * as TabsApi from 'src/services/tabs-api'
 import * as Sidebar from 'src/services/sidebar.fg'
 import * as Info from 'src/services/info'
 import * as SessionValues from 'src/services/session-values'
@@ -91,9 +92,9 @@ export async function showWindowsPopup(config: WindowChoosingDetails = {}): Prom
     const options = wins.map<Promise<WindowChooseOption>>(async w => {
       const [tab] = await browser.tabs.query({ active: true, windowId: w.id })
       let screen
-      if (Settings.state.selWinScreenshots && browser.tabs.captureTab) {
+      if (Settings.state.selWinScreenshots) {
         const imageConf: browser.ImageDetails = { format: 'jpeg', quality: 75, scale: 0.5 }
-        if (tab) screen = await browser.tabs.captureTab(tab.id, imageConf)
+        if (tab) screen = await TabsApi.capture(tab, imageConf)
       }
       return {
         id: w.id ?? NOID,
