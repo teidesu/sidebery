@@ -683,11 +683,13 @@ function findCachedData(
       if (!tab) break
       tabData = winTabs[dataIndex]
       if (!tabData) break
+      const tabUrl = Utils.restoreUrl(tab.pendingUrl ?? tab.url)
+      const cachedUrl = Utils.restoreUrl(tabData.url)
 
       // Match
-      const blindspot = tab.status === 'loading' && tab.url === 'about:blank'
+      const blindspot = tab.status === 'loading' && tabUrl === 'about:blank'
       if (blindspot) blindspotCounter++
-      if ((tabData.url === tab.url && !!tabData.pin === tab.pinned) || blindspot) {
+      if ((cachedUrl === tabUrl && !!tabData.pin === tab.pinned) || blindspot) {
         existedTabs[tab.id] = tabData
         equalityCounter++
       }
@@ -697,7 +699,7 @@ function findCachedData(
         // Try to find corresponding local tab
         for (let j = tabIndex + 1; j < tabIndex + 5; j++) {
           const tabj = tabs[j]
-          if (tabj && tabj.url === tabData.url) {
+          if (tabj && Utils.restoreUrl(tabj.pendingUrl ?? tabj.url) === cachedUrl) {
             tabIndex = j
             existedTabs[tabj.id] = tabData
             equalityCounter++
@@ -748,7 +750,7 @@ export function cacheTabsData(delay = 300): void {
 
     const data = []
     for (const tab of Tabs.list) {
-      const info: T.TabCache = { id: tab.id, url: tab.url }
+      const info: T.TabCache = { id: tab.id, url: tab.pendingUrl ?? tab.url }
       if (tab.pinned) info.pin = true
       if ((tab.parentId as number) > -1) info.parentId = tab.parentId
       if (tab.panelId !== D.NOID) info.panelId = tab.panelId

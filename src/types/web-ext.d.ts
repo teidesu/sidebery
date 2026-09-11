@@ -224,6 +224,7 @@ declare namespace browser {
       lastAccessed: number
       mutedInfo?: MutedInfo
       openerTabId?: ID
+      pendingUrl?: string
       pinned: boolean
       sessionId?: string
       splitViewId?: number

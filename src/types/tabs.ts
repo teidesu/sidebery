@@ -2,7 +2,7 @@ import type * as E from 'src/enums'
 import type * as D from 'src/defaults'
 import type { ParsedTheme } from 'src/services/styles'
 
-export type NativeTab = browser.tabs.Tab
+export type NativeTab = browser.tabs.Tab & { pendingUrl?: string }
 
 export interface Tab extends NativeTab {
   renderId: ID

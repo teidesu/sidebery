@@ -97,6 +97,7 @@ export class MTab implements Tab {
   lastAccessed: number = Date.now()
   mutedInfo?: browser.tabs.MutedInfo | undefined
   openerTabId?: ID | undefined
+  pendingUrl?: string | undefined
   pinned: boolean = false
   sessionId?: string | undefined
   status?: string | undefined
