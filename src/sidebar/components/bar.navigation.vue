@@ -97,6 +97,7 @@ import * as SetupPage from 'src/services/setup-page.fg'
 import * as Popups from 'src/services/popups.fg'
 import * as Logs from 'src/services/logs'
 import * as Sync from 'src/services/sync.fg'
+import * as TabsApi from 'src/services/tabs-api'
 import NavItemComponent from './nav-item.vue'
 
 const HIDDEN_PANELS_BTN: T.NavBtn = {
@@ -614,7 +615,7 @@ function onNavMouseUp(e: MouseEvent, item: T.NavItem, inHiddenBar?: boolean) {
     if (isSettings) {
       if (e.altKey) {
         SetupPage.copyDevtoolsUrl()
-        return browser.tabs.create({})
+        return TabsApi.create({})
       } else return SetupPage.open()
     }
     if (isSearch) return Search.toggleBar()

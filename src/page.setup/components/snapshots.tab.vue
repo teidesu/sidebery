@@ -51,6 +51,7 @@ import * as Utils from 'src/utils'
 import * as Logs from 'src/services/logs'
 import * as IPC from 'src/services/ipc'
 import * as Windows from 'src/services/windows.fg'
+import * as TabsApi from 'src/services/tabs-api'
 
 interface SnapTabProps {
   index: number
@@ -172,7 +173,7 @@ async function openTab(tab: SnapTabState): Promise<void> {
       active: false,
       cookieStoreId: tab.containerId ?? CONTAINER_ID,
     }
-    browser.tabs.create(conf)
+    TabsApi.create(conf)
   }
 }
 

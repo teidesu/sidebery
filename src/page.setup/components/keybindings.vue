@@ -224,6 +224,7 @@ import * as Settings from 'src/services/settings.fg'
 import * as SetupPage from 'src/services/setup-page.fg'
 import * as Keybindings from 'src/services/keybindings.fg'
 import * as Info from 'src/services/info'
+import * as TabsApi from 'src/services/tabs-api'
 import KeybindingField from 'src/page.setup/components/keybindings.keybinding.vue'
 import ToggleField from 'src/components/toggle-field.vue'
 import SelectField from 'src/components/select-field.vue'
@@ -234,6 +235,6 @@ const el = ref<HTMLElement | null>(null)
 onMounted(() => SetupPage.registerEl('settings_keybindings', el.value))
 
 function openShortcutSettings(): void {
-  browser.tabs.create({ url: 'chrome://extensions/shortcuts' })
+  TabsApi.create({ url: 'chrome://extensions/shortcuts' })
 }
 </script>

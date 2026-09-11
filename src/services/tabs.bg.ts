@@ -12,6 +12,7 @@ import * as IPPC from 'src/services/ippc.addon'
 import * as Settings from 'src/services/settings'
 import * as Logs from 'src/services/logs'
 import * as Styles from 'src/services/styles.bg'
+import * as TabsApi from 'src/services/tabs-api'
 import * as Omnibox from 'src/services/omnibox.bg'
 import * as TabEvents from 'src/services/tabs-events'
 import * as ContextMenu from 'src/services/context-menu'
@@ -761,7 +762,7 @@ export async function getGroupPageInitData(tabId: ID): Promise<T.GroupPageInitDa
 }
 
 export function tabsApiProxy<T extends Array<any>>(method: string, ...args: T): any {
-  if (method === 'create') return (browser.tabs.create as T.AnyFunc)(...args)
+  if (method === 'create') return (TabsApi.create as T.AnyFunc)(...args)
   if (method === 'update') return (browser.tabs.update as T.AnyFunc)(...args)
   if (method === 'remove') return (browser.tabs.remove as T.AnyFunc)(...args)
   if (method === 'discard') return (browser.tabs.discard as T.AnyFunc)(...args)
@@ -807,7 +808,7 @@ export async function openTabs(items: T.ItemInfo[], dst: T.DstPlaceInfo) {
   // No sidebar connection
   else {
     for (const item of items) {
-      await browser.tabs.create({ url: item.url, windowId: dst.windowId })
+      await TabsApi.create({ url: item.url, windowId: dst.windowId })
     }
     return true
   }
@@ -828,7 +829,7 @@ export async function reopenTab(tab: T.BgTab, url: string, cookieStoreId?: strin
 
   if (index === undefined) index = tab.index
 
-  await browser.tabs.create({
+  await TabsApi.create({
     windowId: tab.windowId,
     url: Utils.sanitizeUrl(url),
     cookieStoreId,

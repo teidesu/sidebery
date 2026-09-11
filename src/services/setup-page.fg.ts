@@ -10,6 +10,7 @@ import * as Logs from 'src/services/logs'
 import * as Info from 'src/services/info'
 import * as Permissions from 'src/services/permissions'
 import * as SidebarConf from 'src/services/sidebar-config'
+import * as TabsApi from 'src/services/tabs-api'
 
 export type SetupPageView =
   'settings' | 'menu_editor' | 'styles_editor' | 'snapshots' | 'storage' | 'keybindings'
@@ -175,7 +176,7 @@ export async function open(section?: string): Promise<void> {
     } else if (Utils.isTabsPanel(activePanel)) {
       Tabs.createTabInPanel(activePanel, { url })
     } else {
-      browser.tabs.create({ url, windowId: Windows.id })
+      TabsApi.create({ url, windowId: Windows.id })
     }
   }
 }

@@ -554,10 +554,10 @@ export async function parseDragEvent(
 }
 
 export function isGroupUrl(url: string): boolean {
-  return url.startsWith('m') && url.startsWith('/sidebery/group.html', 52)
+  return url.startsWith(D.GROUP_URL)
 }
 export function isPlaceholderUrl(url: string): boolean {
-  return url.startsWith('m') && url.startsWith('/sidebery/url.html', 52)
+  return url.startsWith(D.PLACEHOLDER_URL)
 }
 
 export function createGroupUrl(name?: string, pinUrl?: string, pinCtr?: string): string {

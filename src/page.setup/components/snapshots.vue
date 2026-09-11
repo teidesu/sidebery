@@ -102,6 +102,7 @@ import * as Snapshots from 'src/services/snapshots.fg'
 import * as IPC from 'src/services/ipc'
 import * as Logs from 'src/services/logs'
 import * as SetupPage from 'src/services/setup-page.fg'
+import * as TabsApi from 'src/services/tabs-api'
 import DropDownButton from 'src/components/drop-down-button.vue'
 import SnapTab from './snapshots.tab.vue'
 
@@ -301,7 +302,7 @@ async function openSelectedTabs(how: SnapOpenType): Promise<void> {
           conf.active = false
         }
 
-        creating.push(browser.tabs.create(conf).then(t => (oldNewIds[item.id] = t.id)))
+        creating.push(TabsApi.create(conf).then(t => (oldNewIds[item.id] = t.id)))
       }
       try {
         await Promise.all(creating)

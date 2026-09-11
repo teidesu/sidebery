@@ -5,6 +5,7 @@ import * as Settings from 'src/services/settings.fg'
 import * as Styles from 'src/services/styles.fg'
 import * as IPC from 'src/services/ipc'
 import { SETUP_URL } from 'src/defaults'
+import * as TabsApi from 'src/services/tabs-api'
 
 void (async function () {
   Info.setInstanceType(InstanceType.proxy)
@@ -80,7 +81,7 @@ void (async function () {
       }
     } else {
       const conf = { url, windowId: browser.windows.WINDOW_ID_CURRENT }
-      browser.tabs.create(conf)
+      TabsApi.create(conf)
     }
 
     window.close()

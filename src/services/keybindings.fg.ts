@@ -20,6 +20,7 @@ import * as SetupPage from 'src/services/setup-page.fg'
 import * as Notifications from 'src/services/notifications.fg'
 import { translate } from 'src/dict'
 import * as Info from 'src/services/info'
+import * as TabsApi from 'src/services/tabs-api'
 
 export interface KBState {
   list: T.Command[]
@@ -616,7 +617,7 @@ function onKeyNewTabAfter(): void {
     windowId: Windows.id,
   }
 
-  browser.tabs.create(conf)
+  TabsApi.create(conf)
 }
 
 /**
@@ -1387,7 +1388,7 @@ function onKeyNewTabAsFirstChild(): void {
   if (!activeTab) return
 
   Tabs.setNewTabPosition(activeTab.index + 1, activeTab.id, activeTab.panelId)
-  browser.tabs.create({
+  TabsApi.create({
     index: activeTab.index + 1,
     cookieStoreId: activeTab.cookieStoreId,
     windowId: Windows.id,
@@ -1406,7 +1407,7 @@ function onKeyNewTabAsLastChild(): void {
   }
 
   Tabs.setNewTabPosition(activeTab.index + 1, activeTab.id, activeTab.panelId)
-  browser.tabs.create({
+  TabsApi.create({
     index,
     cookieStoreId: activeTab.cookieStoreId,
     windowId: Windows.id,

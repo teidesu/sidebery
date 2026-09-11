@@ -4,13 +4,13 @@ import * as Tabs from 'src/services/tabs.bg'
 import * as Info from 'src/services/info'
 import * as Containers from 'src/services/containers'
 import * as Logs from 'src/services/logs'
+import * as TabsApi from 'src/services/tabs-api'
 import * as IPC from 'src/services/ipc'
 import * as Omnibox from 'src/services/omnibox.bg'
 import * as Sidebar from 'src/services/sidebar.bg'
 import * as Utils from 'src/utils'
 import { translate } from 'src/dict'
 import * as SessionValues from 'src/services/session-values'
-import * as TabsApi from 'src/services/tabs-api'
 
 export const byId = new Map<ID, BgWindow>()
 export let lastFocusedId = NOID
@@ -122,7 +122,7 @@ export async function createWithTabs(
         conf.cookieStoreId = info.container
       }
 
-      processingTabs.push(browser.tabs.create(conf))
+      processingTabs.push(TabsApi.create(conf))
     }
   }
 

@@ -23,7 +23,7 @@ import * as SessionValues from 'src/services/session-values'
 import * as TabEvents from 'src/services/tabs-events'
 import * as TabsApi from 'src/services/tabs-api'
 
-const EXT_HOST = browser.runtime.getURL('').slice(16)
+const EXT_HOST = new URL(browser.runtime.getURL('')).host
 const URL_HOST_PATH_RE = /^([a-z0-9-]{1,63}\.)+\w+(:\d+)?\/[A-Za-z0-9-._~:/?#[\]%@!$&'()*+,;=]*$/
 const NEWTAB_URL = browser.extension.inIncognitoContext ? 'about:privatebrowsing' : 'about:newtab'
 

@@ -135,11 +135,9 @@ export function isNativeFavicon(url?: string): boolean {
 export function getFavPlaceholder(url?: string): string {
   if (!url) return '#icon_ff'
 
-  if (url.startsWith('m')) {
-    if (url.startsWith(D.GROUP_PATH, 52)) return '#icon_group'
-    if (url.startsWith(D.PLACEHOLDER_PATH, 52)) return '#icon_link_favicon'
-    if (url.startsWith(D.SETUP_PATH, 52)) return '#icon_settings'
-  }
+  if (url.startsWith(D.GROUP_URL)) return '#icon_group'
+  if (url.startsWith(D.PLACEHOLDER_URL)) return '#icon_link_favicon'
+  if (url.startsWith(D.SETUP_URL)) return '#icon_settings'
 
   if (D.IMG_RE.test(url)) return '#icon_img'
   if (D.VID_RE.test(url)) return '#icon_vid'

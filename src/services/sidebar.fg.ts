@@ -25,6 +25,7 @@ import * as SidebarConf from 'src/services/sidebar-config'
 import * as Sync from 'src/services/sync.fg'
 import * as SessionValues from 'src/services/session-values'
 import * as SidebarAction from 'src/services/sidebar-action'
+import * as TabsApi from 'src/services/tabs-api'
 
 export interface SidebarReactiveState {
   nav: ID[]
@@ -2185,7 +2186,7 @@ export async function restoreFromBookmarks(panel: T.TabsPanel, silent?: boolean)
         const containerId = Containers.getContainerFor(info.url)
         if (containerId) conf.cookieStoreId = containerId
       }
-      const newNativeTab = await browser.tabs.create(conf)
+      const newNativeTab = await TabsApi.create(conf)
       idsMap[info.id] = newNativeTab.id
       indexPinned++
       index++
@@ -2256,7 +2257,7 @@ export async function restoreFromBookmarks(panel: T.TabsPanel, silent?: boolean)
         conf.title = info.title
       }
       Tabs.setNewTabPosition(index, parentId, panel.id, false)
-      const newNativeTab = await browser.tabs.create(conf)
+      const newNativeTab = await TabsApi.create(conf)
       idsMap[info.id] = newNativeTab.id
 
       if (info.customColor) {
@@ -2391,7 +2392,7 @@ export async function convertToBookmarksPanel(
     tabsIds.push(...panel.pinnedTabs.map(t => t.id))
   }
   tabsIds.push(...panel.tabs.map(t => t.id))
-  if (Tabs.list.length === tabsIds.length) await browser.tabs.create({})
+  if (Tabs.list.length === tabsIds.length) await TabsApi.create({})
   if (tabsIds.length) await Tabs.removeTabs(tabsIds, true)
 
   // Check if all tabs actualy removed

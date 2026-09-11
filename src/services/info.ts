@@ -116,7 +116,7 @@ export function getMajVer(verStr?: string): number | undefined {
 }
 
 export function getProfileId() {
-  return browser.runtime.getURL('').slice(16, 52)
+  return new URL(browser.runtime.getURL('')).host
 }
 
 export function isFreshInstall(): boolean {

@@ -2764,7 +2764,7 @@ export async function paste(dst: T.DstPlaceInfo) {
         windowId: Windows.id,
       }
       Tabs.setNewTabPosition(dst.index, dst.parentId, dst.panelId)
-      const tabWithSearch = await browser.tabs.create(conf)
+      const tabWithSearch = await TabsApi.create(conf)
       browser.search.search({ query, tabId: tabWithSearch.id })
     }
   }

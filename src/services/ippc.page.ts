@@ -3,6 +3,7 @@ import { InstanceType } from 'src/enums'
 import * as IPPC from 'src/services/ippc'
 import { initBC, sendBCMsg } from 'src/services/ippc.page.bc'
 import { initHM, sendHashMsg } from 'src/services/ippc.page.hm'
+import * as Info from 'src/services/info'
 
 export { sendBCMsg, hashSuffix } from 'src/services/ippc.page.bc'
 
@@ -51,6 +52,7 @@ export async function init<R, I extends InstanceType>(
 }
 
 export function isInDefaultContainer() {
+  if (Info.isChromium) return true
   return !!localStorage.getItem('sdbr')
 }
 

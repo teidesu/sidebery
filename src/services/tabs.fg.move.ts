@@ -541,7 +541,7 @@ export async function moveToThisWin(
   // This is needed to prevent unneeded sequential activation of tabs.
   let tmpLastTab
   if (allInWin && tabs.length > 1) {
-    tmpLastTab = await browser.tabs.create({
+    tmpLastTab = await TabsApi.create({
       url: 'about:blank',
       active: true,
       index: 0,
