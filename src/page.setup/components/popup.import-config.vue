@@ -589,8 +589,6 @@ async function importFavicons(backup: BackupData): Promise<void> {
 
   let index = favData.favicons.length
 
-  if (index >= Favicons.MAX_COUNT_LIMIT) throw 'importFavicons: Exceeding the limit'
-
   const oldNewIndexes = new Map<number, number>()
 
   for (const backupDomain of Object.keys(backup.favDomains)) {
@@ -614,14 +612,14 @@ async function importFavicons(backup: BackupData): Promise<void> {
       favData.favDomains[backupDomain] = backupDomainInfo
     }
     // Reuse favicon (from backup data)
-    if (reusedIndex !== undefined) {
+    else if (reusedIndex !== undefined) {
       backupDomainInfo.index = reusedIndex
       favData.favicons[reusedIndex] = backupFavicon
       favData.favHashes[reusedIndex] = backupHash
       favData.favDomains[backupDomain] = backupDomainInfo
     }
     // Add favicon
-    else {
+    else if (index < Favicons.MAX_COUNT_LIMIT) {
       oldNewIndexes.set(backupIndex, index)
       backupDomainInfo.index = index
       favData.favicons[index] = backupFavicon
@@ -632,7 +630,11 @@ async function importFavicons(backup: BackupData): Promise<void> {
   }
 
   await Store.set({
-    favicons_01: favData.favicons,
+    favicons_01: favData.favicons.slice(0, Favicons.SHARD_SIZE),
+    favicons_02: favData.favicons.slice(Favicons.SHARD_SIZE, Favicons.SHARD_SIZE * 2),
+    favicons_03: favData.favicons.slice(Favicons.SHARD_SIZE * 2, Favicons.SHARD_SIZE * 3),
+    favicons_04: favData.favicons.slice(Favicons.SHARD_SIZE * 3, Favicons.SHARD_SIZE * 4),
+    favicons_05: favData.favicons.slice(Favicons.SHARD_SIZE * 4, Favicons.MAX_COUNT_LIMIT),
     favHashes: favData.favHashes,
     favDomains: favData.favDomains,
   })
