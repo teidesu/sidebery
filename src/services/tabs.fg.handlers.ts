@@ -92,29 +92,17 @@ function onBeforeNavigate(details: browser.webNavigation.NavigationDetails): voi
   documentLoadingTabIds.add(details.tabId)
   activeDocumentNavigationTabIds.add(details.tabId)
   sameDocumentTabIds.delete(details.tabId)
-  Logs.info('NavDebug webNavigation.onBeforeNavigate', {
-    tabId: details.tabId,
-    url: details.url,
-    timeStamp: details.timeStamp,
-  })
 }
 
 function onNavigationCompleted(details: browser.webNavigation.NavigationDetails): void {
   if (details.frameId !== 0) return
   activeDocumentNavigationTabIds.delete(details.tabId)
   const loadingMarked = documentLoadingTabIds.has(details.tabId)
-  Logs.info('NavDebug webNavigation.onCompleted', {
-    tabId: details.tabId,
-    url: details.url,
-    timeStamp: details.timeStamp,
-    loadingMarked,
-  })
   if (!loadingMarked) return
   clearTimeout(documentLoadingCleanupTimeouts.get(details.tabId))
   documentLoadingCleanupTimeouts.set(
     details.tabId,
     setTimeout(() => {
-      Logs.info('NavDebug loading marker expired', { tabId: details.tabId })
       documentLoadingTabIds.delete(details.tabId)
       documentLoadingCleanupTimeouts.delete(details.tabId)
     }, 1000)
@@ -123,12 +111,6 @@ function onNavigationCompleted(details: browser.webNavigation.NavigationDetails)
 
 function onNavigationFailed(details: browser.webNavigation.NavigationDetails): void {
   if (details.frameId !== 0) return
-  Logs.info('NavDebug webNavigation.onErrorOccurred', {
-    tabId: details.tabId,
-    url: details.url,
-    timeStamp: details.timeStamp,
-    loadingMarked: documentLoadingTabIds.has(details.tabId),
-  })
   activeDocumentNavigationTabIds.delete(details.tabId)
   documentLoadingTabIds.delete(details.tabId)
   clearTimeout(documentLoadingCleanupTimeouts.get(details.tabId))
@@ -138,14 +120,6 @@ function onNavigationFailed(details: browser.webNavigation.NavigationDetails): v
 function onSameDocumentNavigation(details: browser.webNavigation.NavigationDetails): void {
   if (details.frameId !== 0) return
   const documentNavigationActive = activeDocumentNavigationTabIds.has(details.tabId)
-  Logs.info('NavDebug webNavigation.sameDocument', {
-    tabId: details.tabId,
-    url: details.url,
-    timeStamp: details.timeStamp,
-    loadingMarked: documentLoadingTabIds.has(details.tabId),
-    documentNavigationActive,
-    tabStatus: Tabs.byId[details.tabId]?.status,
-  })
   if (documentNavigationActive) return
 
   documentLoadingTabIds.delete(details.tabId)
@@ -867,37 +841,17 @@ function onTabUpdated(tabId: ID, change: browser.tabs.ChangeInfo, nativeTab: Nat
     return Logs.warn(`Tabs.onTabUpdated: Cannot find local tab: ${tabId}`, Object.keys(change))
   }
 
-  const nativeStatus = change.status
-  let navigationDecision = 'unchanged'
   if (Info.isChromium && change.status === 'loading') {
     if (documentLoadingTabIds.has(tabId)) {
-      navigationDecision = 'accepted-loading'
       documentLoadingTabIds.delete(tabId)
       clearTimeout(documentLoadingCleanupTimeouts.get(tabId))
       documentLoadingCleanupTimeouts.delete(tabId)
     } else {
-      navigationDecision = 'suppressed-loading'
       delete change.status
     }
   } else if (Info.isChromium && change.status === 'complete' && sameDocumentTabIds.has(tabId)) {
-    navigationDecision = 'suppressed-same-document-complete'
     sameDocumentTabIds.delete(tabId)
     delete change.status
-  }
-
-  if (Info.isChromium && (nativeStatus !== undefined || change.url !== undefined)) {
-    Logs.info('NavDebug tabs.onUpdated', {
-      tabId,
-      changeStatus: nativeStatus,
-      changeUrl: change.url,
-      nativeStatus: nativeTab.status,
-      nativeUrl: nativeTab.url,
-      previousStatus: tab.status,
-      previousUrl: tab.url,
-      loadingMarked: documentLoadingTabIds.has(tabId),
-      sameDocumentMarked: sameDocumentTabIds.has(tabId),
-      decision: navigationDecision,
-    })
   }
 
   // Logs.info('Tabs.onTabUpdated:', tabId, Object.keys(change))
