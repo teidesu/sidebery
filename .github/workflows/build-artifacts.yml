@@ -43,8 +43,9 @@ jobs:
         run: pnpm run ${{ matrix.script }}
 
       - name: Upload ZIP
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sidebery-${{ matrix.browser }}-${{ github.sha }}
           path: ${{ matrix.artifacts }}
           if-no-files-found: error
+          include-hidden-files: true
