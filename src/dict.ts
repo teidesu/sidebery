@@ -5,13 +5,6 @@ export const LANG = LANG_REG.slice(0, 2)
 
 // Set dictionary
 const dict: Record<string, TranslationFn | string> = {}
-const translations = typeof window === 'undefined' ? commonTranslations : window.translations
-if (translations) {
-  for (const key of Object.keys(translations)) {
-    const prop = translations[key]
-    dict[key] = prop[LANG_REG] ?? prop[LANG] ?? prop.en
-  }
-}
 
 function isString(r: string | TranslationFn): r is string {
   if (r.constructor === String) return true
@@ -21,8 +14,14 @@ function isString(r: string | TranslationFn): r is string {
 export function translate(id?: string, ...args: (number | string | undefined)[]): string {
   if (!id) return ''
 
-  const record = dict[id]
-  if (record === undefined) return id
+  let record = dict[id]
+  if (record === undefined) {
+    const translations = typeof window === 'undefined' ? commonTranslations : window.translations
+    const prop = translations?.[id]
+    if (!prop) return id
+    record = prop[LANG_REG] ?? prop[LANG] ?? prop.en
+    dict[id] = record
+  }
 
   if (isString(record)) return record
   else return record(...args)
