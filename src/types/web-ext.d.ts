@@ -562,6 +562,15 @@ declare namespace browser {
     function isOpen(details: IsOpenDetails): Promise<boolean>
   }
 
+  namespace sidePanel {
+    interface OpenOptions {
+      tabId?: ID
+      windowId?: ID
+    }
+
+    function open(options: OpenOptions): Promise<void>
+  }
+
   /**
    * Permissions
    */

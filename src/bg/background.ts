@@ -18,6 +18,7 @@ import * as WebReq from 'src/services/web-req.bg'
 import * as Sync from 'src/services/sync.bg'
 import * as Omnibox from 'src/services/omnibox.bg'
 import * as Styles from 'src/services/styles.bg'
+import * as SidebarAction from 'src/services/sidebar-action'
 export default defineBackground(() => {
   markLocalStorage()
 
@@ -138,9 +139,9 @@ export default defineBackground(() => {
   function initToolbarButton(): void {
     Menu.createBrowserActionMenu()
 
-    browser.action.onClicked.addListener((_, info): void => {
+    browser.action.onClicked.addListener((tab, info): void => {
       if (info && info.button === 1) browser.runtime.openOptionsPage()
-      else browser.sidebarAction.toggle()
+      else SidebarAction.toggle(tab.windowId)
     })
   }
 

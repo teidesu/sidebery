@@ -24,6 +24,7 @@ import { turnOffBeforeRequestHandler, turnOnBeforeRequestHandler } from 'src/ser
 import * as SidebarConf from 'src/services/sidebar-config'
 import * as Sync from 'src/services/sync.fg'
 import * as SessionValues from 'src/services/session-values'
+import * as SidebarAction from 'src/services/sidebar-action'
 
 export interface SidebarReactiveState {
   nav: ID[]
@@ -2307,9 +2308,9 @@ export function updateSidebarTitle(delay = 456): void {
       const panel = panelsById[activePanelId]
       if (!panel) return
 
-      browser.sidebarAction.setTitle({ title: panel.name, windowId: Windows.id })
+      SidebarAction.setTitle({ title: panel.name, windowId: Windows.id })
     } else {
-      browser.sidebarAction.setTitle({ title: 'Sidebery', windowId: Windows.id })
+      SidebarAction.setTitle({ title: 'Sidebery', windowId: Windows.id })
     }
   }, delay)
 }
