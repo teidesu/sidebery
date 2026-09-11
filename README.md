@@ -10,7 +10,7 @@ side panels in chrome look and work kinda ass + it's impossible to properly hide
 
 due to limitations of chromium extensions api, you will need to manually open the side panel in every new window, the default shortcut is `ctrl+e`.
 
-it is currently recommended to use [helium](https://helium.computer), with the following configuration:
+it is currently recommended to use [helium](https://helium.computer), with the following configuration (to hide native tabs, best-effort):
 
 - Browser layout: vertical
   - Show vertical tabs on right side: on (if you want sidechery to be on the left, to avoid hover-reveal conflicts)
@@ -18,6 +18,8 @@ it is currently recommended to use [helium](https://helium.computer), with the f
 - Frameless mode: on
   - Always show the sidebar: off
 - *(optional)* Show a rounded frame around web contents: off
+
+> go upvote my [helium#2490 issue](https://github.com/imputnet/helium/issues/2490) to hopefully improve the situation!
 
 and these custom styles:
 
