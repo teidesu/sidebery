@@ -21,6 +21,9 @@ export let isPreview = false
 export let isSync = false
 export let isPanelConfig = false
 
+export const isFirefox = typeof browser.runtime.getBrowserInfo === 'function'
+export const isChromium = !isFirefox
+
 export let majorVersion: number | undefined = undefined
 export let prevMajorVersion: number | undefined = undefined
 export let prevVersion: string | undefined = undefined
@@ -54,7 +57,7 @@ export async function loadVersionInfo(): Promise<void> {
 }
 
 export async function loadBrowserInfo(): Promise<browser.runtime.BrowserInfo> {
-  if (typeof browser.runtime.getBrowserInfo === 'function') {
+  if (isFirefox) {
     browserInfo = await browser.runtime.getBrowserInfo()
   } else {
     const match = navigator.userAgent.match(/(?:Chrome|Chromium)\/([\d.]+)/)

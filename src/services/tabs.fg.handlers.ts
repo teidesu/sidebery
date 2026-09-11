@@ -924,11 +924,15 @@ function onTabUpdated(tabId: ID, change: browser.tabs.ChangeInfo, nativeTab: Nat
 
   // Handle Firefox internal favicon
   if (change.favIconUrl?.startsWith('chrome:')) {
-    if (change.favIconUrl === 'chrome://global/skin/icons/warning.svg') {
-      tab.warn = true
-      tab.reactive.warn = true
+    if (Info.isFirefox) {
+      if (change.favIconUrl === 'chrome://global/skin/icons/warning.svg') {
+        tab.warn = true
+        tab.reactive.warn = true
+      }
+      change.favIconUrl = ''
+    } else {
+      change.favIconUrl = Favicons.getNativeFavicon(change.url ?? tab.url)
     }
-    change.favIconUrl = ''
   }
 
   // Handle title change

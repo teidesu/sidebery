@@ -20,6 +20,7 @@ import * as Links from 'src/services/links'
 import * as Preview from 'src/services/tabs.fg.preview'
 import * as SessionValues from 'src/services/session-values'
 import * as TabsApi from 'src/services/tabs-api'
+import * as Info from 'src/services/info'
 
 import * as Tabs from 'src/services/tabs.fg'
 
@@ -123,8 +124,12 @@ export function mutateNativeTabToSideberyTab(nativeTab: T.NativeTab): T.Tab {
   if (tab.internal === undefined) tab.internal = tab.url.startsWith(D.ADDON_HOST)
   if (tab.internal) tab.favIconUrl = undefined
   else {
-    if (tab.favIconUrl === 'chrome://global/skin/icons/warning.svg') tab.warn = true
-    if (tab.favIconUrl?.startsWith('chrome:')) tab.favIconUrl = undefined
+    if (Info.isFirefox) {
+      if (tab.favIconUrl === 'chrome://global/skin/icons/warning.svg') tab.warn = true
+      if (tab.favIconUrl?.startsWith('chrome:')) tab.favIconUrl = undefined
+    } else if (!tab.favIconUrl || tab.favIconUrl.startsWith('chrome:')) {
+      tab.favIconUrl = Favicons.getNativeFavicon(tab.url)
+    }
   }
   if (tab.mediaPaused === undefined) tab.mediaPaused = false
   if (tab.isGroup === undefined) tab.isGroup = tab.internal && Utils.isGroupUrl(tab.url)
@@ -2950,9 +2955,17 @@ export function renderFaviconInto(
   imgEl?: HTMLImageElement,
   svgUseEl?: SVGElement
 ): void {
+  if (!tab.favIconUrl) tab.favIconUrl = Favicons.getNativeFavicon(tab.url)
   if (tab.favIconUrl && imgEl) {
+    const nativeFavicon = tab.favIconUrl.startsWith(browser.runtime.getURL('/_favicon/'))
     // Set img
     imgEl.src = tab.favIconUrl
+    imgEl.toggleAttribute('data-native-favicon', nativeFavicon)
+    if (nativeFavicon) {
+      imgEl.style.setProperty('--native-favicon', `url(${JSON.stringify(tab.favIconUrl)})`)
+    } else {
+      imgEl.style.removeProperty('--native-favicon')
+    }
     // Show img
     if (imgEl.style) imgEl.style.display = 'block'
     // Hide svg

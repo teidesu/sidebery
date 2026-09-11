@@ -345,15 +345,23 @@
   left: 0
   width: 16px
   height: 16px
+  color: var(--tabs-normal-fg)
   fill: var(--tabs-normal-fg)
   transition: opacity var(--d-fast)
 .Tab img.fav-icon
   display: none
+  &[data-native-favicon]
+    box-sizing: border-box
+    padding: 8px
+    background-color: currentColor
+    -webkit-mask: var(--native-favicon) center / contain no-repeat
+    mask: var(--native-favicon) center / contain no-repeat
 
 .Tab .fav svg
   opacity: .7
 
 .Tab[data-active="true"] .fav-icon
+  color: var(--tabs-activated-fg)
   fill: var(--tabs-activated-fg)
 
 #root[data-search="false"] .Tab[data-parent="true"] .fav:hover svg.fav-icon

@@ -2,6 +2,7 @@ import { DataUriImage, Stored } from 'src/types'
 import * as D from 'src/defaults'
 import * as Utils from 'src/utils'
 import * as Logs from 'src/services/logs'
+import * as Info from 'src/services/info'
 
 export const MAX_COUNT_LIMIT = 2000
 export const SHARD_SIZE = 400
@@ -117,6 +118,14 @@ export async function resizeFavicon(fav: DataUriImage): Promise<DataUriImage> {
 
   if (newBase64fav.length + THRESHOLD_BYTES_DIFF >= fav.length) return fav
   else return newBase64fav
+}
+
+export function getNativeFavicon(url: string): string {
+  if (Info.isFirefox) return ''
+  const faviconUrl = new URL(browser.runtime.getURL('/_favicon/'))
+  faviconUrl.searchParams.set('pageUrl', url)
+  faviconUrl.searchParams.set('size', SIZE.toString())
+  return faviconUrl.toString()
 }
 
 export function getFavPlaceholder(url?: string): string {
