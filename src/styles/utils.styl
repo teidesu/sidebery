@@ -25,3 +25,27 @@ theme_style(style)
         {block}
     &[data-color-scheme="light"]
       {block}
+
+
+// --- mixin
+//  Thin native scrollbar
+// > thumb: thumb color
+// > track: track color
+thin_scrollbar(thumb, track = #0000)
+  scrollbar-width: thin
+  @supports unquote('selector(::-webkit-scrollbar)')
+    scrollbar-width: auto
+    scrollbar-color: auto
+    &::-webkit-scrollbar
+      width: 7px
+      height: 7px
+    &::-webkit-scrollbar-track
+      background-color: track
+    &::-webkit-scrollbar-thumb
+      background-color: thumb
+      border-radius: 4px
+      background-clip: padding-box
+      border: 1px solid #0000
+    &::-webkit-scrollbar-thumb:hover
+      background-color: thumb
+      filter: contrast(200%)
