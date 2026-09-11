@@ -8,6 +8,7 @@ This fork adds Chromium support to upstream Sidebery v5. Keep Firefox behavior u
 - Vue uses `@vitejs/plugin-vue` directly. Do not restore `@wxt-dev/module-vue`; its global Vue auto-import preset pulls the DOM-dependent Vue dev runtime into Chromium's background worker.
 - The manifest source is `wxt/manifest.json`. Do not restore `src/manifest.json` or the deleted `build/` pipeline.
 - HTML entrypoints reference source `.ts` and `.styl` files. WXT preserves upstream output paths such as `sidebar/sidebar.html`, `sidebery/group.html`, and `styles/sidebar.css`.
+- `src/dict.ts` resolves translations lazily because Vite may evaluate the shared dictionary module before page-specific dictionary side effects in production bundles. Do not restore eager `window.translations` snapshotting.
 - `transform-vue-template-typescript` in `wxt.config.ts` strips TypeScript assertions left in Pug template modules during dev. Keep it while templates contain expressions such as `value as Type`.
 - Chromium manifest generation removes Firefox-only permissions/action fields and normalizes command shortcuts. Firefox keeps the upstream manifest capabilities.
 - Chromium maps Firefox's `_execute_sidebar_action` command to `_execute_action`; `src/services/keybindings.fg.ts` translates it back internally so upstream keybinding UI, exports, and sync names stay unchanged. Chromium commands are read-only, so keybinding editing, reset, and import remain Firefox-only; the setup page opens `chrome://extensions/shortcuts` through `tabs.create` because privileged URLs are not directly linkable.
@@ -16,6 +17,7 @@ This fork adds Chromium support to upstream Sidebery v5. Keep Firefox behavior u
 - `src/services/tabs-events.ts` registers filtered `tabs.onUpdated` listeners on Firefox and unfiltered listeners on Chromium, which rejects event filters. Route new filtered tab-update listeners through it.
 - Chromium adds `webNavigation`; `src/services/tabs.fg.handlers.ts` uses its top-level lifecycle to distinguish document loads from `history.pushState` and fragment navigation. Only real document navigation may set a tab to loading.
 - Chromium configures `sidePanel.setPanelBehavior({ openPanelOnActionClick: true })` instead of handling action clicks itself. This lets toolbar clicks and the `_execute_action` shortcut use Chrome's native open/close toggle.
+- `SetupPage.copyDevtoolsUrl` copies Firefox's direct toolbox URL on Firefox and the current extension's `chrome://extensions` details page on Chromium, where live views can be inspected.
 - Favicon backup import preserves the five storage shards used by `src/services/favicons.bg.ts`, deduplicates without adding a second copy, and skips only new icons after the cache reaches its limit.
 - `src/services/tabs-api.ts` strips Firefox-only tab creation fields (`cookieStoreId`, `discarded`, `openInReaderMode`, `title`) and self-opener updates on Chromium. Firefox-only succession/warmup calls become no-ops there. Route these operations through it.
 - `history.onTitleChanged` is Firefox-only and remains optional in `src/services/history.fg.ts`; Chromium updates history titles on normal reload paths.
