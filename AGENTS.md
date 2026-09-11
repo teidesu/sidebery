@@ -13,6 +13,8 @@ This fork adds Chromium support to upstream Sidebery v5. Keep Firefox behavior u
 - `src/services/styles.fg.ts` and `src/services/styles.bg.ts` use `browser.theme` only when available. Chromium maps Firefox-theme mode to system light/dark mode.
 - `src/services/session-values.ts` is the compatibility boundary for Firefox-only tab/window session values. Firefox uses `browser.sessions`; Chromium uses `browser.storage.session`. Route new `getTabValue`, `setTabValue`, `getWindowValue`, and `setWindowValue` calls through it.
 - `src/services/tabs-events.ts` registers filtered `tabs.onUpdated` listeners on Firefox and unfiltered listeners on Chromium, which rejects event filters. Route new filtered tab-update listeners through it.
+- `src/services/tabs-api.ts` strips Firefox-only tab creation fields (`cookieStoreId`, `discarded`, `openInReaderMode`, `title`) and self-opener updates on Chromium. Firefox-only succession/warmup calls become no-ops there. Route these operations through it.
+- `src/services/sidebar-action.ts` owns Firefox sidebar-action vs Chromium Side Panel behavior. Chromium cannot set the native side-panel title.
 - `src/services/info.ts` uses `runtime.getBrowserInfo` on Firefox and derives Chromium version metadata from the user agent. Keep Firefox-version gates disabled outside Firefox and route new browser-info reads through `Info.loadBrowserInfo`.
 - `src/services/permissions.ts` filters Firefox-only permission names before calling the permissions API. Route new permission checks/requests through it; Chrome rejects unknown names such as `tabHide` and `webRequestBlocking`.
 - `src/services/containers.ts` owns contextual-identity capability detection. Chromium disables native container loading/listeners, and tab normalization supplies `DEFAULT_CONTAINER_ID` when `cookieStoreId` is absent.
@@ -27,10 +29,10 @@ This fork adds Chromium support to upstream Sidebery v5. Keep Firefox behavior u
 
 These are not handled by the build migration yet:
 
-- `browser.sidebarAction` must map to `browser.sidePanel`.
+- Remaining `browser.sidebarAction.isOpen` call sites need an equivalent Chromium open-state source.
 - Container creation/configuration UI still needs to be hidden on Chromium; native contextual identities remain unavailable there.
 - `menus.overrideContext` remains Firefox-only and needs guards at call sites.
-- `browser.pageAction`, `tabs.hide/show`, `tabs.moveInSuccession`, window `titlePreface`, and Firefox proxy behavior need guards or alternatives.
+- `browser.pageAction`, `tabs.hide/show`, window `titlePreface`, and Firefox proxy behavior need guards or alternatives.
 - The Chromium background service worker still contains timer and in-memory lifetime assumptions.
 
 When merging upstream, preserve these boundaries, route new Firefox-only calls through the relevant compatibility layer, and update this file when another divergence is introduced.
