@@ -114,6 +114,8 @@ export async function checkIpInfo(cookieStoreId: ID): Promise<IPCheckResult | nu
  * set (or remove) event listeners.
  */
 export function updateReqHandlers(): void {
+  if (!Containers.isSupported()) return
+
   containersProxies = {}
   includeHostsRules = []
   excludeHostsRules = {}

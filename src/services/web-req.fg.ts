@@ -36,6 +36,7 @@ function onBeforeRequestHandler(info: browser.webRequest.ReqDetails): optBlockin
 }
 
 export function turnOnBeforeRequestHandler() {
+  if (!Containers.isSupported()) return
   if (!browser.webRequest) return
   const eventTarget = browser.webRequest.onBeforeRequest
   if (!eventTarget.hasListener(onBeforeRequestHandler)) {
@@ -58,6 +59,7 @@ export function turnOffBeforeRequestHandler() {
 }
 
 export function updateWebReqHandlers() {
+  if (!Containers.isSupported()) return
   if (Windows.incognito) return
 
   let listen = false
