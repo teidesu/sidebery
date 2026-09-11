@@ -445,6 +445,7 @@ declare namespace browser {
     type UpdatedListener = (tabId: ID, change: ChangeInfo, tab: Tab) => void
     type ActivatedListener = (info: ActiveInfo) => void
     type MovedListener = (tabId: ID, info: MoveInfo) => void
+    type ReplacedListener = (addedTabId: ID, removedTabId: ID) => void
     type AttachedListener = (tabId: ID, info: AttachInfo) => void
     type DetachListener = (tabId: ID, info: DetachInfo) => void
 
@@ -453,6 +454,7 @@ declare namespace browser {
     const onUpdated: UpdateEventTarget<UpdatedListener>
     const onActivated: EventTarget<ActivatedListener>
     const onMoved: EventTarget<MovedListener>
+    const onReplaced: EventTarget<ReplacedListener>
     const onAttached: EventTarget<AttachedListener>
     const onDetached: EventTarget<DetachListener>
   }

@@ -22,6 +22,9 @@ The product branding is Sidechery. Preserve `sidebery` only for upstream referen
 - `SetupPage.copyDevtoolsUrl` copies Firefox's direct toolbox URL on Firefox and the current extension's `chrome://extensions` details page on Chromium, where live views can be inspected.
 - Favicon backup import preserves the five storage shards used by `src/services/favicons.bg.ts`, deduplicates without adding a second copy, and skips only new icons after the cache reaches its limit.
 - `src/services/tabs-api.ts` is the required boundary for all tab creation. It strips Firefox-only fields (`cookieStoreId`, `discarded`, `openInReaderMode`, `title`) and self-opener updates on Chromium. Firefox-only succession/warmup calls become no-ops there.
+- Route tab discarding through `TabsApi.discard`; Firefox accepts arrays while Chromium requires one `tabs.discard` call per tab ID.
+- Foreground and background tab models migrate IDs in place on `tabs.onReplaced`, which Chromium can emit when prerendered/instant content swaps IDs. Do not replace this with full tab reinitialization; it visibly reloads the sidebar. The forced beforeunload discard retry remains Firefox-only.
+- Tab rows use `Tab.renderId` as a stable Vue key across native ID replacement, avoiding remove/add animations during Chromium discard.
 - Route window creation/update through `src/services/windows-api.ts`; Chromium strips Firefox-only `allowScriptsToClose`, `cookieStoreId`, and `titlePreface` fields.
 - Tab screenshots route through `TabsApi.capture`: Firefox uses `captureTab`; Chromium uses `captureVisibleTab` only for an active target and returns no image for inactive tabs. Preview metadata still renders when Chromium cannot capture an image.
 - `history.onTitleChanged` is Firefox-only and remains optional in `src/services/history.fg.ts`; Chromium updates history titles on normal reload paths.

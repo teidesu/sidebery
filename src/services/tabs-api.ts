@@ -44,3 +44,13 @@ export function capture(tab: browser.tabs.Tab, imageDetails: browser.ImageDetail
   delete supportedDetails.scale
   return browser.tabs.captureVisibleTab(tab.windowId, supportedDetails)
 }
+
+export async function discard(tabIds: ID | ID[]): Promise<void> {
+  if (Info.isFirefox) {
+    await browser.tabs.discard(tabIds)
+    return
+  }
+
+  const ids = Array.isArray(tabIds) ? tabIds : [tabIds]
+  await Promise.all(ids.map(tabId => browser.tabs.discard(tabId)))
+}

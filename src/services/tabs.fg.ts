@@ -105,6 +105,7 @@ export function reactivate(r: T.Reactivator<any>) {
 export function mutateNativeTabToSideberyTab(nativeTab: T.NativeTab): T.Tab {
   const tab = nativeTab as T.Tab
 
+  if (tab.renderId === undefined) tab.renderId = tab.id
   if (!tab.cookieStoreId) tab.cookieStoreId = D.DEFAULT_CONTAINER_ID
   if (tab.isParent === undefined) tab.isParent = false
   if (tab.folded === undefined) tab.folded = false
@@ -177,6 +178,10 @@ export function mutateNativeTabToSideberyTab(nativeTab: T.NativeTab): T.Tab {
 export function reactivateTab(tab: T.Tab) {
   if (!tab.reactive || !reactFn) return
   tab.reactive = reactFn(tab.reactive)
+}
+
+export function getRenderId(tabId: ID): ID {
+  return Tabs.byId[tabId]?.renderId ?? tabId
 }
 
 export function getStatus(tab: T.Tab): TabStatus {
@@ -1158,7 +1163,7 @@ export async function discardTabs(tabIds: ID[] = [], explicit = false): Promise<
   }
 
   // Try to discard tabs
-  await browser.tabs.discard(tabIds).catch(err => {
+  await TabsApi.discard(tabIds).catch(err => {
     Logs.err('Tabs.discardTabs: Cannot discard:', err)
   })
 
@@ -1169,7 +1174,7 @@ export async function discardTabs(tabIds: ID[] = [], explicit = false): Promise<
   })
 
   // Try to reset closing prevention and discard such tabs
-  if (Settings.state.forceDiscard && Permissions.allUrls && secondTryIds.length) {
+  if (Info.isFirefox && Settings.state.forceDiscard && Permissions.allUrls && secondTryIds.length) {
     await Promise.allSettled(
       secondTryIds.map(id => {
         return browser.scripting.executeScript({
@@ -1192,7 +1197,7 @@ export async function discardTabs(tabIds: ID[] = [], explicit = false): Promise<
     )
 
     // Second try
-    await browser.tabs.discard(secondTryIds).catch(err => {
+    await TabsApi.discard(secondTryIds).catch(err => {
       Logs.err('Tabs.discardTabs: Cannot discard (second try):', err)
     })
   }
@@ -1646,7 +1651,7 @@ export function autoDiscardFolded(rootTab: T.Tab) {
     const childIds = Tabs.getBranch(rootTab, false).map(t => t.id)
     if (!childIds.length) return
 
-    browser.tabs.discard(childIds)
+    TabsApi.discard(childIds)
   } else {
     let delayMS = Settings.state.discardFoldedDelay
     if (Settings.state.discardFoldedDelayUnit === 'sec') delayMS *= 1000
@@ -1659,7 +1664,7 @@ export function autoDiscardFolded(rootTab: T.Tab) {
         const childIds = Tabs.getBranch(rootTab, false).map(t => t.id)
         if (!childIds.length) return
 
-        browser.tabs.discard(childIds)
+        TabsApi.discard(childIds)
       }
     }, delayMS)
   }

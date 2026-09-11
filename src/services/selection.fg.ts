@@ -55,6 +55,14 @@ export function ids(): ID[] {
   return [...selected]
 }
 
+export function replaceId(oldId: ID, newId: ID): void {
+  normal = normal.map(id => (id === oldId ? newId : id))
+  if (normFirst === oldId) normFirst = newId
+  if (normLast === oldId) normLast = newId
+  if (locked.delete(oldId)) locked.add(newId)
+  if (selected.delete(oldId)) selected.add(newId)
+}
+
 export function getTabsInfo(setPanelId?: boolean): ItemInfo[] {
   if (normType !== SelectionType.Tabs) return []
 

@@ -7,7 +7,10 @@
   :data-dnd-id="panel?.id ?? NOID"
   @wheel="onWheel"
   @drop="onDrop")
-  .tab-wrapper(v-for="id in pinnedTabs" :key="id" :data-targeted="DnD.reactive.dstPin && dropId === id")
+  .tab-wrapper(
+    v-for="id in pinnedTabs"
+    :key="Tabs.getRenderId(id)"
+    :data-targeted="DnD.reactive.dstPin && dropId === id")
     Tab(:tabId="id")
 </template>
 

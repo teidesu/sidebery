@@ -66,7 +66,7 @@ export async function load(): Promise<void> {
     // browser.sessionstore.restore_pinned_tabs_on_demand = true
     // see https://bugzilla.mozilla.org/show_bug.cgi?id=1703072
     if (tab.pinned && !tab.discarded && Settings.state.pinnedForcedDiscard) {
-      browser.tabs.discard(tab.id).catch(() => {
+      TabsApi.discard(tab.id).catch(() => {
         Logs.warn('Tabs.loadTabs: Cannot discard pinned tab for 1703072')
       })
     }
@@ -187,6 +187,7 @@ function mutateNativeTabToSideberyTab(nativeTab: T.NativeTab): T.BgTab {
 export function setupListeners(): void {
   browser.tabs.onCreated.addListener(onTabCreated)
   browser.tabs.onRemoved.addListener(onTabRemoved)
+  browser.tabs.onReplaced.addListener(onTabReplaced)
   TabEvents.addUpdatedListener(onTabUpdated, [
     'pinned',
     'title',
@@ -200,6 +201,35 @@ export function setupListeners(): void {
   browser.tabs.onMoved.addListener(onTabMoved)
   browser.tabs.onAttached.addListener(onTabAttached)
   browser.tabs.onDetached.addListener(onTabDetached)
+}
+
+async function onTabReplaced(addedTabId: ID, removedTabId: ID): Promise<void> {
+  const tab = Tabs.byId[removedTabId]
+  if (!tab) {
+    const nativeTab = await browser.tabs.get(addedTabId).catch(() => undefined)
+    if (nativeTab) onTabCreated(nativeTab)
+    return
+  }
+
+  delete Tabs.byId[removedTabId]
+  tab.id = addedTabId
+  Tabs.byId[addedTabId] = tab
+
+  for (const otherTab of Object.values(Tabs.byId)) {
+    if (otherTab.parentId === removedTabId) otherTab.parentId = addedTabId
+    if (otherTab.openerTabId === removedTabId) otherTab.openerTabId = addedTabId
+  }
+  for (const cache of Object.values(Tabs.cacheByWin)) {
+    for (const entry of cache) {
+      if (entry.id === removedTabId) entry.id = addedTabId
+      if (entry.parentId === removedTabId) entry.parentId = addedTabId
+    }
+  }
+  const window = Windows.byId.get(tab.windowId)
+  if (window?.activeTabId === removedTabId) window.activeTabId = addedTabId
+
+  const nativeTab = await browser.tabs.get(addedTabId).catch(() => undefined)
+  if (nativeTab) Object.assign(tab, nativeTab)
 }
 
 /**
@@ -765,7 +795,7 @@ export function tabsApiProxy<T extends Array<any>>(method: string, ...args: T): 
   if (method === 'create') return (TabsApi.create as T.AnyFunc)(...args)
   if (method === 'update') return (browser.tabs.update as T.AnyFunc)(...args)
   if (method === 'remove') return (browser.tabs.remove as T.AnyFunc)(...args)
-  if (method === 'discard') return (browser.tabs.discard as T.AnyFunc)(...args)
+  if (method === 'discard') return TabsApi.discard(args[0])
   if (method === 'reload') return (browser.tabs.reload as T.AnyFunc)(...args)
   if (method === 'captureTab' && browser.tabs.captureTab) {
     return (browser.tabs.captureTab as T.AnyFunc)(...args)

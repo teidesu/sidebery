@@ -48,6 +48,7 @@ export function setupTabsListeners(): void {
   browser.tabs.onCreated.addListener(onTabCreated)
   TabEvents.addUpdatedListener(onTabUpdated, updProps)
   browser.tabs.onRemoved.addListener(onTabRemoved)
+  browser.tabs.onReplaced.addListener(onTabReplaced)
   browser.tabs.onMoved.addListener(onTabMoved)
   browser.tabs.onDetached.addListener(onTabDetached)
   browser.tabs.onAttached.addListener(onTabAttached)
@@ -66,6 +67,7 @@ export function resetTabsListeners(): void {
   browser.tabs.onCreated.removeListener(onTabCreated)
   browser.tabs.onUpdated.removeListener(onTabUpdated)
   browser.tabs.onRemoved.removeListener(onTabRemoved)
+  browser.tabs.onReplaced.removeListener(onTabReplaced)
   browser.tabs.onMoved.removeListener(onTabMoved)
   browser.tabs.onDetached.removeListener(onTabDetached)
   browser.tabs.onAttached.removeListener(onTabAttached)
@@ -83,6 +85,44 @@ export function resetTabsListeners(): void {
     sameDocumentTabIds.clear()
   }
   listenersAreSet = false
+}
+
+async function onTabReplaced(addedTabId: ID, removedTabId: ID): Promise<void> {
+  const tab = Tabs.byId[removedTabId]
+  if (!tab) return
+
+  delete Tabs.byId[removedTabId]
+  tab.id = addedTabId
+  if (tab.el) tab.el.__sdbr_tabId = addedTabId
+  Tabs.byId[addedTabId] = tab
+
+  if (Tabs.activeId === removedTabId) Tabs.setActiveId(addedTabId)
+  for (const history of [Tabs.activeTabsGlobal, ...Object.values(Tabs.activeTabsPerPanel)]) {
+    history.actTabs = history.actTabs.map(id => (id === removedTabId ? addedTabId : id))
+  }
+  for (const position of Object.values(Tabs.newTabsPosition)) {
+    if (position.parent === removedTabId) position.parent = addedTabId
+  }
+  for (const otherTab of Tabs.list) {
+    if (otherTab.parentId === removedTabId) otherTab.parentId = addedTabId
+    if (otherTab.openerTabId === removedTabId) otherTab.openerTabId = addedTabId
+    if (otherTab.successorTabId === removedTabId) otherTab.successorTabId = addedTabId
+    if (otherTab.relGroupId === removedTabId) otherTab.relGroupId = addedTabId
+  }
+  const removingIndex = Tabs.removingTabs.indexOf(removedTabId)
+  if (removingIndex !== -1) Tabs.removingTabs[removingIndex] = addedTabId
+  Selection.replaceId(removedTabId, addedTabId)
+
+  const nativeTab = await browser.tabs.get(addedTabId).catch(() => undefined)
+  if (nativeTab) Object.assign(tab, nativeTab)
+  tab.reactive.active = tab.active
+  tab.reactive.discarded = !!tab.discarded
+  tab.reactive.pinned = tab.pinned
+  tab.reactive.status = Tabs.getStatus(tab)
+  tab.reactive.url = tab.url
+  Sidebar.recalcTabsPanels()
+  Sidebar.recalcVisibleTabs(tab.panelId)
+  Tabs.saveTabData(addedTabId)
 }
 
 function onBeforeNavigate(details: browser.webNavigation.NavigationDetails): void {

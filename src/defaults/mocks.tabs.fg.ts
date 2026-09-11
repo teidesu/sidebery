@@ -4,6 +4,7 @@ import * as Tabs from 'src/services/tabs.fg'
 import { NOID } from 'src/defaults'
 
 export class MTab implements Tab {
+  renderId: ID = 2
   isParent: boolean = false
   folded: boolean = false
   autoUnloadFoldedTimeout?: number | undefined

@@ -5,6 +5,7 @@ import type { ParsedTheme } from 'src/services/styles'
 export type NativeTab = browser.tabs.Tab
 
 export interface Tab extends NativeTab {
+  renderId: ID
   isParent: boolean
   folded: boolean
   autoUnloadFoldedTimeout?: number
