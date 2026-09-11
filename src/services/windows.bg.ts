@@ -10,6 +10,7 @@ import * as Sidebar from 'src/services/sidebar.bg'
 import * as Utils from 'src/utils'
 import { translate } from 'src/dict'
 import * as SessionValues from 'src/services/session-values'
+import * as TabsApi from 'src/services/tabs-api'
 
 export const byId = new Map<ID, BgWindow>()
 export let lastFocusedId = NOID
@@ -186,7 +187,7 @@ export async function createWithTabs(
   const firstTab = processedTabs[0]
   if (firstTab && moveTabs) {
     if (activeTabId === NOID) activeTabId = firstTab.id
-    await browser.tabs.moveInSuccession([initialTabId], activeTabId).catch(err => {
+    await TabsApi.moveInSuccession([initialTabId], activeTabId).catch(err => {
       Logs.err('Windows.createWithTabs: Cannot update succession for initial tab:', err)
     })
   }

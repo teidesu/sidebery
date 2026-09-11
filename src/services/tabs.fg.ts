@@ -19,6 +19,7 @@ import * as Favicons from 'src/services/favicons.fg'
 import * as Links from 'src/services/links'
 import * as Preview from 'src/services/tabs.fg.preview'
 import * as SessionValues from 'src/services/session-values'
+import * as TabsApi from 'src/services/tabs-api'
 
 import * as Tabs from 'src/services/tabs.fg'
 
@@ -1134,7 +1135,7 @@ export async function discardTabs(tabIds: ID[] = [], explicit = false): Promise<
         await browser.tabs.update(target.id, { active: true })
         activeTab = target
       } else if (activeTab.successorTabId !== target.id) {
-        browser.tabs.moveInSuccession([activeTab.id], target.id).catch(err => {
+        TabsApi.moveInSuccession([activeTab.id], target.id).catch(err => {
           Logs.err('Tabs.discardTabs: Cannot update succession:', err)
         })
         activeTab.successorTabId = target.id
@@ -1924,7 +1925,7 @@ export function flattenTabs(tabIds: ID[]): void {
       if (updVisPanelId === D.NOID) updVisPanelId = tab.panelId
       else if (updVisPanelId && updVisPanelId !== tab.panelId) updVisPanelId = undefined
     }
-    if (tab.parentId === -1) browser.tabs.update(tab.id, { openerTabId: tab.id })
+    if (tab.parentId === -1) TabsApi.update(tab.id, { openerTabId: tab.id })
   }
 
   updateTabsTree(tabsToFlatten[0].index - 1, tabsToFlatten[tabsToFlatten.length - 1].index + 1)
@@ -2029,7 +2030,7 @@ export function updateTabsTree(startIndex = 0, endIndex = -1): void {
 
     // Update openerTabId
     if (tab.parentId === -1 && tab.openerTabId !== undefined) {
-      browser.tabs.update(tab.id, { openerTabId: tab.id }).catch(err => {
+      TabsApi.update(tab.id, { openerTabId: tab.id }).catch(err => {
         Logs.err('Tabs.updateTabsTree: Cannot reset openerTabId:', err)
       })
       tab.openerTabId = undefined
@@ -2919,7 +2920,7 @@ function updateSuccession(exclude?: readonly ID[]) {
     }
 
     if (suc.length > 1) {
-      browser.tabs.moveInSuccession(suc).catch(err => {
+      TabsApi.moveInSuccession(suc).catch(err => {
         Logs.err('Tabs.updateSuccession: Cannot update succession:', err, suc)
       })
     }

@@ -3,6 +3,7 @@ import { DstTreePos, PanelType } from 'src/enums'
 import * as D from 'src/defaults'
 import * as Sidebar from 'src/services/sidebar.fg'
 import * as Tabs from 'src/services/tabs.fg'
+import * as TabsApi from 'src/services/tabs-api'
 import * as Settings from 'src/services/settings'
 import * as Containers from 'src/services/containers'
 import * as Windows from 'src/services/windows.fg'
@@ -63,7 +64,7 @@ export function createChildTab(tabId: ID, url?: string, containerId?: string): v
   if (url) config.url = url
   if (containerId) config.cookieStoreId = containerId
 
-  browser.tabs.create(config).catch(err => {
+  TabsApi.create(config).catch(err => {
     Logs.err('Tabs.createChildTab: Cannot create tab:', err)
   })
 }
@@ -120,7 +121,7 @@ export async function createTabInPanel(panel: Panel, conf?: CreateTabInPanelConf
   if (Windows.incognito && config.cookieStoreId) config.cookieStoreId = D.PRIVATE_CONTAINER_ID
 
   _creatingTabInPanel = true
-  await browser.tabs.create(config).catch(err => {
+  await TabsApi.create(config).catch(err => {
     Logs.err('Tabs.createTabInPanel: Cannot create tab:', err)
   })
   _creatingTabInPanel = false
@@ -253,7 +254,7 @@ export async function createFromDragEvent(e: DragEvent, dst: DstPlaceInfo): Prom
       }
 
       Tabs.setNewTabPosition(dst.index ?? 0, dst.parentId, panel.id)
-      browser.tabs.create(conf).catch(err => {
+      TabsApi.create(conf).catch(err => {
         Logs.err('Tabs.createFromDragEvent: Cannot create tab:', err)
       })
     }
@@ -277,7 +278,7 @@ export async function createFromDragEvent(e: DragEvent, dst: DstPlaceInfo): Prom
       if (e.ctrlKey) conf.active = false
 
       Tabs.setNewTabPosition(dst.index ?? 0, dst.parentId, panel.id)
-      const tab = await browser.tabs.create(conf)
+      const tab = await TabsApi.create(conf)
       tabId = tab.id
     }
     browser.search.search({ query: result.text, tabId })
@@ -498,7 +499,7 @@ export async function open(
       Tabs.setNewTabPosition(index, parentId, dstPanel?.id ?? D.NOID)
     }
 
-    const tab = await browser.tabs.create(conf)
+    const tab = await TabsApi.create(conf)
     idsMap[item.id] = tab.id
 
     if (item.customTitle) {

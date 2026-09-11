@@ -21,6 +21,7 @@ import * as Links from 'src/services/links'
 import * as Info from 'src/services/info.fg'
 import * as SessionValues from 'src/services/session-values'
 import * as TabEvents from 'src/services/tabs-events'
+import * as TabsApi from 'src/services/tabs-api'
 
 const EXT_HOST = browser.runtime.getURL('').slice(16)
 const URL_HOST_PATH_RE = /^([a-z0-9-]{1,63}\.)+\w+(:\d+)?\/[A-Za-z0-9-._~:/?#[\]%@!$&'()*+,;=]*$/
@@ -619,7 +620,7 @@ async function onTabCreated(nativeTab: NativeTab, attached?: boolean) {
     if (tab.openerTabId === undefined || tab.openerTabId === -1) newOpenerTabId = tab.id
     else newOpenerTabId = tab.openerTabId
 
-    browser.tabs.update(tab.id, { openerTabId: newOpenerTabId }).catch(err => {
+    TabsApi.update(tab.id, { openerTabId: newOpenerTabId }).catch(err => {
       Logs.err('Tabs.onTabCreated: Cannot update openerTabId', err)
     })
   }

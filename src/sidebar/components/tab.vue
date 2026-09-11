@@ -93,6 +93,7 @@ import * as Selection from 'src/services/selection.fg'
 import * as Menu from 'src/services/menu.fg'
 import * as Sidebar from 'src/services/sidebar.fg'
 import * as Tabs from 'src/services/tabs.fg'
+import * as TabsApi from 'src/services/tabs-api'
 import * as Mouse from 'src/services/mouse.fg'
 import * as DnD from 'src/services/drag-and-drop.fg'
 import * as Search from 'src/services/search.fg'
@@ -619,15 +620,13 @@ function onMouseEnter(e: MouseEvent) {
       /// warmup successor tab, in case user decides to close active tab
       const successorTabId = tab.successorTabId
       if (successorTabId && Tabs.byId[successorTabId]) {
-        browser.tabs
-          .warmup(successorTabId)
-          .catch(err => Logs.err('Tab.onMouseEnter: Warmup successor tab', err))
+        TabsApi.warmup(successorTabId).catch(err =>
+          Logs.err('Tab.onMouseEnter: Warmup successor tab', err)
+        )
       }
     } else {
       /// warmup hovered tab
-      browser.tabs
-        .warmup(tab.id)
-        .catch(err => Logs.err('Tab.onMouseEnter: Warmup hovered tab', err))
+      TabsApi.warmup(tab.id).catch(err => Logs.err('Tab.onMouseEnter: Warmup hovered tab', err))
     }
   }
 

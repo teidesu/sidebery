@@ -3,6 +3,7 @@ import { PanelType } from 'src/enums'
 import { DEFAULT_CONTAINER_ID, MOVEID, NEWID, NOID } from 'src/defaults'
 import * as Sidebar from 'src/services/sidebar.fg'
 import * as Tabs from 'src/services/tabs.fg'
+import * as TabsApi from 'src/services/tabs-api'
 import * as Settings from 'src/services/settings'
 import * as Windows from 'src/services/windows.fg'
 import * as Containers from 'src/services/containers'
@@ -252,8 +253,8 @@ export async function move(
     if (tab.parentId !== dst.parentId && (!oldParent || !tabs.includes(oldParent))) {
       tab.parentId = dst.parentId
 
-      if (dstParent) browser.tabs.update(tab.id, { openerTabId: dst.parentId })
-      else browser.tabs.update(tab.id, { openerTabId: tab.id })
+      if (dstParent) TabsApi.update(tab.id, { openerTabId: dst.parentId })
+      else TabsApi.update(tab.id, { openerTabId: tab.id })
     }
   }
 
@@ -352,7 +353,7 @@ export async function move(
   // Pin tab
   if (toPin?.length) {
     for (const tab of toPin) {
-      await browser.tabs.update(tab.id, { pinned: true, openerTabId: tab.id }).catch(err => {
+      await TabsApi.update(tab.id, { pinned: true, openerTabId: tab.id }).catch(err => {
         Logs.err('Tabs.move: Cannot pin tab', err)
       })
     }
@@ -399,7 +400,7 @@ async function moveTabsToWin(tabIds: ID[], dst: T.DstPlaceInfo): Promise<void> {
   const activeTab = activeTabId !== undefined ? Tabs.byId[activeTabId] : undefined
   if (activeTab) {
     const target = Tabs.findSuccessorTab(activeTab, tabIds)
-    if (target) await browser.tabs.moveInSuccession([activeTab.id], target.id)
+    if (target) await TabsApi.moveInSuccession([activeTab.id], target.id)
   }
 
   const detachedTabsInfo = Tabs.detachTabs(tabIds)
