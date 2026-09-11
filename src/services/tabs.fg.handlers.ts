@@ -408,14 +408,20 @@ async function onTabCreated(nativeTab: NativeTab, attached?: boolean) {
 
   // Check if tab is reopened
   if (Tabs.removedTabs.length && !tab.discarded && tab.reopened !== false && !attached && !isSplt) {
-    const prevPosIndex = Tabs.removedTabs.findIndex(t => t.title === tab.title)
+    const prevPosIndex = Tabs.removedTabs.findIndex(t => {
+      if (t.title !== tab.title) return false
+      if (Info.isFirefox) return true
+      return t.url === tab.url && t.index === tab.index
+    })
     reopenedTabInfo = Tabs.removedTabs[prevPosIndex]
     if (reopenedTabInfo) {
       // And here attouched tabs...
-      if (!waitForOtherReopenedTabsBufferRelease) {
+      if (Info.isFirefox && !waitForOtherReopenedTabsBufferRelease) {
         waitForOtherReopenedTabs(tab)
         return
       }
+
+      if (Info.isChromium) tab.reopened = true
 
       Tabs.removedTabs.splice(prevPosIndex, 1)
       reopenedTabPanel = Sidebar.panelsById[reopenedTabInfo.panelId]
@@ -1316,6 +1322,7 @@ function onTabRemoved(tabId: ID, info: browser.tabs.RemoveInfo, detached?: boole
       id: tab.id,
       index: tab.index,
       title: tab.title,
+      url: tab.url,
       parentId: recentlyRemovedChildParentMap?.[tab.id] ?? tab.parentId,
       panelId: tab.panelId,
       customTitle: tab.customTitle,

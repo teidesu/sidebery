@@ -271,6 +271,7 @@ export interface RemovedTabInfo {
   id: ID
   index: number
   title: string
+  url: string
   parentId: ID
   panelId: ID
   children?: ID[]
