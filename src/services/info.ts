@@ -53,11 +53,24 @@ export async function loadVersionInfo(): Promise<void> {
   majorVersion = getMajVer(reactive.addonVer)
 }
 
-export async function loadBrowserInfo() {
-  browserInfo = await browser.runtime.getBrowserInfo()
+export async function loadBrowserInfo(): Promise<browser.runtime.BrowserInfo> {
+  if (typeof browser.runtime.getBrowserInfo === 'function') {
+    browserInfo = await browser.runtime.getBrowserInfo()
+  } else {
+    const match = navigator.userAgent.match(/(?:Chrome|Chromium)\/([\d.]+)/)
+    browserInfo = {
+      name: 'Chromium',
+      vendor: 'Chromium',
+      version: match?.[1] ?? '',
+      buildID: '',
+    }
+  }
+
+  return browserInfo
 }
 
 export function ffVersionLowerThan(v: string) {
+  if (browserInfo?.name !== 'Firefox') return false
   if (!browserInfo?.version) return false
   return browserInfo?.version < v
 }

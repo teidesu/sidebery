@@ -120,8 +120,9 @@ function togglePermBookmarks(): void {
 }
 
 function togglePermTabHide(): void {
+  if (!Permissions.isPermissionSupported('tabHide')) return
   if (Permissions.reactive.tabHide) browser.permissions.remove({ permissions: ['tabHide'] })
-  else browser.permissions.request({ origins: [], permissions: ['tabHide'] })
+  else Permissions.request('tabHide')
 }
 
 function togglePermClipboardWrite(): void {

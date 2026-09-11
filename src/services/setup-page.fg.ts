@@ -7,6 +7,8 @@ import * as Sidebar from 'src/services/sidebar.fg'
 import * as Tabs from 'src/services/tabs.fg'
 import * as Settings from 'src/services/settings'
 import * as Logs from 'src/services/logs'
+import * as Info from 'src/services/info'
+import * as Permissions from 'src/services/permissions'
 import * as SidebarConf from 'src/services/sidebar-config'
 
 export type SetupPageView =
@@ -328,21 +330,21 @@ export function updateActiveSection(scrollTop: number): void {
 export async function getDbgDetails(): Promise<T.DbgInfo> {
   const dbg: T.DbgInfo = {
     addonVersion: browser.runtime.getManifest().version,
-    firefoxVersion: (await browser.runtime.getBrowserInfo()).version,
+    firefoxVersion: (await Info.loadBrowserInfo()).version,
     settings: Utils.clone(Settings.state),
   }
 
   try {
     const perms = await Promise.all([
       browser.permissions.contains({ origins: ['<all_urls>'] }),
-      browser.permissions.contains({ permissions: ['webRequest'] }),
-      browser.permissions.contains({ permissions: ['webRequestBlocking'] }),
-      browser.permissions.contains({ permissions: ['proxy'] }),
-      browser.permissions.contains({ permissions: ['tabHide'] }),
-      browser.permissions.contains({ permissions: ['clipboardWrite'] }),
-      browser.permissions.contains({ permissions: ['history'] }),
-      browser.permissions.contains({ permissions: ['bookmarks'] }),
-      browser.permissions.contains({ permissions: ['downloads'] }),
+      Permissions.containsPermission('webRequest'),
+      Permissions.containsPermission('webRequestBlocking'),
+      Permissions.containsPermission('proxy'),
+      Permissions.containsPermission('tabHide'),
+      Permissions.containsPermission('clipboardWrite'),
+      Permissions.containsPermission('history'),
+      Permissions.containsPermission('bookmarks'),
+      Permissions.containsPermission('downloads'),
     ])
     dbg.permissions = {
       allUrls: perms[0],

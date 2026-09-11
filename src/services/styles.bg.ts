@@ -30,7 +30,7 @@ export async function load() {
 export function setupListeners() {
   Styles._setupAutoColorSchemeListener(() => updateWindowStyles(NOID))
 
-  browser.theme.onUpdated.addListener(upd => {
+  browser.theme?.onUpdated.addListener(upd => {
     updateWindowStyles(upd?.windowId === undefined ? NOID : upd.windowId, upd?.theme)
   })
 }
@@ -55,7 +55,7 @@ export async function updateWindowStyles(
     parsedTheme: undefined,
   }
 
-  if (Settings.state.colorScheme === 'ff') {
+  if (Settings.state.colorScheme === 'ff' && browser.theme) {
     if (!newTheme) {
       newTheme = await browser.theme.getCurrent(winId !== NOID ? winId : undefined)
     }
@@ -75,6 +75,7 @@ export async function updateWindowStyles(
   }
 
   if (Settings.state.colorScheme === 'sys') Styles.updColorScheme(newWinStyles)
+  else if (Settings.state.colorScheme === 'ff' && !browser.theme) Styles.updColorScheme(newWinStyles)
   else if (Settings.state.colorScheme === 'dark') Styles.updColorScheme(newWinStyles, 'dark')
   else if (Settings.state.colorScheme === 'light') Styles.updColorScheme(newWinStyles, 'light')
 

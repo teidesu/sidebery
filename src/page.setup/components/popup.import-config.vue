@@ -415,12 +415,14 @@ function requestPermissions(): void {
   if (permDownloads) permissions.push('downloads')
   if (!origins.length && !permissions.length) return
 
-  browser.permissions.request({ origins, permissions }).then((allowed: boolean) => {
-    if (permWebData) permWebData = !allowed
-    if (permTabHide) permTabHide = !allowed
-    if (permDownloads) permDownloads = !allowed
-    state.permNeeded = !allowed
-  })
+  browser.permissions
+    .request({ origins, permissions: permissions.filter(Permissions.isPermissionRequestable) })
+    .then((allowed: boolean) => {
+      if (permWebData) permWebData = !allowed
+      if (permTabHide) permTabHide = !allowed
+      if (permDownloads) permDownloads = !allowed
+      state.permNeeded = !allowed
+    })
 }
 
 type IdMap = Record<string, string>

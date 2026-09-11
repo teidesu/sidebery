@@ -40,7 +40,7 @@ export async function load(): Promise<void> {
 export function setupListeners(): void {
   Styles._setupAutoColorSchemeListener(() => updateColorScheme())
 
-  browser.theme.onUpdated.addListener(upd => {
+  browser.theme?.onUpdated.addListener(upd => {
     // Ignore update for different window
     if (upd && upd.windowId !== undefined && Windows.id !== NOID && upd.windowId !== Windows.id) {
       return
@@ -58,7 +58,7 @@ export function setupListeners(): void {
 }
 
 export async function updateColorScheme(newTheme?: browser.theme.Theme): Promise<void> {
-  if (Settings.state.colorScheme === 'ff') {
+  if (Settings.state.colorScheme === 'ff' && browser.theme) {
     if (!newTheme) {
       newTheme = await browser.theme.getCurrent(Windows.id !== NOID ? Windows.id : undefined)
     }
@@ -86,6 +86,7 @@ export async function updateColorScheme(newTheme?: browser.theme.Theme): Promise
   }
 
   if (Settings.state.colorScheme === 'sys') Styles.updColorScheme(reactive)
+  else if (Settings.state.colorScheme === 'ff' && !browser.theme) Styles.updColorScheme(reactive)
   else if (Settings.state.colorScheme === 'dark') Styles.updColorScheme(reactive, 'dark')
   else if (Settings.state.colorScheme === 'light') Styles.updColorScheme(reactive, 'light')
 }

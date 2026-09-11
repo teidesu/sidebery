@@ -35,6 +35,24 @@ export let clipboardRead = false
 export let history = false
 export let downloads = false
 
+export function isPermissionSupported(permission: string): boolean {
+  if (permission === 'tabHide' || permission === 'webRequestBlocking') {
+    return typeof browser.runtime.getBrowserInfo === 'function'
+  }
+  return true
+}
+
+export function isPermissionRequestable(permission: string): boolean {
+  if (!isPermissionSupported(permission)) return false
+  if (permission === 'proxy' && typeof browser.runtime.getBrowserInfo !== 'function') return false
+  return true
+}
+
+export async function containsPermission(permission: string): Promise<boolean> {
+  if (!isPermissionSupported(permission)) return false
+  return browser.permissions.contains({ permissions: [permission] })
+}
+
 export function reactivate(r: Reactivator<PermissionsState>) {
   reactive = r(reactive)
 }
@@ -45,15 +63,15 @@ export function reactivate(r: Reactivator<PermissionsState>) {
 export async function load(): Promise<void> {
   const perms = await Promise.all([
     browser.permissions.contains({ origins: ['<all_urls>'] }),
-    browser.permissions.contains({ permissions: ['webRequest'] }),
-    browser.permissions.contains({ permissions: ['webRequestBlocking'] }),
-    browser.permissions.contains({ permissions: ['proxy'] }),
-    browser.permissions.contains({ permissions: ['tabHide'] }),
-    browser.permissions.contains({ permissions: ['clipboardWrite'] }),
-    browser.permissions.contains({ permissions: ['clipboardRead'] }),
-    browser.permissions.contains({ permissions: ['history'] }),
-    browser.permissions.contains({ permissions: ['bookmarks'] }),
-    browser.permissions.contains({ permissions: ['downloads'] }),
+    containsPermission('webRequest'),
+    containsPermission('webRequestBlocking'),
+    containsPermission('proxy'),
+    containsPermission('tabHide'),
+    containsPermission('clipboardWrite'),
+    containsPermission('clipboardRead'),
+    containsPermission('history'),
+    containsPermission('bookmarks'),
+    containsPermission('downloads'),
   ])
   allUrls = perms[0]
   webRequest = perms[1]
@@ -96,11 +114,13 @@ export async function _request(...perms: RequestablePermission[]): Promise<boole
 
   if (perms.includes('<all_urls>')) {
     origins.push('<all_urls>')
-    permissions.push('webRequest', 'webRequestBlocking', 'proxy')
+    permissions.push('webRequest')
+    if (isPermissionRequestable('proxy')) permissions.push('proxy')
+    if (isPermissionSupported('webRequestBlocking')) permissions.push('webRequestBlocking')
     Utils.rmFromArray(perms, '<all_urls>')
   }
 
-  permissions.push(...perms)
+  permissions.push(...perms.filter(isPermissionRequestable))
   return await browser.permissions.request({ origins, permissions })
 }
 
