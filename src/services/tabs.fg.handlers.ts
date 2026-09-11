@@ -28,6 +28,11 @@ const URL_HOST_PATH_RE = /^([a-z0-9-]{1,63}\.)+\w+(:\d+)?\/[A-Za-z0-9-._~:/?#[\]
 const NEWTAB_URL = browser.extension.inIncognitoContext ? 'about:privatebrowsing' : 'about:newtab'
 
 export let listenersAreSet = false
+const documentLoadingTabIds = new Set<ID>()
+const documentLoadingCleanupTimeouts = new Map<ID, number>()
+const activeDocumentNavigationTabIds = new Set<ID>()
+const sameDocumentTabIds = new Set<ID>()
+
 export function setupTabsListeners(): void {
   if (!Sidebar.hasTabs) return
 
@@ -47,6 +52,13 @@ export function setupTabsListeners(): void {
   browser.tabs.onDetached.addListener(onTabDetached)
   browser.tabs.onAttached.addListener(onTabAttached)
   browser.tabs.onActivated.addListener(onTabActivated)
+  if (Info.isChromium) {
+    browser.webNavigation.onBeforeNavigate.addListener(onBeforeNavigate)
+    browser.webNavigation.onCompleted.addListener(onNavigationCompleted)
+    browser.webNavigation.onErrorOccurred.addListener(onNavigationFailed)
+    browser.webNavigation.onHistoryStateUpdated.addListener(onSameDocumentNavigation)
+    browser.webNavigation.onReferenceFragmentUpdated.addListener(onSameDocumentNavigation)
+  }
   listenersAreSet = true
 }
 
@@ -58,7 +70,94 @@ export function resetTabsListeners(): void {
   browser.tabs.onDetached.removeListener(onTabDetached)
   browser.tabs.onAttached.removeListener(onTabAttached)
   browser.tabs.onActivated.removeListener(onTabActivated)
+  if (Info.isChromium) {
+    browser.webNavigation.onBeforeNavigate.removeListener(onBeforeNavigate)
+    browser.webNavigation.onCompleted.removeListener(onNavigationCompleted)
+    browser.webNavigation.onErrorOccurred.removeListener(onNavigationFailed)
+    browser.webNavigation.onHistoryStateUpdated.removeListener(onSameDocumentNavigation)
+    browser.webNavigation.onReferenceFragmentUpdated.removeListener(onSameDocumentNavigation)
+    documentLoadingTabIds.clear()
+    documentLoadingCleanupTimeouts.forEach(timeout => clearTimeout(timeout))
+    documentLoadingCleanupTimeouts.clear()
+    activeDocumentNavigationTabIds.clear()
+    sameDocumentTabIds.clear()
+  }
   listenersAreSet = false
+}
+
+function onBeforeNavigate(details: browser.webNavigation.NavigationDetails): void {
+  if (details.frameId !== 0) return
+  clearTimeout(documentLoadingCleanupTimeouts.get(details.tabId))
+  documentLoadingCleanupTimeouts.delete(details.tabId)
+  documentLoadingTabIds.add(details.tabId)
+  activeDocumentNavigationTabIds.add(details.tabId)
+  sameDocumentTabIds.delete(details.tabId)
+  Logs.info('NavDebug webNavigation.onBeforeNavigate', {
+    tabId: details.tabId,
+    url: details.url,
+    timeStamp: details.timeStamp,
+  })
+}
+
+function onNavigationCompleted(details: browser.webNavigation.NavigationDetails): void {
+  if (details.frameId !== 0) return
+  activeDocumentNavigationTabIds.delete(details.tabId)
+  const loadingMarked = documentLoadingTabIds.has(details.tabId)
+  Logs.info('NavDebug webNavigation.onCompleted', {
+    tabId: details.tabId,
+    url: details.url,
+    timeStamp: details.timeStamp,
+    loadingMarked,
+  })
+  if (!loadingMarked) return
+  clearTimeout(documentLoadingCleanupTimeouts.get(details.tabId))
+  documentLoadingCleanupTimeouts.set(
+    details.tabId,
+    setTimeout(() => {
+      Logs.info('NavDebug loading marker expired', { tabId: details.tabId })
+      documentLoadingTabIds.delete(details.tabId)
+      documentLoadingCleanupTimeouts.delete(details.tabId)
+    }, 1000)
+  )
+}
+
+function onNavigationFailed(details: browser.webNavigation.NavigationDetails): void {
+  if (details.frameId !== 0) return
+  Logs.info('NavDebug webNavigation.onErrorOccurred', {
+    tabId: details.tabId,
+    url: details.url,
+    timeStamp: details.timeStamp,
+    loadingMarked: documentLoadingTabIds.has(details.tabId),
+  })
+  activeDocumentNavigationTabIds.delete(details.tabId)
+  documentLoadingTabIds.delete(details.tabId)
+  clearTimeout(documentLoadingCleanupTimeouts.get(details.tabId))
+  documentLoadingCleanupTimeouts.delete(details.tabId)
+}
+
+function onSameDocumentNavigation(details: browser.webNavigation.NavigationDetails): void {
+  if (details.frameId !== 0) return
+  const documentNavigationActive = activeDocumentNavigationTabIds.has(details.tabId)
+  Logs.info('NavDebug webNavigation.sameDocument', {
+    tabId: details.tabId,
+    url: details.url,
+    timeStamp: details.timeStamp,
+    loadingMarked: documentLoadingTabIds.has(details.tabId),
+    documentNavigationActive,
+    tabStatus: Tabs.byId[details.tabId]?.status,
+  })
+  if (documentNavigationActive) return
+
+  documentLoadingTabIds.delete(details.tabId)
+  clearTimeout(documentLoadingCleanupTimeouts.get(details.tabId))
+  documentLoadingCleanupTimeouts.delete(details.tabId)
+  sameDocumentTabIds.add(details.tabId)
+
+  const tab = Tabs.byId[details.tabId]
+  if (tab?.status === 'loading') {
+    tab.status = 'complete'
+    tab.reactive.status = TabStatus.Complete
+  }
 }
 
 let waitForOtherReopenedTabsTimeout: number | undefined
@@ -766,6 +865,39 @@ function onTabUpdated(tabId: ID, change: browser.tabs.ChangeInfo, nativeTab: Nat
   const tab = Tabs.byId[tabId]
   if (!tab) {
     return Logs.warn(`Tabs.onTabUpdated: Cannot find local tab: ${tabId}`, Object.keys(change))
+  }
+
+  const nativeStatus = change.status
+  let navigationDecision = 'unchanged'
+  if (Info.isChromium && change.status === 'loading') {
+    if (documentLoadingTabIds.has(tabId)) {
+      navigationDecision = 'accepted-loading'
+      documentLoadingTabIds.delete(tabId)
+      clearTimeout(documentLoadingCleanupTimeouts.get(tabId))
+      documentLoadingCleanupTimeouts.delete(tabId)
+    } else {
+      navigationDecision = 'suppressed-loading'
+      delete change.status
+    }
+  } else if (Info.isChromium && change.status === 'complete' && sameDocumentTabIds.has(tabId)) {
+    navigationDecision = 'suppressed-same-document-complete'
+    sameDocumentTabIds.delete(tabId)
+    delete change.status
+  }
+
+  if (Info.isChromium && (nativeStatus !== undefined || change.url !== undefined)) {
+    Logs.info('NavDebug tabs.onUpdated', {
+      tabId,
+      changeStatus: nativeStatus,
+      changeUrl: change.url,
+      nativeStatus: nativeTab.status,
+      nativeUrl: nativeTab.url,
+      previousStatus: tab.status,
+      previousUrl: tab.url,
+      loadingMarked: documentLoadingTabIds.has(tabId),
+      sameDocumentMarked: sameDocumentTabIds.has(tabId),
+      decision: navigationDecision,
+    })
   }
 
   // Logs.info('Tabs.onTabUpdated:', tabId, Object.keys(change))
