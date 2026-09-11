@@ -178,7 +178,7 @@ export default defineConfig({
       if (output && !Array.isArray(output)) output.assetFileNames = 'styles/[name].[ext]'
     },
   },
-  vite: () => ({
+  vite: ({ browser }) => ({
     resolve: { alias: { src: path.resolve('src') } },
     plugins: [
       vue(),
@@ -219,6 +219,9 @@ export default defineConfig({
         },
       },
     ],
-    build: { cssMinify: 'esbuild' },
+    build: {
+      cssMinify: 'esbuild',
+      ...(browser !== 'firefox' && { modulePreload: false }),
+    },
   }),
 })

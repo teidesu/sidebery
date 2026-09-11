@@ -138,7 +138,7 @@ export default defineBackground(() => {
   })()
 
   function initToolbarButton(): void {
-    Menu.createBrowserActionMenu()
+    void Menu.createBrowserActionMenu()
 
     if (Info.isChromium && browser.sidePanel?.setPanelBehavior) {
       browser.sidePanel

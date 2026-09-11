@@ -38,6 +38,7 @@ The product branding is Sidechery. Preserve `sidebery` only for upstream referen
 - The setup page hides its Containers section and navigation entry when `Containers.isSupported()` is false; direct container-section hashes fall back to General.
 - Container-dependent request interception and per-container proxy handlers are disabled when contextual identities are unavailable.
 - Context-menu code uses the shared `browser.contextMenus` namespace. Route creation through `src/services/context-menu.ts`, which removes Firefox-only creation fields on Chromium. Firefox-only `onHidden` and `overrideContext` calls remain optional. Chromium cannot replace the page context menu, so `ctxMenuNative` is forced off there in `Settings.updPrecalcSettings` and hidden on the setup page.
+- Browser-action context menus are rebuilt only after `contextMenus.removeAll` completes because Chromium preserves menu items across service-worker restarts and rejects duplicate IDs.
 - Shared style/favicon/settings helpers and `src/bg/background.ts` guard DOM globals so Chromium's service worker can initialize. Background favicon resizing is skipped without DOM canvas support. Do not add unguarded `window`, `document`, `Image`, or `localStorage` access to background imports/startup.
 - Chromium uses the `favicon` permission and `/_favicon/` endpoint for missing or inaccessible native page icons. Live and recently closed Chrome-owned icons are marked with `data-native-favicon` and rendered as `currentColor` masks; `chrome-extension://` page icons retain their colors. Firefox retains upstream favicon handling.
 - `BkmNode` infers Chromium bookmark node kinds from `url` because Chrome omits Firefox's `type`; an explicit `separator` remains a Firefox separator and other URL-less nodes are folders.
@@ -46,6 +47,7 @@ The product branding is Sidechery. Preserve `sidebery` only for upstream referen
 - Chromium manifest/action icons use supersampled raster `src/assets/logo-{16,20,24,32,40,48,64,128}.png` generated from `logo.svg`; the intermediate sizes cover fractional and HiDPI toolbar scale factors. Chrome falls back to a puzzle icon for SVG manifest icons. Regenerate every PNG when the source logo changes.
 - Media injections are passed as functions from `src/injections/` instead of emitted standalone scripts. This keeps `browser.scripting.executeScript` compatible with WXT output.
 - Background initialization is wrapped in `defineBackground`; listeners must remain synchronously registered inside that callback.
+- Vite module preloading is disabled because Chromium extension pages reject generated chunk preloads as cross-world resource mismatches; normal ESM imports still load the chunks.
 - pnpm is the package manager. Keep `pnpm-lock.yaml`; do not restore `package-lock.json`.
 
 ## Known Chromium gaps

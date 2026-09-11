@@ -3,7 +3,8 @@ import * as SnapshotsBg from 'src/services/snapshots.bg'
 import * as TabsBg from 'src/services/tabs.bg'
 import * as ContextMenu from 'src/services/context-menu'
 
-export function createBrowserActionMenu() {
+export async function createBrowserActionMenu(): Promise<void> {
+  await browser.contextMenus.removeAll()
   createSettingsMenu()
   TabsBg.createOpenFromCacheMenu()
 }
@@ -30,8 +31,7 @@ function onMenuClicked(info: browser.contextMenus.OnClickData): void {
 }
 
 function onMenuHiddenBg(): void {
-  browser.contextMenus.removeAll()
-  createBrowserActionMenu()
+  void createBrowserActionMenu()
 }
 
 export function setupListeners(): void {
