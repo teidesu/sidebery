@@ -1,5 +1,6 @@
 import { Reactivator } from 'src/types'
 import * as Utils from 'src/utils'
+import * as Info from 'src/services/info'
 
 import * as Permissions from 'src/services/permissions'
 
@@ -37,14 +38,14 @@ export let downloads = false
 
 export function isPermissionSupported(permission: string): boolean {
   if (permission === 'tabHide' || permission === 'webRequestBlocking') {
-    return typeof browser.runtime.getBrowserInfo === 'function'
+    return Info.isFirefox
   }
   return true
 }
 
 export function isPermissionRequestable(permission: string): boolean {
   if (!isPermissionSupported(permission)) return false
-  if (permission === 'proxy' && typeof browser.runtime.getBrowserInfo !== 'function') return false
+  if (permission === 'proxy' && Info.isChromium) return false
   return true
 }
 

@@ -1,5 +1,7 @@
+import * as Info from 'src/services/info'
+
 export function create(createProperties: browser.contextMenus.CreateProperties): string {
-  if (typeof browser.runtime.getBrowserInfo === 'function') {
+  if (Info.isFirefox) {
     return browser.contextMenus.create(createProperties)
   }
 

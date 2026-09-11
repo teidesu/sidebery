@@ -1,7 +1,9 @@
+import * as Info from 'src/services/info'
+
 export function create(
   createProperties: browser.tabs.CreateProperties = {}
 ): Promise<browser.tabs.Tab> {
-  if (typeof browser.runtime.getBrowserInfo === 'function') {
+  if (Info.isFirefox) {
     return browser.tabs.create(createProperties)
   }
 
@@ -17,10 +19,7 @@ export function update(
   tabId: ID,
   updateProperties: browser.tabs.UpdateProperties
 ): Promise<browser.tabs.Tab> {
-  if (
-    typeof browser.runtime.getBrowserInfo !== 'function' &&
-    updateProperties.openerTabId === tabId
-  ) {
+  if (Info.isChromium && updateProperties.openerTabId === tabId) {
     updateProperties = { ...updateProperties }
     delete updateProperties.openerTabId
   }
