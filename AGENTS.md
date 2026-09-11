@@ -16,11 +16,13 @@ This fork adds Chromium support to upstream Sidebery v5. Keep Firefox behavior u
 - `src/services/tabs-api.ts` strips Firefox-only tab creation fields (`cookieStoreId`, `discarded`, `openInReaderMode`, `title`) and self-opener updates on Chromium. Firefox-only succession/warmup calls become no-ops there. Route these operations through it.
 - `src/services/sidebar-action.ts` owns Firefox sidebar-action vs Chromium Side Panel behavior. Chromium cannot set the native side-panel title.
 - `src/services/info.ts` uses `runtime.getBrowserInfo` on Firefox and derives Chromium version metadata from the user agent. Keep Firefox-version gates disabled outside Firefox and route new browser-info reads through `Info.loadBrowserInfo`.
+- Use `Info.isFirefox`/`Info.isChromium` for browser-family branches. Keep direct API feature detection only for capabilities that can vary by browser version or permission.
 - `src/services/permissions.ts` filters Firefox-only permission names before calling the permissions API. Route new permission checks/requests through it; Chrome rejects unknown names such as `tabHide` and `webRequestBlocking`.
 - `src/services/containers.ts` owns contextual-identity capability detection. Chromium disables native container loading/listeners, and tab normalization supplies `DEFAULT_CONTAINER_ID` when `cookieStoreId` is absent.
 - Container-dependent request interception and per-container proxy handlers are disabled when contextual identities are unavailable.
 - Context-menu code uses the shared `browser.contextMenus` namespace. Route creation through `src/services/context-menu.ts`, which removes Firefox-only creation fields on Chromium. Firefox-only `onHidden` and `overrideContext` calls remain optional.
 - Shared style/favicon/settings helpers and `src/bg/background.ts` guard DOM globals so Chromium's service worker can initialize. Background favicon resizing is skipped without DOM canvas support. Do not add unguarded `window`, `document`, `Image`, or `localStorage` access to background imports/startup.
+- Chromium uses the `favicon` permission and `/_favicon/` endpoint for missing or inaccessible native page icons. These native icons are marked with `data-native-favicon` and rendered as `currentColor` masks; Firefox retains upstream favicon handling.
 - Media injections are passed as functions from `src/injections/` instead of emitted standalone scripts. This keeps `browser.scripting.executeScript` compatible with WXT output.
 - Background initialization is wrapped in `defineBackground`; listeners must remain synchronously registered inside that callback.
 - pnpm is the package manager. Keep `pnpm-lock.yaml`; do not restore `package-lock.json`.
