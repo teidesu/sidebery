@@ -177,6 +177,7 @@ function openCachedWindow(cache: T.TabCache[]) {
 
 function mutateNativeTabToSideberyTab(nativeTab: T.NativeTab): T.BgTab {
   const tab = nativeTab as T.BgTab
+  if (!tab.cookieStoreId) tab.cookieStoreId = D.DEFAULT_CONTAINER_ID
   return tab
 }
 

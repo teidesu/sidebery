@@ -17,6 +17,10 @@ export interface ContainerProxy {
 
 export let reactive: ContainersState = { byId: {} }
 
+export function isSupported(): boolean {
+  return typeof browser.contextualIdentities?.query === 'function'
+}
+
 export function reactivate(r: Reactivator<ContainersState>) {
   reactive = r(reactive)
 }

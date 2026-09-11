@@ -103,6 +103,7 @@ export function reactivate(r: T.Reactivator<any>) {
 export function mutateNativeTabToSideberyTab(nativeTab: T.NativeTab): T.Tab {
   const tab = nativeTab as T.Tab
 
+  if (!tab.cookieStoreId) tab.cookieStoreId = D.DEFAULT_CONTAINER_ID
   if (tab.isParent === undefined) tab.isParent = false
   if (tab.folded === undefined) tab.folded = false
   if (tab.invisible === undefined) tab.invisible = false

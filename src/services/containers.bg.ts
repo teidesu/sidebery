@@ -17,6 +17,16 @@ export async function load(): Promise<void> {
   Logs.info('Containers.load')
   const ts = performance.now()
   ready = false
+
+  if (!Containers.isSupported()) {
+    Containers.reactive.byId = {}
+    ready = true
+    waitingForContainers.forEach(cb => cb())
+    waitingForContainers = []
+    Logs.info('Containers.load: Unsupported')
+    return
+  }
+
   setupListeners()
   const [ffContainers, storage] = await Promise.all([
     browser.contextualIdentities.query({}),
@@ -103,6 +113,8 @@ export async function getContainers() {
 
 let creating: string | undefined
 export async function create(c: NewContainerConf): Promise<Container> {
+  if (!Containers.isSupported()) throw new Error('Containers are not supported')
+
   creating = c.name
   const newRawContainer = await browser.contextualIdentities
     .create({
@@ -141,6 +153,8 @@ export async function createAndSave(
 
 const removing = new Set<string>()
 export async function removeAndSave(id: string, invoker?: IPCNodeInfo) {
+  if (!Containers.isSupported()) return
+
   removing.add(id)
   try {
     await browser.contextualIdentities.remove(id).finally(() => removing.delete(id))
@@ -171,6 +185,8 @@ export async function setContainers(containers: Record<string, Container>, invok
 
 const updating = new Set<string>()
 async function updateNativeContainer(newContainer: Container) {
+  if (!Containers.isSupported()) return
+
   const id = newContainer.id
   const oldContainer = Containers.reactive.byId[id]
   if (!oldContainer) return
@@ -225,6 +241,8 @@ export async function importContainers(
 }
 
 export function setupListeners(): void {
+  if (!Containers.isSupported()) return
+
   browser.contextualIdentities.onCreated.addListener(onContainerCreated)
   browser.contextualIdentities.onRemoved.addListener(onContainerRemoved)
   browser.contextualIdentities.onUpdated.addListener(onContainerUpdated)

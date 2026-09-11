@@ -77,6 +77,8 @@ export async function saveContainer(container: Container, delay?: number) {
 }
 
 function setupListeners(): void {
+  if (!Containers.isSupported()) return
+
   // Handle onCreated event in sidebar, even though it will be received with
   // Store.onKeyChange later. This is needed b/c Sidebery need to get that
   // info ASAP to correctly handle new tabs of just created container.
