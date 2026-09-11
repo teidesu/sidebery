@@ -1,3 +1,67 @@
+# sidechery
+
+> sidebery + chrome = sidechery
+
+vibecoded port of sidebery for chromium. not published anywhere, plz install as an unpacked ext from gh releases.
+
+### note on side panels in chrome
+
+side panels in chrome look and work kinda ass + it's impossible to properly hide the "stock" chromium tabs on any major chrome-based browsers.
+
+due to limitations of chromium extensions api, you will need to manually open the side panel in every new window, the default shortcut is `ctrl+e`.
+
+it is currently recommended to use [helium](https://helium.computer), with the following configuration:
+
+- Browser layout: vertical
+  - Show vertical tabs on right side: on (if you want sidebery to be on the left, to avoid hover-reveal conflicts)
+- Side panel position -> Helium Panels: Left (i.e. opposite of the above)
+- Frameless mode: on
+  - Always show the sidebar: off
+- *(optional)* Show a rounded frame around web contents: off
+
+and these custom styles:
+
+```css
+#root.root {
+  /* see below for explanation of colors - chrome sadly doesnt expose theme to extensions */
+  --frame-bg: #231c2f;
+  --toolbar-bg: #3a3346;
+
+  --nav-btn-active-shadow: inset 0 0 0 1px var(--s-accent, rgba(255,255,255,.1));
+  --nav-btn-len-margin: 2px;
+  --tabs-border-radius: 6px;
+}
+
+.Tab[data-pin=false] .fav {
+   margin: 0 var(--tabs-inner-gap) 0 var(--tabs-inner-gap);
+}
+
+.NavigationBar {
+  border-radius: 8px;
+}
+
+.top-horizontal-box {
+  margin-bottom: 2px;
+  margin-left: 2px;
+}
+
+.NavigationBar .nav-item {
+  border-radius: 7px;
+}
+
+.NavigationBar .nav-item .len {
+  font-size: .5rem;
+}
+```
+
+<div align="center">
+<img src="docs/assets/helium-colors-guide.png" alt="where to find the colors" width="75%">
+</div>
+
+original readme below
+
+---
+
 <div align="center">
 
 <img src="docs/assets/readme-logo.svg" height="96" alt="Sidebery">
