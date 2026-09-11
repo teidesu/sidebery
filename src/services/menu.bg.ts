@@ -1,6 +1,7 @@
 import { translate } from 'src/dict'
 import * as SnapshotsBg from 'src/services/snapshots.bg'
 import * as TabsBg from 'src/services/tabs.bg'
+import * as ContextMenu from 'src/services/context-menu'
 
 export function createBrowserActionMenu() {
   createSettingsMenu()
@@ -8,13 +9,13 @@ export function createBrowserActionMenu() {
 }
 
 export function createSettingsMenu(): void {
-  browser.menus.create({
+  ContextMenu.create({
     id: 'open_settings',
     title: translate('menu.browserAction.open_settings'),
     icons: { '16': 'assets/logo-native.svg' },
     contexts: ['action'],
   })
-  browser.menus.create({
+  ContextMenu.create({
     id: 'create_snapshot',
     title: translate('menu.browserAction.create_snapshot'),
     icons: { '16': 'assets/snapshot-native.svg' },
@@ -22,23 +23,23 @@ export function createSettingsMenu(): void {
   })
 }
 
-function onMenuClicked(info: browser.menus.OnClickData): void {
+function onMenuClicked(info: browser.contextMenus.OnClickData): void {
   if (info.menuItemId === 'open_settings') browser.runtime.openOptionsPage()
   else if (info.menuItemId === 'create_snapshot') SnapshotsBg.createSnapshot()
   else TabsBg.openCachedWindowFromMenu(info.menuItemId)
 }
 
 function onMenuHiddenBg(): void {
-  browser.menus.removeAll()
+  browser.contextMenus.removeAll()
   createBrowserActionMenu()
 }
 
 export function setupListeners(): void {
-  browser.menus.onHidden.addListener(onMenuHiddenBg)
-  browser.menus.onClicked.addListener(onMenuClicked)
+  browser.contextMenus.onHidden?.addListener(onMenuHiddenBg)
+  browser.contextMenus.onClicked.addListener(onMenuClicked)
 }
 
 export function resetListeners(): void {
-  browser.menus.onHidden.removeListener(onMenuHiddenBg)
-  browser.menus.onClicked.removeListener(onMenuClicked)
+  browser.contextMenus.onHidden?.removeListener(onMenuHiddenBg)
+  browser.contextMenus.onClicked.removeListener(onMenuClicked)
 }

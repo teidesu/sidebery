@@ -13,6 +13,8 @@ import * as Settings from 'src/services/settings'
 import * as Logs from 'src/services/logs'
 import * as Styles from 'src/services/styles.bg'
 import * as Omnibox from 'src/services/omnibox.bg'
+import * as TabEvents from 'src/services/tabs-events'
+import * as ContextMenu from 'src/services/context-menu'
 import { DetachedTabsInfo } from 'src/services/tabs.fg.move'
 import { translate } from 'src/dict'
 
@@ -105,7 +107,7 @@ export function createOpenFromCacheMenu() {
     const winCache = _tabsDataCache[0]
     if (!winCache) return
 
-    browser.menus.create({
+    ContextMenu.create({
       id: 'reopen_cached_win',
       title: translate('menu.browserAction.reopen_cached_win_first', winCache.length),
       icons: { '16': 'assets/window-native.svg' },
@@ -115,7 +117,7 @@ export function createOpenFromCacheMenu() {
 
   // Multiple windows
   else {
-    const parentId = browser.menus.create({
+    const parentId = ContextMenu.create({
       id: 'reopen_cached_wins',
       title: translate('menu.browserAction.reopen_cached_wins'),
       icons: { '16': 'assets/window-native.svg' },
@@ -131,7 +133,7 @@ export function createOpenFromCacheMenu() {
         panelIds.add(tab.panelId)
       }
 
-      browser.menus.create({
+      ContextMenu.create({
         id: `reopen_cached_win_${i}`,
         parentId,
         title: translate('menu.browserAction.reopen_cached_win', winCache.length, panelIds.size),
@@ -184,9 +186,15 @@ function mutateNativeTabToSideberyTab(nativeTab: T.NativeTab): T.BgTab {
 export function setupListeners(): void {
   browser.tabs.onCreated.addListener(onTabCreated)
   browser.tabs.onRemoved.addListener(onTabRemoved)
-  browser.tabs.onUpdated.addListener(onTabUpdated, {
-    properties: ['pinned', 'title', 'status', 'favIconUrl', 'url', 'hidden', 'discarded'],
-  })
+  TabEvents.addUpdatedListener(onTabUpdated, [
+    'pinned',
+    'title',
+    'status',
+    'favIconUrl',
+    'url',
+    'hidden',
+    'discarded',
+  ])
   browser.tabs.onActivated.addListener(onTabActivated)
   browser.tabs.onMoved.addListener(onTabMoved)
   browser.tabs.onAttached.addListener(onTabAttached)

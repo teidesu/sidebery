@@ -2,6 +2,7 @@ import * as Logs from 'src/services/logs'
 import * as Tabs from 'src/services/tabs.fg'
 import * as Windows from 'src/services/windows.fg'
 import * as Links from 'src/services/links'
+import * as TabEvents from 'src/services/tabs-events'
 
 export let shadowList: browser.tabs.Tab[] = []
 export let shadowById: Partial<Record<ID, browser.tabs.Tab>> = {}
@@ -43,9 +44,13 @@ export function unloadShadowed(): void {
 export function setupShadowListeners(): void {
   browser.tabs.onCreated.addListener(onShadowTabCreated)
   browser.tabs.onRemoved.addListener(onShadowTabRemoved)
-  browser.tabs.onUpdated.addListener(onShadowTabUpdated, {
-    properties: ['pinned', 'title', 'status', 'favIconUrl', 'url'],
-  })
+  TabEvents.addUpdatedListener(onShadowTabUpdated, [
+    'pinned',
+    'title',
+    'status',
+    'favIconUrl',
+    'url',
+  ])
   browser.tabs.onActivated.addListener(onShadowTabActivated)
   browser.tabs.onMoved.addListener(onShadowTabMoved)
   browser.tabs.onAttached.addListener(onShadowTabAttached)

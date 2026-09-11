@@ -584,7 +584,7 @@ declare namespace browser {
   /**
    * Menus
    */
-  namespace menus {
+  namespace contextMenus {
     // prettier-ignore
     type ContextType = 'all' | 'audio' | 'bookmark' | 'action'
     | 'editable' | 'frame' | 'image' | 'link' | 'page' | 'page_action'

@@ -466,7 +466,7 @@ function onNavCtxMenu(e: MouseEvent, item: T.NavItem) {
   Menu.blockCtxMenu()
 
   let nativeCtx = { showDefaults: false }
-  browser.menus.overrideContext(nativeCtx)
+  browser.contextMenus.overrideContext?.(nativeCtx)
 
   let type: E.MenuType
   if (panel.type === E.PanelType.bookmarks) type = E.MenuType.BookmarksPanel

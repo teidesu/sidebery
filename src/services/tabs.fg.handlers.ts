@@ -20,6 +20,7 @@ import * as Popups from 'src/services/popups.fg'
 import * as Links from 'src/services/links'
 import * as Info from 'src/services/info.fg'
 import * as SessionValues from 'src/services/session-values'
+import * as TabEvents from 'src/services/tabs-events'
 
 const EXT_HOST = browser.runtime.getURL('').slice(16)
 const URL_HOST_PATH_RE = /^([a-z0-9-]{1,63}\.)+\w+(:\d+)?\/[A-Za-z0-9-._~:/?#[\]%@!$&'()*+,;=]*$/
@@ -39,7 +40,7 @@ export function setupTabsListeners(): void {
   }
 
   browser.tabs.onCreated.addListener(onTabCreated)
-  browser.tabs.onUpdated.addListener(onTabUpdated, { properties: updProps })
+  TabEvents.addUpdatedListener(onTabUpdated, updProps)
   browser.tabs.onRemoved.addListener(onTabRemoved)
   browser.tabs.onMoved.addListener(onTabMoved)
   browser.tabs.onDetached.addListener(onTabDetached)

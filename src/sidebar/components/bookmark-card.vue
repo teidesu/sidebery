@@ -157,7 +157,7 @@ function onCtxMenu(e: MouseEvent): void {
   }
 
   let nativeCtx = { context: 'bookmark', bookmarkId: props.node.id } as const
-  browser.menus.overrideContext(nativeCtx)
+  browser.contextMenus.overrideContext?.(nativeCtx)
 
   if (!Selection.isBookmarks()) Selection.selectBookmark(props.node.id)
 

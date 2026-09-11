@@ -16,6 +16,7 @@ import * as Logs from 'src/services/logs'
 import * as Notifications from 'src/services/notifications.fg'
 
 import * as Menu from 'src/services/menu.fg'
+import * as ContextMenu from 'src/services/context-menu'
 
 export let isOpen = false
 export let tabsConf: T.MenuConf = []
@@ -115,12 +116,12 @@ export function setCtxMenu(conf?: T.MenuConfs) {
 }
 
 export function setupListeners(): void {
-  browser.menus.onHidden.addListener(onMenuHiddenFg)
+  browser.contextMenus.onHidden?.addListener(onMenuHiddenFg)
   Store.onKeyChange('contextMenu', menuConfigs => setCtxMenu(menuConfigs))
 }
 
 export function resetListeners(): void {
-  browser.menus.onHidden.removeListener(onMenuHiddenFg)
+  browser.contextMenus.onHidden?.removeListener(onMenuHiddenFg)
 }
 
 export function isBlocked(): boolean {
@@ -135,7 +136,7 @@ export function open(type: MenuType, x?: number, y?: number, customForced?: bool
   if (Mouse.isLocked()) return Mouse.resetClickLock()
   if (!type) return
 
-  let nodeType: browser.menus.ContextType = 'all'
+  let nodeType: browser.contextMenus.ContextType = 'all'
   let blocks: T.MenuBlock[] | undefined
   if (type === MenuType.Tabs) {
     nodeType = 'tab'
@@ -308,13 +309,13 @@ function getBase64SVGIcon(icon: string, rgbColor: string): string | undefined {
 }
 
 function createNativeOption(
-  ctx: browser.menus.ContextType,
+  ctx: browser.contextMenus.ContextType,
   option: T.MenuOption,
   parentId?: string
 ): void {
   if (!ctx) ctx = 'all'
   if (option.type === 'separator') {
-    browser.menus.create({ type: 'separator', contexts: [ctx], parentId })
+    ContextMenu.create({ type: 'separator', contexts: [ctx], parentId })
     return
   }
 
@@ -330,7 +331,7 @@ function createNativeOption(
     }
   }
 
-  const optProps: browser.menus.CreateProperties = {
+  const optProps: browser.contextMenus.CreateProperties = {
     type: 'normal',
     contexts: [ctx],
     viewTypes: ['sidebar'],
@@ -347,18 +348,18 @@ function createNativeOption(
     if (!Settings.state.searchMenuTrig) Search.stop()
   }
 
-  browser.menus.create(optProps)
+  ContextMenu.create(optProps)
 }
 
-function createNativeSubMenuOption(title: string, ctx?: browser.menus.ContextType): string {
+function createNativeSubMenuOption(title: string, ctx?: browser.contextMenus.ContextType): string {
   if (!ctx) ctx = 'all'
-  const optProps: browser.menus.CreateProperties = {
+  const optProps: browser.contextMenus.CreateProperties = {
     type: 'normal',
     contexts: [ctx],
     viewTypes: ['sidebar'],
     title: title,
   }
-  return browser.menus.create(optProps)
+  return ContextMenu.create(optProps)
 }
 
 /**

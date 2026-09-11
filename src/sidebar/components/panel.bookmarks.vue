@@ -285,7 +285,7 @@ function onNavCtxMenu(e: MouseEvent): void {
   }
 
   let nativeCtx = { showDefaults: false }
-  browser.menus.overrideContext(nativeCtx)
+  browser.contextMenus.overrideContext?.(nativeCtx)
 
   if (!Selection.isSet()) Selection.selectNavItem(props.panel.id)
   Menu.open(MenuType.BookmarksPanel)
