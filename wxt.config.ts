@@ -40,6 +40,16 @@ export default defineConfig({
       manifest.permissions.push('proxy')
       delete manifest.action.default_area
       delete manifest.action.theme_icons
+
+      for (const [name, command] of Object.entries(
+        manifest.commands as Record<string, { suggested_key?: Record<string, string> }>
+      )) {
+        if (name === '_execute_sidebar_action' && command.suggested_key?.default) {
+          command.suggested_key.windows = command.suggested_key.default
+        } else {
+          delete command.suggested_key
+        }
+      }
     }
 
     return manifest
