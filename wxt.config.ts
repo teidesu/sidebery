@@ -40,6 +40,10 @@ export default defineConfig({
         (permission: string) => !['proxy', 'tabHide', 'webRequestBlocking'].includes(permission)
       )
       manifest.permissions.push('proxy')
+      // Pin the extension ID so installs from different paths update the
+      // existing installation instead of adding a separate extension.
+      manifest.key =
+        'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxYmjjo0xLPVOre3re6fs+//IhFgeGOw0GZ3O1s8QyqM4VpSyEIH1RucHt15ZMK4g15kMSOkG42R2XET8RRbUmWi8AlgAWyVnLXYjAVyxrRA4HlyqdTgTmeq0uZZ7X8q0htwurhCdsxL/Yj6fkbltQOiIGfKwptz7Z8HMLKfZ7bnhN4GAvr8tC2PqB7CncpQQhuuZsMTg7wzZoj4wQsOVMpIoJhOuqV4fHvTdVSs5kwhtlP9uibb1Vg4/t7sS66IhBgSPIUxqwSArxOnw7onm2NRBX9ELaxpzLoHz/l3lp3qi8cngEE8j4Ljt/b6X3261jCwNhKoNo1Q7NVDwyOYNrwIDAQAB'
       manifest.icons = {
         16: 'assets/logo-16.png',
         20: 'assets/logo-20.png',
