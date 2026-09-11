@@ -1,6 +1,6 @@
 /// <reference types="../src/types/web-ext.d.ts" />
 
-import manifest from '../src/manifest.json'
+import manifest from '../wxt/manifest.json'
 
 class EventTarget<T> {
   addListener: (listener: T) => void

@@ -8,6 +8,7 @@
     "moduleResolution": "bundler",
     "target": "ESNext",
     "module": "ESNext",
+    "types": [],
     "removeComments": true,
     "preserveConstEnums": false,
     "outDir": "./addon",
@@ -17,11 +18,9 @@
     },
     "skipDefaultLibCheck": true
   },
-  "include": ["src/**/*.ts", "src/**/*.vue"],
+  "include": ["src/**/*.ts", "src/**/*.vue", "wxt/**/*.ts"],
   "exclude": ["**/__test__/*"],
   "vueCompilerOptions": {
-    "plugins": [
-      "@vue/language-plugin-pug"
-    ]
+    "plugins": ["@vue/language-plugin-pug"]
   }
 }

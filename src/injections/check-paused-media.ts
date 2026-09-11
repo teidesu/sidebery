@@ -1,4 +1,4 @@
-;(function (): boolean {
+export function checkPausedMedia(): boolean {
   const audioEls = document.querySelectorAll('audio')
   const videoEls = document.querySelectorAll('video')
 
@@ -23,4 +23,4 @@
   }
 
   return pausedElCount > 0
-})()
+}

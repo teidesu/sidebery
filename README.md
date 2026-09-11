@@ -261,11 +261,11 @@ Result:
 
 ## Build
 
-> Prerequisites: latest LTS Node.js version
+> Prerequisites: latest LTS Node.js and pnpm
 
-1. Install dependencies: `npm install`
-2. Build all parts of Add-on: `npm run build`
-3. Create Add-on archive in `./dist`: `npm run build.ext`
+1. Install dependencies: `pnpm install`
+2. Build the extension: `pnpm build`
+3. Create the extension archive: `pnpm zip`
 
 After creating the Add-on archive, you can then use the version in Firefox as follows:
 
@@ -273,18 +273,20 @@ After creating the Add-on archive, you can then use the version in Firefox as fo
 2. Go to `about:debugging`
 3. Go to "This Firefox"
 4. At "Temporary Extensions" click on "Load Temporary Add-on..."
-5. Select the `.zip` file in the `dist` directory.
+5. Select the `.zip` file in the `.output` directory.
 6. Close the settings tab
 7. Your Firefox now always runs with the development version
 8. For updating: Repeat all steps.
 
 ## Development
 
-> Prerequisites: latest LTS Node.js version
+> Prerequisites: latest LTS Node.js and pnpm
 
-Install dependencies: `npm install`  
-Build and watch for changes: `npm run dev`  
-Run browser with Add-on: `npm run dev.run -- <firefox-executable>`
+Install dependencies: `pnpm install`
+
+Build, watch, and run Firefox: `pnpm dev`
+
+Build, watch, and run Chrome: `pnpm dev:chrome`
 
 ## Donate
 

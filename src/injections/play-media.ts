@@ -1,4 +1,4 @@
-;(function (): void {
+export function playMedia(): void {
   const audioEls = document.querySelectorAll('audio')
   const videoEls = document.querySelectorAll('video')
 
@@ -23,4 +23,4 @@
       }
     }
   }
-})()
+}

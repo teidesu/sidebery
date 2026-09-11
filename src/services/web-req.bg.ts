@@ -15,7 +15,7 @@ interface IncludeRule {
 
 export let containersProxies: Record<string, browser.proxy.ProxyInfo> = {}
 
-const BG_URL = browser.runtime.getURL('bg/background.html')
+const BG_URL = browser.runtime.getURL('bg/background.js')
 
 let handledReqId: string | undefined
 let includeHostsRules: IncludeRule[] = []

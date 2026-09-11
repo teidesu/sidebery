@@ -1,4 +1,4 @@
-;(function (): boolean {
+export function pauseMedia(): boolean {
   const audioEls = document.querySelectorAll('audio')
   const videoEls = document.querySelectorAll('video')
 
@@ -34,4 +34,4 @@
   }
 
   return pausedEls.length > 0
-})()
+}

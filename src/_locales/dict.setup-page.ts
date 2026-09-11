@@ -8105,5 +8105,7 @@ Available parameters:
   },
 }
 
-if (!window.translations) window.translations = setupPageTranslations
-else Object.assign(window.translations, setupPageTranslations)
+if (typeof window !== 'undefined') {
+  if (!window.translations) window.translations = setupPageTranslations
+  else Object.assign(window.translations, setupPageTranslations)
+}

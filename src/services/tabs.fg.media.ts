@@ -5,6 +5,9 @@ import * as Permissions from 'src/services/permissions.fg'
 import * as Settings from 'src/services/settings'
 import * as Logs from 'src/services/logs'
 import * as Utils from 'src/utils'
+import { pauseMedia } from 'src/injections/pause-media'
+import { playMedia } from 'src/injections/play-media'
+import { checkPausedMedia as checkPausedMediaInjection } from 'src/injections/check-paused-media'
 
 export function muteTabs(tabIds: ID[]): void {
   for (const tabId of tabIds) {
@@ -100,7 +103,7 @@ export async function pauseTabMedia(id?: ID): Promise<void> {
 
   browser.scripting
     .executeScript({
-      files: ['../injections/pause-media.js'],
+      func: pauseMedia,
       injectImmediately: true,
       target: {
         tabId: tab.id,
@@ -129,7 +132,7 @@ export async function checkPausedMedia(tabId: ID): Promise<boolean | null> {
   let results
   try {
     results = await browser.scripting.executeScript({
-      files: ['../injections/check-paused-media.js'],
+      func: checkPausedMediaInjection,
       injectImmediately: true,
       target: { tabId, allFrames: true },
     })
@@ -158,7 +161,7 @@ export async function playTabMedia(id?: ID): Promise<void> {
 
   browser.scripting
     .executeScript({
-      files: ['../injections/play-media.js'],
+      func: playMedia,
       injectImmediately: true,
       target: {
         tabId: tab.id,
@@ -192,7 +195,7 @@ export async function pauseTabsMediaOfPanel(panelId: ID): Promise<void> {
   if (!Utils.isTabsPanel(panel)) return
 
   const injectionConfig: Omit<browser.scripting.InjectDetails, 'target'> = {
-    files: ['../injections/pause-media.js'],
+    func: pauseMedia,
     injectImmediately: true,
   }
 
@@ -262,7 +265,7 @@ export async function playTabsMediaOfPanel(panelId: ID): Promise<void> {
   if (!Utils.isTabsPanel(panel)) return
 
   const injectionConfig: Omit<browser.scripting.InjectDetails, 'target'> = {
-    files: ['../injections/play-media.js'],
+    func: playMedia,
     injectImmediately: true,
   }
 
@@ -326,7 +329,7 @@ export async function pauseAllAudibleTabsMedia(): Promise<void> {
   }
 
   const injectionConfig: Omit<browser.scripting.InjectDetails, 'target'> = {
-    files: ['../injections/pause-media.js'],
+    func: pauseMedia,
     injectImmediately: true,
   }
 
@@ -364,7 +367,7 @@ export async function playAllPausedTabsMedia(): Promise<void> {
   }
 
   const injectionConfig: Omit<browser.scripting.InjectDetails, 'target'> = {
-    files: ['../injections/play-media.js'],
+    func: playMedia,
     injectImmediately: true,
   }
 

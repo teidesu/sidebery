@@ -12,6 +12,7 @@ const runtimeGlobTypes = {
   ScrollToOptions: true,
   MozFocusEvent: true,
   ID: true,
+  defineBackground: true,
 }
 
 export default [
@@ -49,9 +50,9 @@ export default [
     },
   },
 
-  // Build/Test
+  // WXT/Test
   {
-    files: ['./build/*', './test/*'],
+    files: ['./wxt.config.ts', './wxt/*', './tests/*'],
     languageOptions: {
       ecmaVersion: 'latest',
       globals: { ...globals.node },
@@ -59,7 +60,7 @@ export default [
   },
 
   // Exclude
-  { ignores: ['addon/*'] },
+  { ignores: ['.output/*', '.wxt/*', 'addon/*'] },
 
   // Rules configs
   {
@@ -92,6 +93,8 @@ export default [
       'no-prototype-builtins': 'off',
       'no-constant-condition': ['error', { checkLoops: false }],
       'no-unused-labels': 'off',
+      'no-unassigned-vars': 'off',
+      'no-useless-assignment': 'off',
     },
   },
 ]

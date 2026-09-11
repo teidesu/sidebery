@@ -1,13 +1,12 @@
 .cache
 .vscode
+.output
+.wxt
 dist
 node_modules
 coverage
 addon
-build/*
-!build/*.ts
-!build/*.js
-!build/*.mjs
+build/profile-*
 /.devenv/
 /.direnv/
 .idea

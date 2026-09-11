@@ -5,33 +5,53 @@ on:
     types: [opened, reopened, synchronize, ready_for_review, review_requested]
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository to the runner
+        uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
+      - name: Setup nodejs
+        uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: pnpm
+      - name: Build
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+
   eslint:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repository to the runner
         uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
       - name: Setup nodejs
         uses: actions/setup-node@v6
         with:
           node-version: lts/*
+          cache: pnpm
       - name: Lint
         run: |
-          npm install
-          npm run lint.eslint
+          pnpm install --frozen-lockfile
+          pnpm run lint.eslint
 
   lint-types:
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repository to the runner
         uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
       - name: Setup nodejs
         uses: actions/setup-node@v6
         with:
           node-version: lts/*
+          cache: pnpm
       - name: Lint
         run: |
-          npm install
-          npm run lint.types
+          pnpm install --frozen-lockfile
+          pnpm run lint.types
 
   test:
     runs-on: ubuntu-latest
@@ -40,11 +60,13 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 2
+      - uses: pnpm/action-setup@v4
       - name: Setup nodejs
         uses: actions/setup-node@v6
         with:
           node-version: lts/*
+          cache: pnpm
       - name: Test
         run: |
-          npm install
-          npx vitest related --run $(git diff --name-only --relative HEAD^1 HEAD)
+          pnpm install --frozen-lockfile
+          pnpm exec vitest related --run $(git diff --name-only --relative HEAD^1 HEAD)

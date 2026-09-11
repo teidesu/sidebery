@@ -1,11 +1,14 @@
+import { commonTranslations } from 'src/_locales/dict.common'
+
 const LANG_REG = browser.i18n.getUILanguage().replace('-', '_')
 export const LANG = LANG_REG.slice(0, 2)
 
 // Set dictionary
 const dict: Record<string, TranslationFn | string> = {}
-if (window.translations) {
-  for (const key of Object.keys(window.translations)) {
-    const prop = window.translations[key]
+const translations = typeof window === 'undefined' ? commonTranslations : window.translations
+if (translations) {
+  for (const key of Object.keys(translations)) {
+    const prop = translations[key]
     dict[key] = prop[LANG_REG] ?? prop[LANG] ?? prop.en
   }
 }

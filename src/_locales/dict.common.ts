@@ -2832,5 +2832,7 @@ export const commonTranslations: Translations = {
   },
 }
 
-if (!window.translations) window.translations = commonTranslations
-else Object.assign(window.translations, commonTranslations)
+if (typeof window !== 'undefined') {
+  if (!window.translations) window.translations = commonTranslations
+  else Object.assign(window.translations, commonTranslations)
+}
