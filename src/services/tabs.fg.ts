@@ -535,7 +535,12 @@ function restoreTab(
   }
 
   // Use openerTabId as fallback for parentId
-  if (tab.parentId === -1 && tab.openerTabId !== undefined && Tabs.byId[tab.openerTabId]) {
+  if (
+    Info.isFirefox &&
+    tab.parentId === -1 &&
+    tab.openerTabId !== undefined &&
+    Tabs.byId[tab.openerTabId]
+  ) {
     tab.parentId = tab.openerTabId
   }
 
@@ -2991,4 +2996,8 @@ export function renderFaviconInto(
     // Hide img
     if (imgEl) imgEl.style.display = 'none'
   }
+}
+
+export const TESTING = {
+  restoreTab,
 }

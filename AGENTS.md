@@ -27,6 +27,7 @@ The product branding is Sidechery. Preserve `sidebery` only for upstream referen
 - Foreground and background tab models migrate IDs in place on `tabs.onReplaced`, which Chromium can emit when prerendered/instant content swaps IDs. Do not replace this with full tab reinitialization; it visibly reloads the sidebar. The forced beforeunload discard retry remains Firefox-only.
 - Chromium session restore detection matches recently removed tabs by URL, title, and native index because Firefox tab session values do not transfer to Chrome's new restored tab ID. Preserve `RemovedTabInfo.url` for tree restoration.
 - Chromium restart cache matching uses `Tab.pendingUrl` and `Utils.restoreUrl` so lazy-restored tabs and regenerated internal-page IPC suffixes still match persisted tree data.
+- Chromium tree restoration uses saved parent IDs only. Do not infer restored nesting from native `openerTabId`: it retains historical opener relationships after tabs have been flattened. Firefox keeps the upstream opener fallback.
 - Tab rows use `Tab.renderId` as a stable Vue key across native ID replacement, avoiding remove/add animations during Chromium discard.
 - Route window creation/update through `src/services/windows-api.ts`; Chromium strips Firefox-only `allowScriptsToClose`, `cookieStoreId`, and `titlePreface` fields.
 - Tab screenshots route through `TabsApi.capture`: Firefox uses `captureTab`; Chromium uses `captureVisibleTab` only for an active target and returns no image for inactive tabs. Preview metadata still renders when Chromium cannot capture an image.
