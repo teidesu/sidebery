@@ -28,7 +28,7 @@ const URL_HOST_PATH_RE = /^([a-z0-9-]{1,63}\.)+\w+(:\d+)?\/[A-Za-z0-9-._~:/?#[\]
 const NEWTAB_URL = browser.extension.inIncognitoContext ? 'about:privatebrowsing' : 'about:newtab'
 
 export let listenersAreSet = false
-const documentLoadingTabIds = new Set<ID>()
+const documentLoadingUrls = new Map<ID, string>()
 const documentLoadingCleanupTimeouts = new Map<ID, number>()
 const activeDocumentNavigationTabIds = new Set<ID>()
 const sameDocumentTabIds = new Set<ID>()
@@ -78,7 +78,7 @@ export function resetTabsListeners(): void {
     browser.webNavigation.onErrorOccurred.removeListener(onNavigationFailed)
     browser.webNavigation.onHistoryStateUpdated.removeListener(onSameDocumentNavigation)
     browser.webNavigation.onReferenceFragmentUpdated.removeListener(onSameDocumentNavigation)
-    documentLoadingTabIds.clear()
+    documentLoadingUrls.clear()
     documentLoadingCleanupTimeouts.forEach(timeout => clearTimeout(timeout))
     documentLoadingCleanupTimeouts.clear()
     activeDocumentNavigationTabIds.clear()
@@ -88,6 +88,9 @@ export function resetTabsListeners(): void {
 }
 
 async function onTabReplaced(addedTabId: ID, removedTabId: ID): Promise<void> {
+  const pendingUrl = documentLoadingUrls.get(removedTabId)
+  documentLoadingUrls.delete(removedTabId)
+  if (pendingUrl !== undefined) documentLoadingUrls.set(addedTabId, pendingUrl)
   const tab = Tabs.byId[removedTabId]
   if (!tab) return
 
@@ -129,21 +132,28 @@ function onBeforeNavigate(details: browser.webNavigation.NavigationDetails): voi
   if (details.frameId !== 0) return
   clearTimeout(documentLoadingCleanupTimeouts.get(details.tabId))
   documentLoadingCleanupTimeouts.delete(details.tabId)
-  documentLoadingTabIds.add(details.tabId)
+  documentLoadingUrls.set(details.tabId, details.url)
   activeDocumentNavigationTabIds.add(details.tabId)
   sameDocumentTabIds.delete(details.tabId)
+  const tab = Tabs.byId[details.tabId]
+  if (tab && !tab.url) {
+    tab.pendingUrl = details.url
+    tab.status = 'loading'
+    tab.reactive.status = TabStatus.Loading
+    Tabs.renderTitle(tab)
+  }
 }
 
 function onNavigationCompleted(details: browser.webNavigation.NavigationDetails): void {
   if (details.frameId !== 0) return
   activeDocumentNavigationTabIds.delete(details.tabId)
-  const loadingMarked = documentLoadingTabIds.has(details.tabId)
+  const loadingMarked = documentLoadingUrls.has(details.tabId)
   if (!loadingMarked) return
   clearTimeout(documentLoadingCleanupTimeouts.get(details.tabId))
   documentLoadingCleanupTimeouts.set(
     details.tabId,
     setTimeout(() => {
-      documentLoadingTabIds.delete(details.tabId)
+      documentLoadingUrls.delete(details.tabId)
       documentLoadingCleanupTimeouts.delete(details.tabId)
     }, 1000)
   )
@@ -152,9 +162,14 @@ function onNavigationCompleted(details: browser.webNavigation.NavigationDetails)
 function onNavigationFailed(details: browser.webNavigation.NavigationDetails): void {
   if (details.frameId !== 0) return
   activeDocumentNavigationTabIds.delete(details.tabId)
-  documentLoadingTabIds.delete(details.tabId)
+  documentLoadingUrls.delete(details.tabId)
   clearTimeout(documentLoadingCleanupTimeouts.get(details.tabId))
   documentLoadingCleanupTimeouts.delete(details.tabId)
+  const tab = Tabs.byId[details.tabId]
+  if (tab && !tab.url && tab.status === 'loading') {
+    tab.status = 'complete'
+    tab.reactive.status = TabStatus.Complete
+  }
 }
 
 function onSameDocumentNavigation(details: browser.webNavigation.NavigationDetails): void {
@@ -162,7 +177,7 @@ function onSameDocumentNavigation(details: browser.webNavigation.NavigationDetai
   const documentNavigationActive = activeDocumentNavigationTabIds.has(details.tabId)
   if (documentNavigationActive) return
 
-  documentLoadingTabIds.delete(details.tabId)
+  documentLoadingUrls.delete(details.tabId)
   clearTimeout(documentLoadingCleanupTimeouts.get(details.tabId))
   documentLoadingCleanupTimeouts.delete(details.tabId)
   sameDocumentTabIds.add(details.tabId)
@@ -375,6 +390,12 @@ async function onTabCreated(nativeTab: NativeTab, attached?: boolean) {
   const initialOpenerId = nativeTab.openerTabId
   const initialOpener = Tabs.byId[nativeTab.openerTabId ?? -1]
   const tab = Tabs.mutateNativeTabToSideberyTab(nativeTab)
+  const pendingUrl = documentLoadingUrls.get(tab.id)
+  if (!tab.url && pendingUrl) {
+    tab.pendingUrl = pendingUrl
+    tab.status = 'loading'
+    tab.reactive.status = TabStatus.Loading
+  }
   const isSplt =
     tab.active &&
     tab.splitViewId !== undefined &&
@@ -897,8 +918,8 @@ function onTabUpdated(tabId: ID, change: browser.tabs.ChangeInfo, nativeTab: Nat
   }
 
   if (Info.isChromium && change.status === 'loading') {
-    if (documentLoadingTabIds.has(tabId)) {
-      documentLoadingTabIds.delete(tabId)
+    if (documentLoadingUrls.has(tabId)) {
+      documentLoadingUrls.delete(tabId)
       clearTimeout(documentLoadingCleanupTimeouts.get(tabId))
       documentLoadingCleanupTimeouts.delete(tabId)
     } else {
@@ -987,6 +1008,7 @@ function onTabUpdated(tabId: ID, change: browser.tabs.ChangeInfo, nativeTab: Nat
   // Url
   let branchColorizationNeeded = false
   if (change.url !== undefined) {
+    if (Info.isChromium) tab.pendingUrl = nativeTab.pendingUrl
     if (change.url !== tab.url) {
       const isInternal = change.url.startsWith(D.ADDON_HOST)
       const isGroup = isInternal && Utils.isGroupUrl(change.url)
@@ -1276,6 +1298,7 @@ function rememberChildTabs(childId: ID, parentId: ID): void {
  * Tabs.onRemoved
  */
 function onTabRemoved(tabId: ID, info: browser.tabs.RemoveInfo, detached?: boolean): void {
+  documentLoadingUrls.delete(tabId)
   if (info.windowId !== Windows.id) return
   if (!Tabs.ready || waitForOtherReopenedTabsBuffer || Tabs.sorting) {
     Tabs.deferredEventHandling.push(() => onTabRemoved(tabId, info, detached))
@@ -1967,4 +1990,9 @@ function onTabActivated(info: browser.tabs.ActiveInfo): void {
   if (Search.active && Settings.state.searchTabSwitch && !Search.reactive.barIsFocused) {
     Search.tmpKeepSearchingOnOutsideExit(500)
   }
+}
+
+export const TESTING = {
+  onBeforeNavigate,
+  onNavigationFailed,
 }
