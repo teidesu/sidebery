@@ -136,11 +136,13 @@ function onBeforeNavigate(details: browser.webNavigation.NavigationDetails): voi
   activeDocumentNavigationTabIds.add(details.tabId)
   sameDocumentTabIds.delete(details.tabId)
   const tab = Tabs.byId[details.tabId]
-  if (tab && !tab.url) {
-    tab.pendingUrl = details.url
+  if (tab) {
     tab.status = 'loading'
     tab.reactive.status = TabStatus.Loading
-    Tabs.renderTitle(tab)
+    if (!tab.url) {
+      tab.pendingUrl = details.url
+      Tabs.renderTitle(tab)
+    }
   }
 }
 
@@ -166,7 +168,7 @@ function onNavigationFailed(details: browser.webNavigation.NavigationDetails): v
   clearTimeout(documentLoadingCleanupTimeouts.get(details.tabId))
   documentLoadingCleanupTimeouts.delete(details.tabId)
   const tab = Tabs.byId[details.tabId]
-  if (tab && !tab.url && tab.status === 'loading') {
+  if (tab?.status === 'loading') {
     tab.status = 'complete'
     tab.reactive.status = TabStatus.Complete
   }
@@ -391,8 +393,8 @@ async function onTabCreated(nativeTab: NativeTab, attached?: boolean) {
   const initialOpener = Tabs.byId[nativeTab.openerTabId ?? -1]
   const tab = Tabs.mutateNativeTabToSideberyTab(nativeTab)
   const pendingUrl = documentLoadingUrls.get(tab.id)
-  if (!tab.url && pendingUrl) {
-    tab.pendingUrl = pendingUrl
+  if (pendingUrl) {
+    if (!tab.url) tab.pendingUrl = pendingUrl
     tab.status = 'loading'
     tab.reactive.status = TabStatus.Loading
   }
@@ -1995,4 +1997,5 @@ function onTabActivated(info: browser.tabs.ActiveInfo): void {
 export const TESTING = {
   onBeforeNavigate,
   onNavigationFailed,
+  onSameDocumentNavigation,
 }

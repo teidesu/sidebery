@@ -17,7 +17,47 @@ afterEach(() => {
   Tabs.setById({})
 })
 
-describe('Chromium pending navigation titles', () => {
+describe('Chromium document navigation', () => {
+  test.each(['chrome://newtab/', 'chrome-extension://example/newtab.html', 'https://example.com'])(
+    'starts loading immediately when navigating away from %s',
+    url => {
+      const tab = new MTab({ url, title: 'Current page', status: 'complete' })
+      Tabs.setById({ 2: tab })
+
+      TESTING.onBeforeNavigate(navigation)
+
+      expect(tab.status).toBe('loading')
+      expect(tab.reactive.status).toBe(TabStatus.Loading)
+      expect(tab.url).toBe(url)
+      expect(tab.title).toBe('Current page')
+
+      TESTING.onNavigationFailed(navigation)
+      expect(tab.status).toBe('complete')
+      expect(tab.reactive.status).toBe(TabStatus.Complete)
+    }
+  )
+
+  test('does not start the spinner for same-document navigation', () => {
+    const tab = new MTab({ status: 'complete' })
+    Tabs.setById({ 2: tab })
+
+    TESTING.onSameDocumentNavigation(navigation)
+
+    expect(tab.status).toBe('complete')
+    expect(tab.reactive.status).toBe(TabStatus.Complete)
+  })
+
+  test('keeps loading when a document changes history before completing', () => {
+    const tab = new MTab({ status: 'complete' })
+    Tabs.setById({ 2: tab })
+
+    TESTING.onBeforeNavigate(navigation)
+    TESTING.onSameDocumentNavigation(navigation)
+
+    expect(tab.status).toBe('loading')
+    expect(tab.reactive.status).toBe(TabStatus.Loading)
+  })
+
   test('shows a form destination before Chrome emits a tab URL update', () => {
     const tab = new MTab()
     tab.url = ''
@@ -54,6 +94,7 @@ describe('Chromium pending navigation titles', () => {
 
     expect(tab.pendingUrl).toBeUndefined()
     expect(Tabs.getDisplayTitle(tab)).toBe('')
+    expect(tab.reactive.status).toBe(TabStatus.Complete)
   })
 
   test('preserves a custom title while the form submits', () => {
