@@ -111,6 +111,8 @@ export async function load(): Promise<void> {
 }
 
 export function updPrecalcSettings() {
+  if (Info.isChromium) state.ctxMenuNative = false
+
   newTabBarPositionAfterTabs = state.showNewTabBtns && state.newTabBarPosition === 'after_tabs'
   newTabBarPositionBottom = state.showNewTabBtns && state.newTabBarPosition === 'bottom'
 

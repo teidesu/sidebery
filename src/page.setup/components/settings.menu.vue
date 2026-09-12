@@ -3,6 +3,7 @@ section(ref="el")
   h2 {{translate('settings.ctx_menu_title')}}
   span.header-shadow
   ToggleField(
+    v-if="Info.isFirefox"
     label="settings.ctx_menu_native"
     v-model:value="Settings.state.ctxMenuNative"
     dbg="ctxMenuNative"
@@ -41,6 +42,7 @@ import * as Utils from 'src/utils'
 import { translate } from 'src/dict'
 import { DEFAULT_SETTINGS } from 'src/defaults'
 import * as Settings from 'src/services/settings.fg'
+import * as Info from 'src/services/info'
 import * as Menu from 'src/services/menu.fg'
 import * as SetupPage from 'src/services/setup-page.fg'
 import TextField from '../../components/text-field.vue'
