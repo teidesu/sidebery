@@ -1,3 +1,4 @@
+import * as BookmarksApi from 'src/services/bookmarks-api'
 import * as T from 'src/types'
 import * as E from 'src/enums'
 import * as D from 'src/defaults'
@@ -1402,7 +1403,7 @@ async function setFolderForTabsPanel(panel: T.Panel, dst: T.DstPlaceInfo) {
     if (parent && result.name) {
       let rootFolder
       try {
-        rootFolder = await browser.bookmarks.create({
+        rootFolder = await BookmarksApi.create({
           type: 'folder',
           title: result.name.trim(),
           parentId: parentId,

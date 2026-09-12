@@ -1,3 +1,4 @@
+import * as BookmarksApi from 'src/services/bookmarks-api'
 import * as T from 'src/types'
 import { TabStatus, LoadSrc, Err } from 'src/enums'
 import * as D from 'src/defaults'
@@ -1449,7 +1450,7 @@ export async function bookmarkTabs(tabIds: ID[]): Promise<void> {
       }
       Bookmarks.attachTabInfoToTitle(info)
 
-      await browser.bookmarks.create({
+      await BookmarksApi.create({
         parentId,
         type: 'bookmark',
         title: info.title,

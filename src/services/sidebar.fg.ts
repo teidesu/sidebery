@@ -1,3 +1,4 @@
+import * as BookmarksApi from 'src/services/bookmarks-api'
 import * as Utils from 'src/utils'
 import { translate } from 'src/dict'
 import * as T from 'src/types'
@@ -1981,7 +1982,7 @@ export async function bookmarkTabsPanel(
 
     const parentConf = { title: folderName, index, parentId: parent.id }
     try {
-      const nativePanelFolder = await browser.bookmarks.create(parentConf)
+      const nativePanelFolder = await BookmarksApi.create(parentConf)
       panelFolder = Bookmarks.byId.get(nativePanelFolder.id)
       if (!panelFolder) throw 'No panelFolder'
     } catch (err) {

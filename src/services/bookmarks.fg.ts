@@ -1,3 +1,5 @@
+import * as BookmarksApi from 'src/services/bookmarks-api'
+import * as Info from 'src/services/info'
 import * as Utils from 'src/utils'
 import { translate } from 'src/dict'
 import * as T from 'src/types'
@@ -768,6 +770,7 @@ export async function createBookmarkNode(
   type: browser.bookmarks.TreeNodeType,
   target: BkmNode
 ): Promise<void> {
+  if (Info.isChromium && type === 'separator') return
   const expandedBookmarks = Bookmarks.reactive.expanded[Sidebar.activePanelId]
   let parentId: ID | undefined
   let index = 0
@@ -796,7 +799,7 @@ export async function createBookmarkNode(
   if (!parentId) parentId = D.BKM_OTHER_ID
 
   if (type === 'separator') {
-    await browser.bookmarks.create({ parentId, type: 'separator', index })
+    await BookmarksApi.create({ parentId, type: 'separator', index })
   } else {
     const isBookmark = type === 'bookmark'
     const result = await openBookmarksPopup({
@@ -819,7 +822,7 @@ export async function createBookmarkNode(
       if (parentId === D.NOID) parentId = D.BKM_OTHER_ID
 
       try {
-        await browser.bookmarks.create({
+        await BookmarksApi.create({
           parentId,
           title: result.name,
           type,
@@ -956,6 +959,7 @@ async function undoRemove(deleted: BkmNode[]): Promise<void> {
   let offset = 0
   let prevParent
   for (const n of deleted) {
+    if (Info.isChromium && n.type === E.BkmType.Separator) continue
     if (prevParent !== n.parentId) offset = 0
     const conf: browser.bookmarks.CreateDetails = {
       type: typeName[n.type],
@@ -965,7 +969,7 @@ async function undoRemove(deleted: BkmNode[]): Promise<void> {
     if (oldNewIds[n.parentId]) conf.parentId = oldNewIds[n.parentId]
     if (n.type !== E.BkmType.Separator) conf.title = n.title
     if (n.type === E.BkmType.Bookmark) conf.url = n.url
-    const newNode = await browser.bookmarks.create(conf)
+    const newNode = await BookmarksApi.create(conf)
     prevParent = n.parentId
     oldNewIds[n.id] = newNode.id
     offset++
@@ -1167,7 +1171,7 @@ export async function createFromDragEvent(e: DragEvent, dst: T.DstPlaceInfo): Pr
   if (!result?.url) return
   if (!result.text) result.text = Tabs.list.find(t => t.url === result.url)?.title
 
-  await browser.bookmarks.create({
+  await BookmarksApi.create({
     url: result.url,
     title: result.text || result.url,
     index: dst.index,
@@ -1289,7 +1293,7 @@ export async function createFrom(
       // Create folder
       if (children.length) {
         const folderConf = { title: item.title, parentId, index }
-        const folder = await browser.bookmarks.create(folderConf)
+        const folder = await BookmarksApi.create(folderConf)
         idsMap[item.id] = folder.id
 
         if (progress) Notifications.updateProgress(progress, n++, items.length)
@@ -1297,21 +1301,21 @@ export async function createFrom(
         // Create bookmark of parent item
         if (item.url && !D.GROUP_RE.test(item.url)) {
           const url = Utils.restoreUrl(item.url)
-          await browser.bookmarks.create({ title: item.title, url, parentId: folder.id })
+          await BookmarksApi.create({ title: item.title, url, parentId: folder.id })
         }
 
         continue
       }
 
       const url = Utils.restoreUrl(item.url)
-      await browser.bookmarks.create({ title: item.title, url, parentId, index })
+      await BookmarksApi.create({ title: item.title, url, parentId, index })
 
       if (progress) Notifications.updateProgress(progress, n++, items.length)
     }
   } else {
     for (const t of items) {
       attachTabInfoToTitle(t)
-      await browser.bookmarks.create({
+      await BookmarksApi.create({
         url: Utils.restoreUrl(t.url),
         title: t.title,
         index: dstIndex++,
@@ -1359,6 +1363,7 @@ export async function saveToFolder(
       }
 
       // Get target index and update indexes map
+      if (Info.isChromium && !item.url && !item.title) continue
       let index = indexes[parentFolderId]
       if (index === undefined) {
         index = 0
@@ -1380,7 +1385,7 @@ export async function saveToFolder(
         // Create separator
         else {
           const createConf = { type: 'separator' as const, index, parentId: parentFolderId }
-          await browser.bookmarks.create(createConf)
+          await BookmarksApi.create(createConf)
         }
         continue
       }
@@ -1403,7 +1408,7 @@ export async function saveToFolder(
         // Create folder
         else {
           const createConf = { title: item.title, index, parentId: parentFolderId }
-          const nFolder = await browser.bookmarks.create(createConf)
+          const nFolder = await BookmarksApi.create(createConf)
           folder = byId.get(nFolder.id)
         }
         if (!folder) throw 'Bookmarks.saveToFolder: No folder'
@@ -1430,7 +1435,7 @@ export async function saveToFolder(
           else {
             const url = Utils.restoreUrl(item.url)
             const createConf = { title: item.title, url, index: 0, parentId: folder.id }
-            const nBookmark = await browser.bookmarks.create(createConf)
+            const nBookmark = await BookmarksApi.create(createConf)
             bookmark = byId.get(nBookmark.id)
           }
           indexes[folder.id]++
@@ -1455,7 +1460,7 @@ export async function saveToFolder(
       // Create bookmark
       else {
         const createConf = { title: item.title, url, index, parentId: parentFolderId }
-        const nBookmark = await browser.bookmarks.create(createConf)
+        const nBookmark = await BookmarksApi.create(createConf)
         bookmark = byId.get(nBookmark.id)
       }
 
@@ -1486,7 +1491,7 @@ export async function saveToFolder(
       else {
         const url = Utils.restoreUrl(item.url)
         const createConf = { title: item.title, url, index, parentId: panelFolderId }
-        const nBookmark = await browser.bookmarks.create(createConf)
+        const nBookmark = await BookmarksApi.create(createConf)
         bookmark = byId.get(nBookmark.id)
       }
 

@@ -12,6 +12,7 @@ import * as Menu from 'src/services/menu.fg'
 import * as Sidebar from 'src/services/sidebar.fg'
 import * as Search from 'src/services/search.fg'
 import * as Logs from 'src/services/logs'
+import * as Info from 'src/services/info'
 
 export const bookmarksMenuOptions: Record<string, () => MenuOption | MenuOption[] | undefined> = {
   openInNewWin: () => {
@@ -144,6 +145,7 @@ export const bookmarksMenuOptions: Record<string, () => MenuOption | MenuOption[
   },
 
   createSeparator: () => {
+    if (Info.isChromium) return
     const node = Bookmarks.byId.get(Selection.getFirst())
     if (!node) return
     const option: MenuOption = {
