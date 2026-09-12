@@ -2941,29 +2941,34 @@ function updateSuccession(exclude?: readonly ID[]) {
   return firstSuccessor
 }
 
+export function getDisplayTitle(tab: T.Tab): string {
+  return tab.customTitle ?? (tab.title || (Info.isChromium ? tab.url || tab.pendingUrl || '' : ''))
+}
+
 export function renderTitle(tab: T.Tab, forcedTitle?: string) {
   if (tab.isGroup && tab.title === D.GROUP_INITIAL_TITLE) {
     tab.title = Utils.getGroupName(tab.url) ?? tab.title
   }
   if (tab.titleEl) {
-    tab.titleEl.innerText = forcedTitle ?? tab.customTitle ?? tab.title
+    tab.titleEl.innerText = forcedTitle ?? getDisplayTitle(tab)
   }
   if (Settings.state.forceUpdTooltip) {
     updateTooltip(tab.id)
   }
 }
 
-export function renderFavicon(tab: T.Tab) {
-  renderFaviconInto(tab, tab.favImgEl, tab.favSvgUseEl)
+export function renderFavicon(tab: T.Tab, fallback = false) {
+  renderFaviconInto(tab, tab.favImgEl, tab.favSvgUseEl, fallback)
 }
 
 export function renderFaviconInto(
   tab: T.Tab,
   imgEl?: HTMLImageElement,
-  svgUseEl?: SVGElement
+  svgUseEl?: SVGElement,
+  fallback = false
 ): void {
-  if (!tab.favIconUrl) tab.favIconUrl = Favicons.getNativeFavicon(tab.url)
-  if (tab.favIconUrl && imgEl) {
+  if (!fallback && !tab.favIconUrl) tab.favIconUrl = Favicons.getNativeFavicon(tab.url)
+  if (!fallback && tab.favIconUrl && imgEl) {
     const nativeFavicon = Favicons.isNativeFavicon(tab.favIconUrl)
     // Set img
     imgEl.src = tab.favIconUrl

@@ -71,7 +71,7 @@
         tabindex="-1"
         @blur="onCustomTitleBlur"
         @keydown="onCustomTitlteKD")
-      .title(ref="titleEl") {{tab.customTitle ?? tab.title}}
+      .title(ref="titleEl") {{Tabs.getDisplayTitle(tab)}}
     .close(
       v-if="!iconOnly && Settings.state.tabRmBtn !== 'none'"
       draggable="true"
@@ -758,11 +758,11 @@ function onError(): void {
   // For a sticky clone, fall back to the placeholder locally without mutating the
   // shared tab (which would affect the real row).
   if (props.sticky) {
-    Tabs.renderFaviconInto(tab, undefined, favSvgUseEl.value ?? undefined)
+    Tabs.renderFaviconInto(tab, favImgEl.value ?? undefined, favSvgUseEl.value ?? undefined, true)
     return
   }
   tab.favIconUrl = undefined
-  Tabs.renderFavicon(tab)
+  Tabs.renderFavicon(tab, true)
 }
 
 function onCustomTitleBlur(e: Event) {

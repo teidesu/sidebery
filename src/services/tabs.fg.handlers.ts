@@ -887,6 +887,15 @@ function onTabUpdated(tabId: ID, change: browser.tabs.ChangeInfo, nativeTab: Nat
     return Logs.warn(`Tabs.onTabUpdated: Cannot find local tab: ${tabId}`, Object.keys(change))
   }
 
+  if (
+    Info.isChromium &&
+    change.title === undefined &&
+    nativeTab.title &&
+    nativeTab.title !== tab.title
+  ) {
+    change.title = nativeTab.title
+  }
+
   if (Info.isChromium && change.status === 'loading') {
     if (documentLoadingTabIds.has(tabId)) {
       documentLoadingTabIds.delete(tabId)
@@ -1244,7 +1253,7 @@ function updTabReactiveProps(change: browser.tabs.ChangeInfo, tab: Tab) {
   if (change.mutedInfo?.muted !== undefined) tab.reactive.mediaMuted = change.mutedInfo.muted
   if (pChange) tab.reactive.pinned = change.pinned as boolean
   if (change.status !== undefined) tab.reactive.status = Tabs.getStatus(tab)
-  if (tChange) Tabs.renderTitle(tab)
+  if (tChange || (Info.isChromium && uChange && !tab.title)) Tabs.renderTitle(tab)
   if (uChange) tab.reactive.url = change.url as string
   if (!tab.internal && (tChange || uChange || dChange || pChange)) {
     Tabs.updateBadge(tab, change)

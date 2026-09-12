@@ -121,6 +121,7 @@ export async function resizeFavicon(fav: DataUriImage): Promise<DataUriImage> {
 }
 
 export function getNativeFavicon(url: string): string {
+  if (!url) return ''
   if (Info.isFirefox) return ''
   const faviconUrl = new URL(browser.runtime.getURL('/_favicon/'))
   faviconUrl.searchParams.set('pageUrl', url)
